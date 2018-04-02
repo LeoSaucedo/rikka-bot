@@ -7,8 +7,6 @@ import discord
 from test.test_asyncgen import asyncio
 import gizoogle
 
-print(gizoogle.text("Hello world"))
-
 #Auth token
 tokenfile = open("auth_token.txt", "r")
 token = tokenfile.read()
