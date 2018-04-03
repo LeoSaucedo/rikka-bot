@@ -16,7 +16,7 @@ token = rawtoken[0]
 #imagelists
 hugsfile = open("hug_gifs.list", "r")
 huglist = hugsfile.read().splitlines()
-hugcount = len(huglist) - 1
+hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
 
 #Instantiates Discord client
 client = discord.Client()
@@ -41,6 +41,11 @@ async def on_message(message):
         """Hugs the author of the message."""
         msg = "{0.author.mention}: ".format(message) + huglist[randint(0,hugcount)] 
         await client.send_message(message.channel, msg)
+    if message.content.startswith(";hug "):
+        """Hugs a specified user."""
+        msg = "{0.author.mention} hugs {0.mentions[0].mention}! ".format(message) + huglist[randint(0,hugcount)]
+        await client.send_message(message.channel, msg)
+        await client.delete_message(message)
 """
 Logs into the server.
 """
@@ -50,5 +55,5 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print("-------")
-    print("loaded hugs: " + str(hugcount + 1))
+    print("loaded hugs: " + str(hugcount + 1)) # +1 because humans are not computers.
 client.run(token)

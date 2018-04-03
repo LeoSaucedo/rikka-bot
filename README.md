@@ -7,6 +7,7 @@ A Discord bot that performs various functions.
 - `;hello` - Says hi.
 - `;gizoogle (text)` - translates a given text with gizoogle.
 - `;hugme` - hugs you.
+- `;hug @user` - hugs the specified user.
 
 ### Requirements
 - bs4
