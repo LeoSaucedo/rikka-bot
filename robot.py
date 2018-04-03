@@ -9,7 +9,8 @@ import gizoogle
 
 #Auth token
 tokenfile = open("auth_token.txt", "r")
-token = tokenfile.read()
+rawtoken = tokenfile.read().splitlines()
+token = rawtoken[0]
 
 #Instantiates Discord client
 client = discord.Client()
