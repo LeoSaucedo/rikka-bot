@@ -60,7 +60,7 @@ async def on_message(message):
         msg = "{0.author.mention} hugs {0.mentions[0].mention}! ".format(message) + huglist[randint(0,hugcount)]
         await client.send_message(message.channel, msg)
         await client.delete_message(message)
-    if message.content.startswith(command("gay")):
+    if message.content.startswith(command(";gay")):
         #no u
         msg = "no u {0.author.mention}".format(message)
         await client.send_message(message.channel, msg)
