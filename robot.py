@@ -7,7 +7,6 @@ import discord
 import asyncio
 import gizoogle
 from random import randint
-from discord import message
 
 #Auth token
 tokenfile = open("auth_token.txt", "r")
@@ -37,34 +36,51 @@ def getArgument(command, message):
     
 @client.event
 async def on_message(message):
+    """
+    Universal commands
+    """
     #Makes sure bot does not reply to itself
     if message.author == client.user:
         return
+    if message.content.startswith(command("help")):
+        #Returns the README on the GitHub.
+        msg = "{0.author.mention} https://github.com/LeoSaucedo/rikka-bot/blob/master/README.md".format(message)
+        await client.send_message(message.channel, msg)
+    
     if message.content.startswith(command("hello")) or message.content.startswith(command("hi")):
         #Says hi and embeds a gif, mentioning the author of the message.
         msg = "h-hello {0.author.mention}-chan! ".format(message) + 'https://cdn.discordapp.com/attachments/402744318013603840/430592483282386974/image.gif'
         await client.send_message(message.channel, msg)
+    
     if message.content.startswith(command("gizoogle")):
         #Gizoogles the given string and returns it.
         translatedMessage = gizoogle.text(getArgument(command("gizoogle"), message))
-        #translatedMessage = translatedMessage.encode("ascii", "ignore")
         msg = "{0.author.mention} says: ".format(message) + translatedMessage.format(message)
         await client.send_message(message.channel, msg)
         await client.delete_message(message)
+    
     if message.content.startswith(command("hugme")) or message.content == command("hug"):
         #Hugs the author of the message.
         msg = "{0.author.mention}: ".format(message) + huglist[randint(0,hugcount)] 
         await client.send_message(message.channel, msg)
+    
     if message.content.startswith(command("hug ")):
         #Hugs the first user mentioned by the author.
         msg = "{0.author.mention} hugs {0.mentions[0].mention}! ".format(message) + huglist[randint(0,hugcount)]
         await client.send_message(message.channel, msg)
         await client.delete_message(message)
+    
     if message.content.startswith(command("gay")):
         #no u
         msg = "no u {0.author.mention}".format(message)
         await client.send_message(message.channel, msg)
-        
+
+    """
+    Administrator Commands.
+    """
+    if message.channel.permissions_for(message.author).administrator == True:
+        return
+
     """
     Miscellaneous gifs.
     I know it's ugly, but I'll fix it eventually.
@@ -101,6 +117,30 @@ async def on_message(message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430595392669745153/image.gif"
         await client.send_message(message.channel, msg)
 
+    #SyCW Commands - By special request.
+    if message.server.id == "329383300848418816":
+        if message.content == command("assad"):
+            msg = "https://cdn.discordapp.com/attachments/422581776247029761/430787413888073728/image.jpg"
+            await client.send_message(message.channel, msg)
+        if message.content == command("turkey"):
+            msg = "https://cdn.discordapp.com/attachments/422581776247029761/430787599343550494/image.jpg"
+            await client.send_message(message.channel, msg)
+        if message.content == command("bomb"):
+            msg = "https://cdn.discordapp.com/attachments/422581776247029761/430787955880230912/image.jpg"
+            await client.send_message(message.channel, msg)
+        if message.content == command("isis"):
+            msg = "https://cdn.discordapp.com/attachments/422581776247029761/430788102399983617/image.png"
+            await client.send_message(message.channel, msg)
+        if message.content == command("barrel"):
+            msg = "https://cdn.discordapp.com/attachments/422581776247029761/430788296663367680/image.jpg"
+            await client.send_message(message.channel, msg)
+        if message.content == command("kurd"):
+            msg = "https://cdn.discordapp.com/attachments/422581776247029761/430789263945105412/image.jpg"
+            await client.send_message(message.channel, msg)
+        if message.content == command("abuhajaar"):
+            msg = "https://cdn.discordapp.com/attachments/422581776247029761/430804463016476672/image.png"
+            await client.send_message(message.channel, msg)
+        
 """
 Bot login actions
 """
