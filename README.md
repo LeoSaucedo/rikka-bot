@@ -6,6 +6,7 @@ A Discord bot that performs various functions.
 *Right now, this bot's prefix is* `;`*.*
 - `;hello` - Says hi.
 - `;gizoogle (text)` - translates a given text with gizoogle.
+- `;hugme` - hugs you.
 
 ### Requirements
 - bs4

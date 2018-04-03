@@ -6,11 +6,17 @@ Carlos Saucedo, 2018
 import discord
 import asyncio
 import gizoogle
+from random import randint
 
 #Auth token
 tokenfile = open("auth_token.txt", "r")
 rawtoken = tokenfile.read().splitlines()
 token = rawtoken[0]
+
+#imagelists
+hugsfile = open("hug_gifs.list", "r")
+huglist = hugsfile.read().splitlines()
+hugcount = len(huglist) - 1
 
 #Instantiates Discord client
 client = discord.Client()
@@ -22,13 +28,18 @@ async def on_message(message):
         return
     if message.content.startswith(";hello") or message.content.startswith(";hi"):
         """Says hi."""
-        msg = "hello {0.author.mention} -chan!".format(message)
+        msg = "h-hello {0.author.mention}-chan!".format(message)
         await client.send_message(message.channel, msg)
     if message.content.startswith(";gizoogle"):
         """Gizoogle!"""
         rawMessage = message.content.replace(";gizoogle ", "")
         translatedMessage = gizoogle.text(rawMessage)
-        msg = translatedMessage.format(message)
+        msg = "{0.author.mention} says: ".format(message) + translatedMessage.format(message)
+        await client.send_message(message.channel, msg)
+        await client.delete_message(message)
+    if message.content.startswith(";hugme"):
+        """Hugs the author of the message."""
+        msg = "{0.author.mention}: ".format(message) + huglist[randint(0,hugcount)] 
         await client.send_message(message.channel, msg)
 """
 Logs into the server.
@@ -39,4 +50,5 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print("-------")
+    print("loaded hugs: " + str(hugcount + 1))
 client.run(token)
