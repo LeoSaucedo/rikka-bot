@@ -4,7 +4,7 @@ Carlos Saucedo, 2018
 """
 
 import discord
-from test.test_asyncgen import asyncio
+import asyncio
 import gizoogle
 
 #Auth token
