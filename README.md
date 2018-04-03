@@ -5,7 +5,7 @@ A Discord bot that performs various functions.
 ### Commands
 *Right now, this bot's prefix is* `;`*.*
 - `;hello` - Says hi.
-- `;hello (text)` - translates a given text with gizoogle.
+- `;gizoogle (text)` - translates a given text with gizoogle.
 
 ### Requirements
 - bs4
