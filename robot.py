@@ -14,7 +14,7 @@ tokenfile = open("auth_token.txt", "r")
 rawtoken = tokenfile.read().splitlines()
 token = rawtoken[0]
 
-#imagelists
+#lists
 hugsfile = open("hug_gifs.list", "r")
 huglist = hugsfile.read().splitlines()
 hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
@@ -32,6 +32,7 @@ def command(string):
 def getArgument(command, message):
     #Gets the argument text as a string.
     argument = message.content.replace(command + " ", "")
+    argument = argument.encode("ascii", "ignore")
     return argument
     
 @client.event
@@ -46,6 +47,7 @@ async def on_message(message):
     if message.content.startswith(command("gizoogle")):
         #Gizoogles the given string and returns it.
         translatedMessage = gizoogle.text(getArgument(command("gizoogle"), message))
+        #translatedMessage = translatedMessage.encode("ascii", "ignore")
         msg = "{0.author.mention} says: ".format(message) + translatedMessage.format(message)
         await client.send_message(message.channel, msg)
         await client.delete_message(message)
@@ -58,12 +60,16 @@ async def on_message(message):
         msg = "{0.author.mention} hugs {0.mentions[0].mention}! ".format(message) + huglist[randint(0,hugcount)]
         await client.send_message(message.channel, msg)
         await client.delete_message(message)
-    if "gay" in message.content:
-        #Self explanatory command. Just for the memes.
+    if message.content.startswith(command("gay")):
+        #no u
         msg = "no u {0.author.mention}".format(message)
         await client.send_message(message.channel, msg)
         
-    """Miscellaneous gifs"""
+    """
+    Miscellaneous gifs.
+    I know it's ugly, but I'll fix it eventually.
+    """
+    #Rikka's actions
     if message.content == command("shocked"):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430591612637413389/image.gif"
         await client.send_message(message.channel, msg)
