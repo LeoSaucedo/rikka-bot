@@ -9,6 +9,10 @@ A Discord bot that performs various functions.
 - `;hugme` - hugs you.
 - `;hug @user` - hugs the specified user.
 
+#### Emotes
+*Note: All emotes are entirely SFW.*
+- `shocked, smile, hentai, blush, bdsm, rekt, boop, fuckoff, sanic, dreamy`
+
 ### Requirements
 - bs4
 - requests
