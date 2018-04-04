@@ -2,13 +2,18 @@
 # rikka-bot
 A Discord bot that performs various functions.
 
+This bot is in very active development. If it goes offline for a few minutes, it's probably because I'm implementing a new feature.
+
 ### Commands
 *Right now, this bot's prefix is* `;`*.*
 - `;hello` - Says hi.
 - `;gizoogle (text)` - translates a given text with gizoogle.
 - `;hugme` - hugs you.
 - `;hug @user` - hugs the specified user.
-- `gay` - no u
+- `;gay` - no u
+
+#### Admin commands
+- `;clear (number)` - Clears a set number of messages from the given channel.
 
 #### Emotes
 *Note: All emotes are entirely SFW.*

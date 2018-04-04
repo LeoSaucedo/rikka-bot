@@ -7,6 +7,7 @@ import discord
 import asyncio
 import gizoogle
 from random import randint
+import string
 
 #Auth token
 tokenfile = open("auth_token.txt", "r")
@@ -79,8 +80,19 @@ async def on_message(message):
     Administrator Commands.
     """
     if message.channel.permissions_for(message.author).administrator == True:
-        return
-
+        if message.content.startswith(command("clear")):
+            #Removes a set number of messages.
+            number = int(getArgument(command("clear"), message))
+            counter = -1
+            async for x in client.logs_from(message.channel, limit=number):
+                if counter < number:
+                    await client.delete_message(x)
+                    counter += 1
+                    await asyncio.sleep(0.1)
+            msg = "deleted " + str(number) + " messages!".format(string)
+            await client.send_message(message.channel, msg)
+            
+            
     """
     Miscellaneous gifs.
     I know it's ugly, but I'll fix it eventually.
