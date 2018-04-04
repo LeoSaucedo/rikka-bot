@@ -82,14 +82,14 @@ async def on_message(message):
     if message.channel.permissions_for(message.author).administrator == True:
         if message.content.startswith(command("clear")):
             #Removes a set number of messages.
-            number = int(getArgument(command("clear"), message))
-            counter = -1
+            number = int(getArgument(command("clear"), message)) + 2
+            counter = 0
             async for x in client.logs_from(message.channel, limit=number):
-                if counter < number:
+                if counter < number :
                     await client.delete_message(x)
                     counter += 1
                     await asyncio.sleep(0.1)
-            msg = "deleted " + str(number) + " messages!".format(string)
+            msg = "deleted " + str(number - 2) + " messages!".format(string)
             await client.send_message(message.channel, msg)
             
             
