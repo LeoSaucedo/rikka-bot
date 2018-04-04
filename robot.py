@@ -45,7 +45,7 @@ async def on_message(message):
         return
     if message.content.startswith(command("help")):
         #Returns the README on the GitHub.
-        msg = "{0.author.mention} https://github.com/LeoSaucedo/rikka-bot/blob/master/README.md".format(message)
+        msg = "{0.author.mention} https://discordbots.org/bot/430482288053059584".format(message)
         await client.send_message(message.channel, msg)
     
     if message.content.startswith(command("hello")) or message.content.startswith(command("hi")):
