@@ -1,5 +1,7 @@
 ![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)
 # rikka-bot
+[![Discord Bots](https://discordbots.org/api/widget/430482288053059584.svg)](https://discordbots.org/bot/430482288053059584)
+
 A Discord bot that performs various functions.
 
 This bot is in very active development. If it goes offline for a few minutes, it's probably because I'm implementing a new feature.
