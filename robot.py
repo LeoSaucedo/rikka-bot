@@ -40,7 +40,7 @@ async def on_server_join(server):
     serversConnected = str(len(client.servers))
     print("Joined server " + server.name + "!")
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
-    await client.change_presence(game=discord.Game(name='in ' + serversConnected + ' servers!')) 
+    await client.change_presence(game=discord.Game(name='on ' + serversConnected + ' servers!')) 
     
 @client.event
 async def on_message(message):
@@ -172,5 +172,5 @@ async def on_ready():
     print("loaded hugs: " + str(hugcount + 1)) # +1 because humans are not computers.
     serversConnected = str(len(client.servers))
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
-    await client.change_presence(game=discord.Game(name='in ' + serversConnected + ' servers!'))
+    await client.change_presence(game=discord.Game(name='on ' + serversConnected + ' servers!'))
 client.run(token) #runs the bot.
