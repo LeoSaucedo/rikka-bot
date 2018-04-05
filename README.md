@@ -12,6 +12,7 @@ This bot is in very active development. If it goes offline for a few minutes, it
 - `;hugme` - hugs you.
 - `;hug @user` - hugs the specified user.
 - `;gay` - no u
+- `;translate (text)` - translates the specified text to English.
 
 #### Admin commands
 - `;clear (number)` - Clears a set number of messages from the given channel.

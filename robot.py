@@ -8,6 +8,7 @@ import asyncio
 import gizoogle
 from random import randint
 import string
+from googletrans import Translator
 
 #Auth token
 tokenfile = open("auth_token.txt", "r")
@@ -19,20 +20,26 @@ hugsfile = open("hug_gifs.list", "r")
 huglist = hugsfile.read().splitlines()
 hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
 
-#Instantiates Discord client
+#Instances
 client = discord.Client()
+translator = Translator()
 
 #Discord prefix
 prefix = ";"
 
 def command(string):
     #Builds a command out of the given string.
+    #Makes you able to change the prefix at any given moment.
     return prefix + string
 
 def getArgument(command, message):
     #Gets the argument text as a string.
     argument = message.content.replace(command + " ", "")
     argument = argument.encode("ascii", "ignore")
+    return argument
+
+def getRawArgument(command, message):
+    argument = message.content.replace(command + " ", "")
     return argument
     
 @client.event
@@ -50,6 +57,7 @@ async def on_message(message):
     #Makes sure bot does not reply to itself
     if message.author == client.user:
         return
+    
     if message.content.startswith(command("help")):
         #Returns the README on the GitHub.
         msg = "{0.author.mention} https://discordbots.org/bot/430482288053059584".format(message)
@@ -81,6 +89,12 @@ async def on_message(message):
     if message.content.startswith(command("gay")):
         #no u
         msg = "no u {0.author.mention}".format(message)
+        await client.send_message(message.channel, msg)
+
+    if message.content.startswith(command("translate")):
+        #Translates the given text into english.
+        translatedMessage = translator.translate(getRawArgument(command("translate"), message)).text
+        msg = ("{0.author.mention}: translated text - " + translatedMessage).format(message)
         await client.send_message(message.channel, msg)
 
     """
