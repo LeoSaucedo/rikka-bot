@@ -36,6 +36,13 @@ def getArgument(command, message):
     return argument
     
 @client.event
+async def on_server_join(server):
+    serversConnected = str(len(client.servers))
+    print("Joined server " + server.name + "!")
+    print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
+    await client.change_presence(game=discord.Game(name='in ' + serversConnected + ' servers!')) 
+    
+@client.event
 async def on_message(message):
     """
     Universal commands
