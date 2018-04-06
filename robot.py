@@ -9,29 +9,35 @@ import gizoogle
 from random import randint
 import string
 from googletrans import Translator
+import dbl
 
-#Auth token
+#Auth tokens
 tokenfile = open("auth_token.txt", "r")
 rawtoken = tokenfile.read().splitlines()
 token = rawtoken[0]
+
+bltokenfile = open("dbl_token.txt", "r")
+rawbltoken = bltokenfile.read().splitlines()
+bltoken = rawbltoken[0]
+shardCount = 1 #Keeping it simple with 1 for now.
 
 #lists
 hugsfile = open("hug_gifs.list", "r")
 huglist = hugsfile.read().splitlines()
 hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
 
-
 #Instances
 client = discord.Client()
 translator = Translator()
+botlist = dbl.Client(client, bltoken)
 
-#Discord prefix
-prefix = ";"
+#Prefix things
+defaultPrefix = ";"
 
 def command(string):
     #Builds a command out of the given string.
-    #Makes you able to change the prefix at any given moment.
-    return prefix + string
+    #Makes you able to change the deafultPrefix at any given moment.
+    return defaultPrefix + string
 
 def getArgument(command, message):
     #Gets the argument text as a string.
@@ -48,7 +54,24 @@ async def on_server_join(server):
     serversConnected = str(len(client.servers))
     print("Joined server " + server.name + "!")
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
-    await client.change_presence(game=discord.Game(name='on ' + serversConnected + ' servers!')) 
+    await client.change_presence(game=discord.Game(name='on ' + serversConnected + ' servers!'))
+    try:
+        await botlist.post_server_count(serversConnected, shardCount)
+        print("Successfully published server count to dbl.")
+    except Exception as e:
+        print("Failed to post server count to tbl.")
+    
+@client.event
+async def on_server_remove(server):
+    serversConnected = str(len(client.servers))
+    print("Joined server " + server.name + "!")
+    print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
+    await client.change_presence(game=discord.Game(name='on ' + serversConnected + ' servers!'))
+    try:
+        await botlist.post_server_count(serversConnected, shardCount)
+        print("Successfully published server count to dbl.")
+    except Exception as e:
+        print("Failed to post server count to tbl.") 
     
 @client.event
 async def on_message(message):
@@ -100,11 +123,11 @@ async def on_message(message):
         
     if message.content.startswith(command("info")):
         #Returns information about the bot.
-        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command prefix is: " + prefix + ". To get help, use " + prefix + "help.").format(message)
+        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command deafultPrefix is: " + defaultPrefix + ". To get help, use " + defaultPrefix + "help.").format(message)
         await client.send_message(message.channel, msg)
         
     if (len(message.mentions) > 0) and (message.mentions[0] == client.user) and ("help" in message.content):
-        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command prefix is: " + prefix + ". To get help, use " + prefix + "help.").format(message)
+        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command deafultPrefix is: " + defaultPrefix + ". To get help, use " + defaultPrefix + "help.").format(message)
         await client.send_message(message.channel, msg)
 
     """
@@ -197,4 +220,10 @@ async def on_ready():
     serversConnected = str(len(client.servers))
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
     await client.change_presence(game=discord.Game(name='on ' + serversConnected + ' servers!'))
+    try:
+        await botlist.post_server_count(serversConnected)
+        print("Successfully published server count to dbl.")
+    except Exception as e:
+        print("Failed to post server count to tbl.")
+
 client.run(token) #runs the bot.
