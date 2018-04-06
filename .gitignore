@@ -2,3 +2,5 @@
 *.pyc
 test.py
 robotold.py
+.project
+.pydevproject
