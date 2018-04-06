@@ -11,5 +11,6 @@ setup(name = 'rikka-bot',
         'discord',
         'asyncio',
         'googletrans',
-        'bs4',]
+        'bs4'
+        'dblpy',]
     )

@@ -20,6 +20,7 @@ hugsfile = open("hug_gifs.list", "r")
 huglist = hugsfile.read().splitlines()
 hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
 
+
 #Instances
 client = discord.Client()
 translator = Translator()
@@ -95,6 +96,15 @@ async def on_message(message):
         #Translates the given text into english.
         translatedMessage = translator.translate(getRawArgument(command("translate"), message)).text
         msg = ("{0.author.mention}: translated text - " + translatedMessage).format(message)
+        await client.send_message(message.channel, msg)
+        
+    if message.content.startswith(command("info")):
+        #Returns information about the bot.
+        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command prefix is: " + prefix + ". To get help, use " + prefix + "help.").format(message)
+        await client.send_message(message.channel, msg)
+        
+    if (len(message.mentions) > 0) and (message.mentions[0] == client.user) and ("help" in message.content):
+        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command prefix is: " + prefix + ". To get help, use " + prefix + "help.").format(message)
         await client.send_message(message.channel, msg)
 
     """
