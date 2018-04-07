@@ -222,10 +222,10 @@ async def on_message(message):
     if message.content == command("dreamy", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430595392669745153/image.gif"
         await client.send_message(message.channel, msg)
-    if message.content == command("waifu"):
+    if message.content == command("waifu", message):
         msg = "https://i.pinimg.com/originals/bd/9a/a4/bd9aa46572e180ec6df08119429a1e81.jpg"
         await client.send_message(message.channel, msg)
-    if message.content == command("trash"):
+    if message.content == command("trash", message):
         msg = "https://media1.tenor.com/images/29307201260fb755e7ff9fec21f22c95/tenor.gif?itemid=8811727"
         await client.send_message(message.channel, msg)
     #SyCW Commands - By special request.
