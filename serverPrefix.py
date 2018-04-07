@@ -10,7 +10,7 @@ class serverPrefix(object):
         self.prefix = newPrefix
         
     def setID(self, newID):
-        self.serverID, newID
+        self.serverID = newID
         
     def getPrefix(self):
         return self.prefix

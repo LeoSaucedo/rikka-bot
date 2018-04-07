@@ -26,6 +26,9 @@ shardCount = 1 #Keeping it simple with 1 for now.
 hugsfile = open("hug_gifs.list", "r")
 huglist = hugsfile.read().splitlines()
 hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
+ramsayfile = open("ramsay.list")
+ramsaylist = ramsayfile.read().splitlines()
+ramsayCount = len(ramsaylist) - 1
 
 #Instances
 client = discord.Client()
@@ -48,9 +51,9 @@ def command(string):
 def getServerPrefix(server):
     serverInList = False
     for serverPrefix in serverList:
-        if server.id == serverPrefix.getID:
+        if server.id == serverPrefix.getID():
             serverInList = True
-            return serverPrefix.getPrefix
+            return serverPrefix.getPrefix()
     if serverInList == False:
         return defaultPrefix
 
@@ -174,9 +177,9 @@ async def on_message(message):
         if message.content.startswith(command("prefix", message)):
             #Changes the prefix to the specified string.
             serverInList = False #Gotta initialize the variable
-            newPrefix = getArgument(command("prefix", message), message)
+            newPrefix = getRawArgument(command("prefix", message), message)
             for serverPrefix in serverList:
-                if(message.server.id == serverPrefix.getID):
+                if(message.server.id == serverPrefix.getID()):
                     serverInList = True
                     serverPrefix.setPrefix(newPrefix)
                     msg = ("Changed server prefix to " + newPrefix + " !").format(message)
@@ -266,7 +269,7 @@ async def on_ready():
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
     await client.change_presence(game=discord.Game(name='on ' + serversConnected + ' servers!'))
     try:
-        await botlist.post_server_count(serversConnected)
+        await botlist.post_server_count(serversConnected, shardCount)
         print("Successfully published server count to dbl.")
     except Exception as e:
         print("Failed to post server count to tbl.")
