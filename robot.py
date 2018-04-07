@@ -49,12 +49,15 @@ def command(string):
 """
 
 def getServerPrefix(server):
+    #Returns the server prefix.
+    #If there is no server prefix set, it returns the defaultPrefix.
     serverInList = False
     for serverPrefix in serverList:
         if server.id == serverPrefix.getID():
             serverInList = True
             return serverPrefix.getPrefix()
     if serverInList == False:
+        #If server does not have default prefix set
         return defaultPrefix
 
 def command(string, message):
@@ -137,6 +140,11 @@ async def on_message(message):
         msg = "{0.author.mention} hugs {0.mentions[0].mention}! ".format(message) + huglist[randint(0,hugcount)]
         await client.send_message(message.channel, msg)
         await client.delete_message(message)
+        
+    if message.content.startswith(command("ramsay", message)):
+        #Replies with a random Gordon Ramsay quote.
+        msg = ramsaylist[randint(0, ramsayCount)]
+        await client.send_message(message.channel, msg)
     
     if message.content.startswith(command("gay", message)):
         #no u
@@ -151,11 +159,12 @@ async def on_message(message):
         
     if message.content.startswith(command("info", message)):
         #Returns information about the bot.
-        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command deafult Prefix is: " + defaultPrefix + ". To get help, use " + defaultPrefix + "help.").format(message)
+        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: " + getServerPrefix(message.server) + ". To get help, use " + getServerPrefix(message.server) + "help.").format(message)
         await client.send_message(message.channel, msg)
         
     if (len(message.mentions) > 0) and (message.mentions[0] == client.user) and ("help" in message.content):
-        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command deafult Prefix is: " + defaultPrefix + ". To get help, use " + defaultPrefix + "help.").format(message)
+        #Returns information about the bot.
+        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: " + getServerPrefix(message.server) + ". To get help, use " + getServerPrefix(message.server) + "help.").format(message)
         await client.send_message(message.channel, msg)
 
     """
@@ -180,11 +189,13 @@ async def on_message(message):
             newPrefix = getRawArgument(command("prefix", message), message)
             for serverPrefix in serverList:
                 if(message.server.id == serverPrefix.getID()):
+                    #If the server already has a custom prefix set
                     serverInList = True
                     serverPrefix.setPrefix(newPrefix)
                     msg = ("Changed server prefix to " + newPrefix + " !").format(message)
                     await client.send_message(message.channel, msg)
             if serverInList == False:
+                #If the server does not already have a custom prefix set
                 newServerPrefix.setID(message.server.id)
                 newServerPrefix.setPrefix(newPrefix)
                 serverList.append(newServerPrefix)

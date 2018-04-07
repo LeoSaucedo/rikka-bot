@@ -7,15 +7,20 @@ This bot is in very active development. If it goes offline for a few minutes, it
 
 ### Commands
 *Right now, this bot's prefix is* `;`*.*
+- `;help` - Returns a command list.
+- `;info` - Returns information about the bot.
+- `@mention help` - Returns a command list.
 - `;hello` - Says hi.
 - `;gizoogle (text)` - translates a given text with gizoogle.
 - `;hugme` - hugs you.
 - `;hug @user` - hugs the specified user.
 - `;gay` - no u
 - `;translate (text)` - translates the specified text to English.
+- `;ramsay` - Returns a random Gordon Ramsay quote.
 
 #### Admin commands
 - `;clear (number)` - Clears a set number of messages from the given channel.
+- `;prefix (prefix)` - Sets a server-wide custom prefix for the bot.
 
 #### Emotes
 *Note: All emotes are entirely SFW.*
