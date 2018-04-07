@@ -276,6 +276,7 @@ async def on_ready():
     print(client.user.id)
     print("-------")
     print("loaded hugs: " + str(hugcount + 1)) # +1 because humans are not computers.
+    print("loaded Ramsay quotes: " + str(ramsayCount + 1))
     serversConnected = str(len(client.servers))
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
     await client.change_presence(game=discord.Game(name='on ' + serversConnected + ' servers!'))
