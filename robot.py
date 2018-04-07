@@ -10,6 +10,7 @@ from random import randint
 import string
 from googletrans import Translator
 import dbl
+from serverPrefix import serverPrefix
 
 #Auth tokens
 tokenfile = open("auth_token.txt", "r")
@@ -33,11 +34,30 @@ botlist = dbl.Client(client, bltoken)
 
 #Prefix things
 defaultPrefix = ";"
+newServerPrefix = serverPrefix("null", "null")
 
+#Custom Prefix settings
+serverList = []
+
+"""
 def command(string):
     #Builds a command out of the given string.
-    #Makes you able to change the deafultPrefix at any given moment.
     return defaultPrefix + string
+"""
+
+def getServerPrefix(server):
+    serverInList = False
+    for serverPrefix in serverList:
+        if server.id == serverPrefix.getID:
+            serverInList = True
+            return serverPrefix.getPrefix
+    if serverInList == False:
+        return defaultPrefix
+
+def command(string, message):
+    #Builds a command out of the given string.
+    serverPrefix = getServerPrefix(message.server)
+    return serverPrefix + string
 
 def getArgument(command, message):
     #Gets the argument text as a string.
@@ -64,7 +84,7 @@ async def on_server_join(server):
 @client.event
 async def on_server_remove(server):
     serversConnected = str(len(client.servers))
-    print("Joined server " + server.name + "!")
+    print("Left server " + server.name + "!")
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
     await client.change_presence(game=discord.Game(name='on ' + serversConnected + ' servers!'))
     try:
@@ -78,65 +98,70 @@ async def on_message(message):
     """
     Universal commands
     """
-    #Makes sure bot does not reply to itself
+    
     if message.author == client.user:
+        #Makes sure bot does not reply to itself
         return
     
-    if message.content.startswith(command("help")):
+    if message.author.bot == True:
+        #Makes sure bot does not reply to another bot.
+        return
+    
+    if message.content.startswith(command("help", message)):
         #Returns the README on the GitHub.
         msg = "{0.author.mention} https://discordbots.org/bot/430482288053059584".format(message)
         await client.send_message(message.channel, msg)
     
-    if message.content.startswith(command("hello")) or message.content.startswith(command("hi")):
+    if message.content.startswith(command("hello", message)) or message.content.startswith(command("hi", message)):
         #Says hi and embeds a gif, mentioning the author of the message.
         msg = "h-hello {0.author.mention}-chan! ".format(message) + 'https://cdn.discordapp.com/attachments/402744318013603840/430592483282386974/image.gif'
         await client.send_message(message.channel, msg)
     
-    if message.content.startswith(command("gizoogle")):
+    if message.content.startswith(command("gizoogle", message)):
         #Gizoogles the given string and returns it.
-        translatedMessage = gizoogle.text(getArgument(command("gizoogle"), message))
+        translatedMessage = gizoogle.text(getArgument(command("gizoogle", message), message))
         msg = "{0.author.mention} says: ".format(message) + translatedMessage.format(message)
         await client.send_message(message.channel, msg)
         await client.delete_message(message)
     
-    if message.content.startswith(command("hugme")) or message.content == command("hug"):
+    if message.content.startswith(command("hugme", message)) or message.content == command("hug", message):
         #Hugs the author of the message.
         msg = "{0.author.mention}: ".format(message) + huglist[randint(0,hugcount)] 
         await client.send_message(message.channel, msg)
     
-    if message.content.startswith(command("hug ")):
+    if message.content.startswith(command("hug ", message)):
         #Hugs the first user mentioned by the author.
         msg = "{0.author.mention} hugs {0.mentions[0].mention}! ".format(message) + huglist[randint(0,hugcount)]
         await client.send_message(message.channel, msg)
         await client.delete_message(message)
     
-    if message.content.startswith(command("gay")):
+    if message.content.startswith(command("gay", message)):
         #no u
         msg = "no u {0.author.mention}".format(message)
         await client.send_message(message.channel, msg)
 
-    if message.content.startswith(command("translate")):
+    if message.content.startswith(command("translate", message)):
         #Translates the given text into english.
-        translatedMessage = translator.translate(getRawArgument(command("translate"), message)).text
+        translatedMessage = translator.translate(getRawArgument(command("translate", message), message)).text
         msg = ("{0.author.mention}: translated text - " + translatedMessage).format(message)
         await client.send_message(message.channel, msg)
         
-    if message.content.startswith(command("info")):
+    if message.content.startswith(command("info", message)):
         #Returns information about the bot.
-        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command deafultPrefix is: " + defaultPrefix + ". To get help, use " + defaultPrefix + "help.").format(message)
+        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command deafult Prefix is: " + defaultPrefix + ". To get help, use " + defaultPrefix + "help.").format(message)
         await client.send_message(message.channel, msg)
         
     if (len(message.mentions) > 0) and (message.mentions[0] == client.user) and ("help" in message.content):
-        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command deafultPrefix is: " + defaultPrefix + ". To get help, use " + defaultPrefix + "help.").format(message)
+        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command deafult Prefix is: " + defaultPrefix + ". To get help, use " + defaultPrefix + "help.").format(message)
         await client.send_message(message.channel, msg)
 
     """
     Administrator Commands.
     """
     if message.channel.permissions_for(message.author).administrator == True:
-        if message.content.startswith(command("clear")):
+        if message.content.startswith(command("clear", message)):
             #Removes a set number of messages.
-            number = int(getArgument(command("clear"), message)) + 2
+            number = int(getArgument(command("clear", message), message)) + 2
             counter = 0
             async for x in client.logs_from(message.channel, limit=number):
                 if counter < number :
@@ -145,65 +170,80 @@ async def on_message(message):
                     await asyncio.sleep(0.1)
             msg = "deleted " + str(number - 2) + " messages!".format(string)
             await client.send_message(message.channel, msg)
-            
-            
+
+        if message.content.startswith(command("prefix", message)):
+            #Changes the prefix to the specified string.
+            serverInList = False #Gotta initialize the variable
+            newPrefix = getArgument(command("prefix", message), message)
+            for serverPrefix in serverList:
+                if(message.server.id == serverPrefix.getID):
+                    serverInList = True
+                    serverPrefix.setPrefix(newPrefix)
+                    msg = ("Changed server prefix to " + newPrefix + " !").format(message)
+                    await client.send_message(message.channel, msg)
+            if serverInList == False:
+                newServerPrefix.setID(message.server.id)
+                newServerPrefix.setPrefix(newPrefix)
+                serverList.append(newServerPrefix)
+                msg = ("Set server prefix to " + newPrefix + " !").format(message)
+                await client.send_message(message.channel, msg)
     """
     Miscellaneous gifs.
     I know it's ugly, but I'll fix it eventually.
     """
     #Rikka's actions
-    if message.content == command("shocked"):
+    if message.content == command("shocked", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430591612637413389/image.gif"
         await client.send_message(message.channel, msg)
-    if message.content == command("smile"):
+    if message.content == command("smile", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430591877834735617/image.gif"
         await client.send_message(message.channel, msg)
-    if message.content == command("hentai"):
+    if message.content == command("hentai", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430593080215994370/image.gif"
         await client.send_message(message.channel, msg)
-    if message.content == command("blush"):
+    if message.content == command("blush", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430593551554969600/image.gif"
         await client.send_message(message.channel, msg)
-    if message.content == command("bdsm"):
+    if message.content == command("bdsm", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430593796045144064/image.gif"
         await client.send_message(message.channel, msg)
-    if message.content == command("rekt"):
+    if message.content == command("rekt", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430594037427470336/image.gif"
         await client.send_message(message.channel, msg)
-    if message.content == command("boop"):
+    if message.content == command("boop", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430594711602987008/image.gif"
         await client.send_message(message.channel, msg)
-    if message.content == command("fuckoff"):
+    if message.content == command("fuckoff", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430594846022041601/image.gif"
         await client.send_message(message.channel, msg)
-    if message.content == command("sanic"):
+    if message.content == command("sanic", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430595068156575756/image.gif"
         await client.send_message(message.channel, msg)
-    if message.content == command("dreamy"):
+    if message.content == command("dreamy", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430595392669745153/image.gif"
         await client.send_message(message.channel, msg)
 
     #SyCW Commands - By special request.
     if message.server.id == "329383300848418816":
-        if message.content == command("assad"):
+        if message.content == command("assad", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430787413888073728/image.jpg"
             await client.send_message(message.channel, msg)
-        if message.content == command("turkey"):
+        if message.content == command("turkey", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430787599343550494/image.jpg"
             await client.send_message(message.channel, msg)
-        if message.content == command("bomb"):
+        if message.content == command("bomb", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430787955880230912/image.jpg"
             await client.send_message(message.channel, msg)
-        if message.content == command("isis"):
+        if message.content == command("isis", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430788102399983617/image.png"
             await client.send_message(message.channel, msg)
-        if message.content == command("barrel"):
+        if message.content == command("barrel", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430788296663367680/image.jpg"
             await client.send_message(message.channel, msg)
-        if message.content == command("kurd"):
+        if message.content == command("kurd", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430789263945105412/image.jpg"
             await client.send_message(message.channel, msg)
-        if message.content == command("abuhajaar"):
+        if message.content == command("abuhajaar", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430804463016476672/image.png"
             await client.send_message(message.channel, msg)
         
