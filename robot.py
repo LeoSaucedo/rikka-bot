@@ -10,7 +10,6 @@ from random import randint
 import string
 from googletrans import Translator
 import dbl
-from serverPrefix import serverPrefix
 
 #Auth tokens
 tokenfile = open("auth_token.txt", "r")
@@ -30,6 +29,8 @@ ramsayfile = open("ramsay.list")
 ramsaylist = ramsayfile.read().splitlines()
 ramsayCount = len(ramsaylist) - 1
 
+#Prefix file accessing
+
 #Instances
 client = discord.Client()
 translator = Translator()
@@ -37,25 +38,20 @@ botlist = dbl.Client(client, bltoken)
 
 #Prefix things
 defaultPrefix = ";"
-newServerPrefix = serverPrefix("null", "null")
-
-#Custom Prefix settings
-serverList = []
-
-"""
-def command(string):
-    #Builds a command out of the given string.
-    return defaultPrefix + string
-"""
+        
 
 def getServerPrefix(server):
     #Returns the server prefix.
     #If there is no server prefix set, it returns the defaultPrefix.
+    prefixFile = open("server_prefixes.txt", "r+")
+    prefixList = prefixFile.read().splitlines()
+    prefixFile.close()
     serverInList = False
-    for serverPrefix in serverList:
-        if server.id == serverPrefix.getID():
+    for line in prefixList:
+        splitLine = line.split()
+        if server.id == splitLine[0]:
             serverInList = True
-            return serverPrefix.getPrefix()
+            return splitLine[1]
     if serverInList == False:
         #If server does not have default prefix set
         return defaultPrefix
@@ -185,20 +181,29 @@ async def on_message(message):
 
         if message.content.startswith(command("prefix", message)):
             #Changes the prefix to the specified string.
+            prefixFile = open("server_prefixes.txt")
+            prefixList = prefixFile.read().splitlines()
+            prefixFile.close()
             serverInList = False #Gotta initialize the variable
             newPrefix = getRawArgument(command("prefix", message), message)
-            for serverPrefix in serverList:
-                if(message.server.id == serverPrefix.getID()):
+            index = 0
+            for line in prefixList:
+                splitLine = line.split()
+                if(message.server.id == splitLine[0]):
                     #If the server already has a custom prefix set
                     serverInList = True
-                    serverPrefix.setPrefix(newPrefix)
+                    prefixFile = open("server_prefixes.txt", "w+")
+                    prefixList[index] = (message.server.id + " " + newPrefix)
+                    prefixFile.write("\n".join(prefixList))
+                    prefixFile.close()
                     msg = ("Changed server prefix to " + newPrefix + " !").format(message)
                     await client.send_message(message.channel, msg)
+                index = index + 1
             if serverInList == False:
                 #If the server does not already have a custom prefix set
-                newServerPrefix.setID(message.server.id)
-                newServerPrefix.setPrefix(newPrefix)
-                serverList.append(newServerPrefix)
+                prefixFile = open("server_prefixes.txt", "a+")
+                prefixFile.write(message.server.id + " " + newPrefix+"\n") #Adds line to prefixlist
+                prefixFile.close()
                 msg = ("Set server prefix to " + newPrefix + " !").format(message)
                 await client.send_message(message.channel, msg)
     """
@@ -219,7 +224,7 @@ async def on_message(message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430593551554969600/image.gif"
         await client.send_message(message.channel, msg)
     if message.content == command("bdsm", message):
-        msg = "https://cdn.discordapp.com/attachments/402744318013603840/430593796045144064/image.gif"
+        msg = "http://i.imgur.com/dI4zJwk.gif"
         await client.send_message(message.channel, msg)
     if message.content == command("rekt", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430594037427470336/image.gif"
