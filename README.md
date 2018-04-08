@@ -19,6 +19,7 @@ This bot is in very active development. If it goes offline for a few minutes, it
 - `;ramsay` - Returns a random Gordon Ramsay quote.
 
 #### Admin commands
+- `;prefix (prefix)` - Changes the prefix to a set custom prefix.
 - `;clear (number)` - Clears a set number of messages from the given channel.
 
 #### Emotes
