@@ -20,7 +20,6 @@ This bot is in very active development. If it goes offline for a few minutes, it
 
 #### Admin commands
 - `;clear (number)` - Clears a set number of messages from the given channel.
-- `;prefix (prefix)` - Sets a server-wide custom prefix for the bot.
 
 #### Emotes
 *Note: All emotes are entirely SFW.*
