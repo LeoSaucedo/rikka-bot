@@ -247,6 +247,9 @@ async def on_message(message):
     if message.content == command("trash", message):
         msg = "https://media1.tenor.com/images/29307201260fb755e7ff9fec21f22c95/tenor.gif?itemid=8811727"
         await client.send_message(message.channel, msg)
+    if message.content == command("kys", message):
+        msg = "https://imgur.com/YfYwzcN"
+        await client.send_message(message.channel, msg)
     #SyCW Commands - By special request.
     if message.server.id == "329383300848418816":
         if message.content == command("assad", message):
