@@ -212,7 +212,7 @@ async def on_message(message):
                     #If the server already has a custom prefix set
                     serverInList = True
                     prefixFile = open("server_prefixes.txt", "w+")
-                    prefixList[index] = (message.channel.guild.id + " " + newPrefix)
+                    prefixList[index] = (str(message.channel.guild.id) + " " + newPrefix)
                     prefixFile.write("\n".join(prefixList))
                     prefixFile.close()
                     msg = ("Changed server prefix to " + newPrefix + " !").format(message)
@@ -221,7 +221,7 @@ async def on_message(message):
             if serverInList == False:
                 #If the server does not already have a custom prefix set
                 prefixFile = open("server_prefixes.txt", "a+")
-                prefixFile.write("\n" + message.channel.guild.id + " " + newPrefix) #Adds line to prefixlist
+                prefixFile.write("\n" + str(message.channel.guild.id) + " " + newPrefix) #Adds line to prefixlist
                 prefixFile.close()
                 msg = ("Set server prefix to " + newPrefix + " !").format(message)
                 await message.channel.send(msg)
