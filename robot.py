@@ -10,6 +10,7 @@ from random import randint
 import string
 from googletrans import Translator
 import dbl
+import CleverApi
 
 #Auth tokens
 tokenfile = open("auth_token.txt", "r")
@@ -21,6 +22,18 @@ rawbltoken = bltokenfile.read().splitlines()
 bltoken = rawbltoken[0]
 shardCount = 1 #Keeping it simple with 1 for now.
 
+clevertokenfile = open("clever_token.txt")
+rawclevertoken = clevertokenfile.read().splitlines()
+userapi = rawclevertoken[0]
+keyapi = rawclevertoken[1]
+
+#Cleverbot
+print("Starting cleverbot instance...")
+try:
+    clever = CleverApi.Bot(userapi, keyapi)
+except Exception as e:
+    print("Could not start cleverbot instance.")
+
 #lists
 hugsfile = open("hug_gifs.list", "r")
 huglist = hugsfile.read().splitlines()
@@ -28,8 +41,6 @@ hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
 ramsayfile = open("ramsay.list")
 ramsaylist = ramsayfile.read().splitlines()
 ramsayCount = len(ramsaylist) - 1
-
-#Prefix file accessing
 
 #Instances
 client = discord.Client()
@@ -114,7 +125,7 @@ async def on_message(message):
         msg = "{0.author.mention} https://discordbots.org/bot/430482288053059584".format(message)
         await client.send_message(message.channel, msg)
     
-    if message.content.startswith(command("hello", message)) or message.content.startswith(command("hi", message)):
+    if message.content == command("hi", message) or message.content == command("hello", message):
         #Says hi and embeds a gif, mentioning the author of the message.
         msg = "h-hello {0.author.mention}-chan! ".format(message) + 'https://cdn.discordapp.com/attachments/402744318013603840/430592483282386974/image.gif'
         await client.send_message(message.channel, msg)
@@ -151,6 +162,12 @@ async def on_message(message):
         #Translates the given text into english.
         translatedMessage = translator.translate(getRawArgument(command("translate", message), message)).text
         msg = ("{0.author.mention}: translated text - " + translatedMessage).format(message)
+        await client.send_message(message.channel, msg)
+        
+    if message.content.startswith(command("clever", message)):
+        #Returns CleverBot's response.
+        query = getRawArgument(command("clever", message), message)
+        msg = clever.ask(query)
         await client.send_message(message.channel, msg)
         
     if message.content.startswith(command("info", message)):

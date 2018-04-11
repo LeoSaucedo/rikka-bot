@@ -17,6 +17,7 @@ This bot is in very active development. If it goes offline for a few minutes, it
 - `;gay` - no u
 - `;translate (text)` - translates the specified text to English.
 - `;ramsay` - Returns a random Gordon Ramsay quote.
+- `;clever (text)` - Returns the cleverbot response to the given text.
 
 #### Admin commands
 - `;prefix (prefix)` - Changes the prefix to a set custom prefix.
@@ -27,5 +28,6 @@ This bot is in very active development. If it goes offline for a few minutes, it
 - `shocked, smile, hentai, blush, bdsm, rekt, boop, fuckoff, sanic, dreamy, kys`
 
 ### Special Thanks
-- Special thanks to user chafla for his code [gizoogle.py](https://github.com/chafla/gizoogle-py), which helped make this program possible.
+- Special thanks to user chafla for their code [gizoogle.py](https://github.com/chafla/gizoogle-py), which helped make this program possible.
 - Hat tip to Rapptz for developing the [Discord API Wrapper](https://github.com/Rapptz/discord.py) used in this program.
+- Credit to phl4nk for their [implementation of the cleverbot.io API for python](https://github.com/phl4nk/CleverApi).
