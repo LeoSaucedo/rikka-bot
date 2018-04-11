@@ -28,6 +28,6 @@ This bot is in very active development. If it goes offline for a few minutes, it
 - `shocked, smile, hentai, blush, bdsm, rekt, boop, fuckoff, sanic, dreamy, kys`
 
 ### Special Thanks
-- Special thanks to user chafla for their code [gizoogle.py](https://github.com/chafla/gizoogle-py), which helped make this program possible.
+- Special thanks to user chafla for their code [gizoogle.py](https://github.com/Rapptz/discord.py/tree/rewrite), which helped make this program possible.
 - Hat tip to Rapptz for developing the [Discord API Wrapper](https://github.com/Rapptz/discord.py) used in this program.
 - Credit to phl4nk for their [implementation of the cleverbot.io API for python](https://github.com/phl4nk/CleverApi).
