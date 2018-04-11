@@ -150,7 +150,7 @@ async def on_message(message):
         msg = "no u {0.author.mention}".format(message)
         await client.send_message(message.channel, msg)
      
-    if message.content.startswith(command("insult ", message)):
+    if message.content.startswith(command("insultnfsw ", message)):
         # Says a random insult using an insult generator
         msg = "{0.author.mention} calls {0.mentions[0].mention} a " + insultlist[randint(0, insultCount)]
         await client.send_message(message.channel, msg)
