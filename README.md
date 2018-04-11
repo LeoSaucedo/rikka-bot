@@ -27,9 +27,6 @@ This bot is in very active development. If it goes offline for a few minutes, it
 *Note: All emotes are entirely SFW.*
 - `shocked, smile, hentai, blush, bdsm, rekt, boop, fuckoff, sanic, dreamy, kys`
 
-### NFSW Commands
-*Note: All emotes can only run if the server is in NFSW.*
-- `;insult @user`
 ### Special Thanks
 - Special thanks to user chafla for their code [gizoogle.py](https://github.com/chafla/gizoogle-py), which helped make this program possible.
 - Hat tip to Rapptz for developing the [Discord API Wrapper](https://github.com/Rapptz/discord.py) used in this program.
