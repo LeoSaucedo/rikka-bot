@@ -28,6 +28,9 @@ hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
 ramsayfile = open("ramsay.list")
 ramsaylist = ramsayfile.read().splitlines()
 ramsayCount = len(ramsaylist) - 1
+insultfile = open("InsultGenerator.list")
+insultlist = insultfile.read().splitlines()
+insultCount = len(insultlist) - 1
 
 #Prefix file accessing
 
