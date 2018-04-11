@@ -28,7 +28,10 @@ hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
 ramsayfile = open("ramsay.list")
 ramsaylist = ramsayfile.read().splitlines()
 ramsayCount = len(ramsaylist) - 1
-insultfile = open("InsultGenerator.list")
+insultnswfile = open("InsultGenerator.list")
+insultnsfwlist = insultfile.read().splitlines()
+insultnsfwCount = len(insultlist) - 1
+insultfile = open("sfwinsults.list")
 insultlist = insultfile.read().splitlines()
 insultCount = len(insultlist) - 1
 
@@ -151,6 +154,12 @@ async def on_message(message):
         await client.send_message(message.channel, msg)
      
     if message.content.startswith(command("insultnfsw ", message)):
+        # Says a random insult using an insult generator
+        msg = "{0.author.mention} calls {0.mentions[0].mention} a " + insultnsfwlist[randint(0, insultCount)]
+        await client.send_message(message.channel, msg)
+        await client.delete_message(message)
+        
+    if message.content.startswith(command("insult ", message)):
         # Says a random insult using an insult generator
         msg = "{0.author.mention} calls {0.mentions[0].mention} a " + insultlist[randint(0, insultCount)]
         await client.send_message(message.channel, msg)
