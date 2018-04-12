@@ -11,6 +11,7 @@ import string
 from googletrans import Translator
 import dbl
 import CleverApi
+from time import sleep
 
 #Auth tokens
 tokenfile = open("auth_token.txt", "r")
@@ -168,9 +169,10 @@ async def on_message(message):
         
     if message.content.startswith(command("clever", message)):
         #Returns CleverBot's response.
-        query = getRawArgument(command("clever", message), message)
-        msg = clever.ask(query)
-        await message.channel.send(msg)
+        async with message.channel.typing():
+            query = getRawArgument(command("clever", message), message)
+            msg = clever.ask(query)
+            await message.channel.send(msg)
         
     if message.content.startswith(command("info", message)):
         #Returns information about the bot.
@@ -185,19 +187,17 @@ async def on_message(message):
     """
     Administrator Commands.
     """
+    ""
     if message.channel.permissions_for(message.author).administrator == True:
+        
         if message.content.startswith(command("clear", message)):
-            #Removes a set number of messages.
-            number = int(getArgument(command("clear", message), message)) + 2
-            counter = 0
-            async for x in message.channel.history(limit=number):
-                if counter < number :
-                    await x.delete()
-                    counter += 1
-                    await asyncio.sleep(0.1)
-            msg = "deleted " + str(number - 2) + " messages!".format(string)
+            number = int(getArgument(command("clear", message), message))
+            await message.channel.purge(limit=(number + 1), bulk=True)
+            msg = "deleted " + str(number) + " messages!".format(string)
             await message.channel.send(msg)
-
+            sleep(5)
+            await message.channel.purge(limit = 1, bulk = True)
+        
         if message.content.startswith(command("prefix", message)):
             #Changes the prefix to the specified string.
             prefixFile = open("server_prefixes.txt")
@@ -269,6 +269,7 @@ async def on_message(message):
     if message.content == command("kys", message):
         msg = "https://imgur.com/YfYwzcN"
         await message.channel.send(msg)
+    
     #SyCW Commands - By special request.
     if message.channel.guild.id == 329383300848418816:
         if message.content == command("assad", message):
