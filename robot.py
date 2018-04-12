@@ -42,6 +42,12 @@ hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
 ramsayfile = open("ramsay.list")
 ramsaylist = ramsayfile.read().splitlines()
 ramsayCount = len(ramsaylist) - 1
+insultnsfwfile = open("InsultGenerator.list")
+insultnsfwlist = insultnsfw.read().splitlines()
+insultnsfwCount = len(ramsaylist) - 1
+insultfile = open("sfwinsults.list")
+insultlist = insultfile.read().splitlines()
+insultCount = len(ramsaylist) - 1
 
 #Instances
 client = discord.Client()
@@ -166,6 +172,18 @@ async def on_message(message):
         translatedMessage = translator.translate(getRawArgument(command("translate", message), message)).text
         msg = ("{0.author.mention}: translated text - " + translatedMessage).format(message)
         await message.channel.send(msg)
+        
+        if message.content.startswith(command("insultnfsw ", message)):
+        # Says a random insult using an insult generator
+        msg = "{0.author.mention} calls {0.mentions[0].mention} a ".format(message) + insultnsfwlist[randint(0, insultCount)]
+        await message.channel.send(msg)
+        await message.delete()
+
+    if message.content.startswith(command("insult ", message)):
+        # Says a random insult using an insult generator
+        msg = "{0.author.mention} calls {0.mentions[0].mention} a ".format(message) + insultlist[randint(0,hugcount)]
+        await message.channel.send(msg)
+        await message.delete()
         
     if message.content.startswith(command("clever", message)):
         #Returns CleverBot's response.
