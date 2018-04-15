@@ -18,6 +18,7 @@ This bot is in very active development. If it goes offline for a few minutes, it
 - `;translate (text)` - translates the specified text to English.
 - `;ramsay` - Returns a random Gordon Ramsay quote.
 - `;clever (text)` - Returns the cleverbot response to the given text.
+- `paypal` - Returns donation link to contribute to server hosting.
 
 #### Admin commands
 - `;prefix (prefix)` - Changes the prefix to a set custom prefix.
@@ -26,6 +27,9 @@ This bot is in very active development. If it goes offline for a few minutes, it
 #### Emotes
 *Note: All emotes are entirely SFW.*
 - `shocked, smile, hentai, blush, bdsm, rekt, boop, fuckoff, sanic, dreamy, kys`
+
+#### In the works
+- `trivia` Trivia module with global and local leaderboards
 
 ### Special Thanks
 - Special thanks to user chafla for their code [gizoogle.py](https://github.com/Rapptz/discord.py/tree/rewrite), which helped make this program possible.
