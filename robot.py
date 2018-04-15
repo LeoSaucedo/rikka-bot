@@ -191,6 +191,10 @@ async def on_message(message):
         #Returns information about the bot.
         msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: " + getServerPrefix(message.channel.guild) + ". To get help, use " + getServerPrefix(message.channel.guild) + "help.").format(message)
         await message.channel.send(msg)
+        
+    if message.content.startswith(command("donate", message)) or message.content.startswith(command("paypal", message)):
+        msg = ("Help the humble programmer of this bot get himself a cup of tea to keep him going. https://www.paypal.me/LeoSaucedo").format(message)
+        await message.channel.send(msg)
 
     """
     Administrator Commands.
