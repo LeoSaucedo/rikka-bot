@@ -18,7 +18,7 @@ This bot is in very active development. If it goes offline for a few minutes, it
 - `;translate (text)` - translates the specified text to English.
 - `;ramsay` - Returns a random Gordon Ramsay quote.
 - `;clever (text)` - Returns the cleverbot response to the given text.
-- `paypal` - Returns donation link to contribute to server hosting.
+- `;paypal` - Returns donation link to contribute to server hosting.
 
 #### Admin commands
 - `;prefix (prefix)` - Changes the prefix to a set custom prefix.
