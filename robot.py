@@ -39,9 +39,11 @@ except Exception as e:
 hugsfile = open("hug_gifs.list", "r")
 huglist = hugsfile.read().splitlines()
 hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
+hugsfile.close()
 ramsayfile = open("ramsay.list")
 ramsaylist = ramsayfile.read().splitlines()
 ramsayCount = len(ramsaylist) - 1
+ramsayfile.close()
 
 #Instances
 client = discord.Client()
@@ -50,6 +52,9 @@ botlist = dbl.Client(client, bltoken)
 
 #Prefix things
 defaultPrefix = ";"
+
+#Trivia
+
         
 
 def getServerPrefix(guild):
@@ -84,7 +89,7 @@ def getRawArgument(command, message):
     return argument
     
 @client.event
-async def on_server_join(guild):
+async def on_guild_join(guild):
     serversConnected = str(len(client.guilds))
     print("Joined server " + guild.name + "!")
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
@@ -97,7 +102,7 @@ async def on_server_join(guild):
         print("Failed to post server count to tbl.")
     
 @client.event
-async def on_server_remove(guild):
+async def on_guild_remove(guild):
     serversConnected = str(len(client.guilds))
     print("Left server " + guild.name + "!")
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
@@ -171,7 +176,10 @@ async def on_message(message):
         #Returns CleverBot's response.
         async with message.channel.typing():
             query = getRawArgument(command("clever", message), message)
-            msg = clever.ask(query)
+            try:
+                msg = clever.ask(query)
+            except Exception as cleverBotException:
+                await message.channel.send("Could not resolve message.")
             await message.channel.send(msg)
         
     if message.content.startswith(command("info", message)):
@@ -187,7 +195,6 @@ async def on_message(message):
     """
     Administrator Commands.
     """
-    ""
     if message.channel.permissions_for(message.author).administrator == True:
         
         if message.content.startswith(command("clear", message)):
@@ -225,6 +232,12 @@ async def on_message(message):
                 prefixFile.close()
                 msg = ("Set server prefix to " + newPrefix + " !").format(message)
                 await message.channel.send(msg)
+                
+    """
+    Trivia commands. - WIP
+    """
+    
+
     """
     Miscellaneous gifs.
     I know it's ugly, but I'll fix it eventually.
