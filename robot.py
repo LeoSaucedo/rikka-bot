@@ -44,6 +44,10 @@ ramsayfile = open("ramsay.list")
 ramsaylist = ramsayfile.read().splitlines()
 ramsayCount = len(ramsaylist) - 1
 ramsayfile.close()
+insultfile = open("sfwinsults.list")
+insultlist = insultfile.read().splitlines()
+insultCount = len(insultlist) - 1
+insultfile.close()
 
 #Instances
 client = discord.Client()
