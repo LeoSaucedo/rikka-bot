@@ -3,19 +3,17 @@
 
 A Discord bot that performs various functions.
 
-This bot is in very active development. If it goes offline for a few minutes, it's probably because I'm implementing a new feature.
-
 ### Commands
 *Right now, this bot's prefix is* `;`*.*
 - `;help` - Returns a command list.
 - `;info` - Returns information about the bot.
 - `@mention help` - Returns a command list.
 - `;hello` - Says hi.
-- `;gizoogle (text)` - translates a given text with gizoogle.
-- `;hugme` - hugs you.
-- `;hug @user` - hugs the specified user.
+- `;gizoogle (text)` - Yranslates a given text with gizoogle.
+- `;hugme` - Hugs you.
+- `;hug @user` - Hugs the specified user.
 - `;gay` - no u
-- `;translate (text)` - translates the specified text to English.
+- `;translate (text)` - Translates the specified text to English.
 - `;ramsay` - Returns a random Gordon Ramsay quote.
 - `;clever (text)` - Returns the cleverbot response to the given text.
 - `;paypal` - Returns donation link to contribute to server hosting.
@@ -29,7 +27,8 @@ This bot is in very active development. If it goes offline for a few minutes, it
 - `shocked, smile, hentai, blush, bdsm, rekt, boop, fuckoff, sanic, dreamy, kys`
 
 #### In the works
-- `trivia` Trivia module with global and local leaderboards
+- `trivia`  - Trivia module with global and local leaderboards
+- `insult` - A fun random insult generator.
 
 ### Special Thanks
 - Special thanks to user chafla for their code [gizoogle.py](https://github.com/Rapptz/discord.py/tree/rewrite), which helped make this program possible.
