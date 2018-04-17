@@ -44,6 +44,10 @@ ramsayfile = open("ramsay.list")
 ramsaylist = ramsayfile.read().splitlines()
 ramsayCount = len(ramsaylist) - 1
 ramsayfile.close()
+insultfile = open("sfwinsults.list")
+insultlist = insultfile.read().splitlines()
+insultCount = len(insultlist) - 1
+insultfile.close()
 
 #Instances
 client = discord.Client()
@@ -196,6 +200,12 @@ async def on_message(message):
         msg = ("Help the humble programmer of this bot get himself a cup of tea to keep him going. https://www.paypal.me/LeoSaucedo").format(message)
         await message.channel.send(msg)
 
+    if message.content.startswith(command("insult ", message)):
+        # Says a random insult using an insult generator
+        msg = "{0.author.mention} calls {0.mentions[0].mention} a ".format(message) + insultlist[randint(0,hugcount)]
+        await message.channel.send(msg)
+        await message.delete()
+        
     """
     Administrator Commands.
     """
