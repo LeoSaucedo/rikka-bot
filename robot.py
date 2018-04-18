@@ -182,7 +182,7 @@ async def on_message(message):
             try:
                 msg = clever.ask(query)
             except Exception as cleverBotException:
-                await message.channel.send("Could not resolve message.")
+                msg = "cleverbot.io API error. Try again later."
             await message.channel.send(msg)
         
     elif message.content.startswith(command("info", message)):
