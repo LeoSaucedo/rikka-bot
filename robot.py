@@ -29,11 +29,10 @@ userapi = rawclevertoken[0]
 keyapi = rawclevertoken[1]
 
 #Cleverbot
-print("Starting cleverbot instance...")
 try:
     clever = CleverApi.Bot(userapi, keyapi)
 except Exception as e:
-    print("Could not start cleverbot instance.")
+    print("Failed to instantiate CleverBot.")
 
 #lists
 hugsfile = open("hug_gifs.list", "r")
@@ -209,7 +208,7 @@ async def on_message(message):
     """
     Administrator Commands.
     """
-    elif message.channel.permissions_for(message.author).administrator == True:
+    if message.channel.permissions_for(message.author).administrator == True:
         
         if message.content.startswith(command("clear", message)):
             number = int(getArgument(command("clear", message), message))
@@ -257,7 +256,7 @@ async def on_message(message):
     I know it's ugly, but I'll fix it eventually.
     """
     #Rikka's actions
-    elif message.content == command("shocked", message):
+    if message.content == command("shocked", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430591612637413389/image.gif"
         await message.channel.send(msg)
     elif message.content == command("smile", message):
