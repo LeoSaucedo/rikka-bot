@@ -17,6 +17,7 @@ A Discord bot that performs various functions.
 - `;ramsay` - Returns a random Gordon Ramsay quote.
 - `;clever (text)` - Returns the cleverbot response to the given text.
 - `;paypal` - Returns donation link to contribute to server hosting.
+- `;insult (user)` - Sends a random insult to the given user.
 
 #### Admin commands
 - `;prefix (prefix)` - Changes the prefix to a set custom prefix.
@@ -28,7 +29,6 @@ A Discord bot that performs various functions.
 
 #### In the works
 - `trivia`  - Trivia module with global and local leaderboards
-- `insult` - A fun random insult generator.
 
 ### Special Thanks
 - Special thanks to user chafla for their code [gizoogle.py](https://github.com/Rapptz/discord.py/tree/rewrite), which helped make this program possible.
