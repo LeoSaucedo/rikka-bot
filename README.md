@@ -29,6 +29,7 @@ A Discord bot that performs various functions.
 
 #### In the works
 - `trivia`  - Trivia module with global and local leaderboards
+- Improved, proprietary AI, instead of cleverbot.
 
 ### Special Thanks
 - Special thanks to user chafla for their code [gizoogle.py](https://github.com/Rapptz/discord.py/tree/rewrite), which helped make this program possible.
