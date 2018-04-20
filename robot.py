@@ -341,4 +341,5 @@ async def on_ready():
     except Exception as e:
         print("Failed to post server count to tbl.")
 
-client.run(token) #runs the bot.
+while True:
+	client.run(token) #runs the bot.
