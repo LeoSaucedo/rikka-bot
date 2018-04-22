@@ -47,6 +47,10 @@ insultfile = open("sfwinsults.list")
 insultlist = insultfile.read().splitlines()
 insultCount = len(insultlist) - 1
 insultfile.close()
+nsfwinsultfile = open("nsfwinsults.list")
+nsfwinsultlist = nsfwinsultfile.read().splitlines()
+nsfwInsultCount = len(nsfwinsultlist) -1
+nsfwinsultfile.close()
 
 #Instances
 client = discord.Client()
@@ -55,10 +59,6 @@ botlist = dbl.Client(client, bltoken)
 
 #Prefix things
 defaultPrefix = ";"
-
-#Trivia
-
-        
 
 def getServerPrefix(guild):
     #Returns the server prefix.
@@ -119,10 +119,10 @@ async def on_guild_remove(guild):
     
 @client.event
 async def on_message(message):
+    
     """
     Universal commands
     """
-    
     if message.author == client.user:
         #Makes sure bot does not reply to itself
         return
@@ -201,7 +201,11 @@ async def on_message(message):
 
     elif message.content.startswith(command("insult ", message)):
         # Says a random insult using an insult generator
-        msg = "{0.author.mention} calls {0.mentions[0].mention} a ".format(message) + insultlist[randint(0,hugcount)]
+        if message.channel.is_nsfw():
+            #If the channel is isfw.
+            msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + nsfwinsultlist[randint(0,nsfwInsultCount)]+"!"
+        else:
+            msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + insultlist[randint(0,insultCount)]+"!"
         await message.channel.send(msg)
         await message.delete()
         
@@ -245,10 +249,6 @@ async def on_message(message):
                 prefixFile.close()
                 msg = ("Set server prefix to " + newPrefix + " !").format(message)
                 await message.channel.send(msg)
-                
-    """
-    Trivia commands. - WIP
-    """
     
 
     """
@@ -342,4 +342,4 @@ async def on_ready():
         print("Failed to post server count to tbl.")
 
 while True:
-	client.run(token) #runs the bot.
+    client.run(token) #runs the bot.
