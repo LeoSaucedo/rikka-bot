@@ -256,7 +256,7 @@ async def on_message(message):
     I know it's ugly, but I'll fix it eventually.
     """
     #Rikka's actions
-    elif message.content == command("shocked", message):
+    if message.content == command("shocked", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430591612637413389/image.gif"
         await message.channel.send(msg)
     elif message.content == command("smile", message):
