@@ -201,7 +201,7 @@ async def on_message(message):
 
     elif message.content.startswith(command("insult ", message)):
         # Says a random insult using an insult generator
-        msg = "{0.author.mention} calls {0.mentions[0].mention} a ".format(message) + insultlist[randint(0,hugcount)]
+        msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + insultlist[randint(0,hugcount)]
         await message.channel.send(msg)
         await message.delete()
         
