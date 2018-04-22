@@ -60,10 +60,6 @@ botlist = dbl.Client(client, bltoken)
 #Prefix things
 defaultPrefix = ";"
 
-#Trivia
-
-        
-
 def getServerPrefix(guild):
     #Returns the server prefix.
     #If there is no server prefix set, it returns the defaultPrefix.
@@ -123,16 +119,6 @@ async def on_guild_remove(guild):
     
 @client.event
 async def on_message(message):
-    
-    """
-    NSFW Commands
-    """
-    if(message.channel.is_nsfw()):
-        #If message is sent in an nsfw channel.
-        if(message.content.startswith(command("insult", message))):
-            msg = "{0.author.mention} calls {0.mentions[0].mention}".format(message) + nsfwinsultlist[randint(0,nsfwInsultCount)]+"!"
-            await message.channel.send(msg)
-            await message.delete()
     
     """
     Universal commands
@@ -215,7 +201,11 @@ async def on_message(message):
 
     elif message.content.startswith(command("insult ", message)):
         # Says a random insult using an insult generator
-        msg = "{0.author.mention} calls {0.mentions[0].mention}".format(message) + insultlist[randint(0,insultCount)]+"!"
+        if message.channel.is_nsfw():
+            #If the channel is isfw.
+            msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + nsfwinsultlist[randint(0,nsfwInsultCount)]+"!"
+        else:
+            msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + insultlist[randint(0,insultCount)]+"!"
         await message.channel.send(msg)
         await message.delete()
         
@@ -266,7 +256,7 @@ async def on_message(message):
     I know it's ugly, but I'll fix it eventually.
     """
     #Rikka's actions
-    if message.content == command("shocked", message):
+    elif message.content == command("shocked", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430591612637413389/image.gif"
         await message.channel.send(msg)
     elif message.content == command("smile", message):
