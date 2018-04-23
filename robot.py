@@ -12,6 +12,7 @@ from googletrans import Translator
 import dbl
 import CleverApi
 from time import sleep
+import trivia
 
 #Auth tokens
 tokenfile = open("auth_token.txt", "r")
@@ -59,6 +60,12 @@ botlist = dbl.Client(client, bltoken)
 
 #Prefix things
 defaultPrefix = ";"
+
+#Trivia instantiation
+questionPath = "trivia_questions.list"
+answerPath = "trivia_answers.list"
+trivia = trivia.triviaGame(questionPath, answerPath)
+isSent = False
 
 def getServerPrefix(guild):
     #Returns the server prefix.
@@ -208,6 +215,49 @@ async def on_message(message):
             msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + insultlist[randint(0,insultCount)]+"!"
         await message.channel.send(msg)
         await message.delete()
+        
+        
+    """
+    Trivia Commands.
+    """
+    if message.content == command("trivia", message):
+        prefix = getServerPrefix(message.guild)
+        msg = "To get a question, type "+prefix+"trivia ask. To attempt an answer, type "+prefix+"trivia (attempt). To reveal the answer, type "+prefix+"trivia reveal."
+        await message.channel.send(msg)
+        msg = "To check your score, type "+prefix+"trivia score. Good luck!"
+        await message.channel.send(msg)
+        
+    elif message.content.startswith(command("trivia ask", message)):
+        #Returns a randomly generated question.
+        msg = trivia.getQuestion()
+        await message.channel.send(msg)
+        global isSent
+        isSent = True
+        
+    elif message.content.startswith(command("trivia reveal", message)):
+        msg = trivia.getAnswer()
+        await message.channel.send(msg)
+        isSent = False
+        
+    elif message.content.startswith(command("trivia score", message)):
+        msg  = ("{0.author.mention}, your score is " + str(trivia.getScore(message.author.id))).format(message)
+        await message.channel.send(msg)
+        
+    elif message.content.startswith(command("attempt", message)):
+        #The user is attempting to answer the question.
+        attempt = getRawArgument(command("attempt", message), message)
+        if isSent == True:
+            #If the question is sent and the answer has not yet been revealed.
+            if attempt.lower() == trivia.getAnswer().lower():
+                #If the answer is correct.
+                msg = "{0.author.mention}, correct! The answer is ".format(message) + trivia.getAnswer()
+                await message.channel.send(msg)
+                trivia.addPoint(message.guild.id, message.author.id)
+                isSent = False
+        elif isSent == False:
+            msg = "You haven't gotten a question yet!"
+            await message.channel.send(msg)
+    
         
     """
     Administrator Commands.
