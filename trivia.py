@@ -5,34 +5,56 @@ The format for the leaderbaord is as follows:
 Carlos Saucedo, 2018
 """
 from random import randint
-import discord
-from discord import message
-
+from triviaSet import triviaSet
 class triviaGame:
     def __init__(self, questionPath, answerPath):
         leaderboardFile = open("leaderboard.txt", "r")
         self.leaderboardList = leaderboardFile.read().splitlines()
         leaderboardFile.close()
         
-        questionFile = open(questionPath, "r")
-        self.questionList = questionFile.read().splitlines()
+        questionFile = open(questionPath, "r", encoding="utf8")
+        self.questionList = questionFile.read().encode("ascii", "ignore").splitlines()
         self.questionCount = len(self.questionList)
         questionFile.close()
         
-        answerFile = open(answerPath, "r")
-        self.answerList = answerFile.read().splitlines()
+        answerFile = open(answerPath, "r", encoding="utf8")
+        self.answerList = answerFile.read().encode("ascii", "ignore").splitlines()
         answerFile.close()
         self.questionNumber = None
         
-    def getQuestion(self):
-        #Returns a randomly selected question.
-        self.questionNumber = randint(0, self.questionCount -1)
-        return self.questionList[self.questionNumber]
+        self.setList = []
         
-    def getAnswer(self):
+    def getQuestion(self, serverID):
+        #Returns a randomly selected question.
+        inList = False
+        for x in self.setList:
+            if x.getServer() == serverID:
+                #If the server has already started a question instance.
+                inList = True
+                questionNumber = randint(0, self.questionCount -1)
+                question = self.questionList[questionNumber]
+                question = question.decode("utf-8")
+                answer = self.answerList[questionNumber]
+                answer = answer.decode("utf-8")
+                x.setQuestion(question, answer)
+                return x.getQuestion()
+        if inList == False:
+            #The server has not initated a trivia game.
+            questionNumber = randint(0, self.questionCount -1)
+            question = self.questionList[questionNumber]
+            question = question.decode("utf-8")
+            answer = self.answerList[questionNumber]
+            answer = answer.decode("utf-8")
+            x = triviaSet(serverID)
+            x.setQuestion(question, answer)
+            self.setList.append(x)
+            return x.getQuestion()
+            
+    def getAnswer(self, serverID):
         #Returns the answer to the given question.
-        self.isQuestionSent = False
-        return self.answerList[self.questionNumber]
+        for x in self.setList:
+            if x.getServer() == serverID:
+                return x.getAnswer()
     
     def getScore(self, userID):
         #Returns the score for the author of the message.
@@ -48,12 +70,6 @@ class triviaGame:
                 return splitLine [2]
         if userInList == False:
             return 0
-        
-    def getCorrect(self):
-        return self.isCorrect
-    
-    def getSent(self):
-        return self.isQuestionSent
         
     def addPoint(self, serverID, userID):
         #Adds a point to the given user's score.
@@ -82,9 +98,3 @@ class triviaGame:
             leaderboardFile = open("leaderboard.txt", "a+")
             leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + "1")
             leaderboardFile.close()
-        
-        
-        
-        
-        
-        

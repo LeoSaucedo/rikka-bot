@@ -18,6 +18,7 @@ A Discord bot that performs various functions.
 - `;clever (text)` - Returns the cleverbot response to the given text.
 - `;paypal` - Returns donation link to contribute to server hosting.
 - `;insult (user)` - Sends a random insult to the given user.
+- `;trivia` - A simple, global trivia game with over 250,000 questions.
 
 #### Admin commands
 - `;prefix (prefix)` - Changes the prefix to a set custom prefix.

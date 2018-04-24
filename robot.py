@@ -229,14 +229,18 @@ async def on_message(message):
         
     elif message.content.startswith(command("ask", message)):
         #Returns a randomly generated question.
-        msg = trivia.getQuestion()
+        msg = trivia.getQuestion(message.guild.id)
         await message.channel.send(msg)
         global isSent
         isSent = True
         
     elif message.content.startswith(command("reveal", message)):
-        msg = trivia.getAnswer()
-        await message.channel.send(msg)
+        if isSent == True:
+            msg = trivia.getAnswer(message.guild.id)
+            await message.channel.send(msg)
+        elif isSent == False:
+            msg = "You haven't asked a question yet!"
+            await message.channel.send(msg)
         isSent = False
         
     elif message.content.startswith(command("trivia score", message)):
