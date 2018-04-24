@@ -232,16 +232,16 @@ async def on_message(message):
         msg = trivia.getQuestion(message.guild.id)
         await message.channel.send(msg)
         global isSent
-        isSent = True
+        trivia.setSent(message.guild.id, True)
         
     elif message.content.startswith(command("reveal", message)):
-        if isSent == True:
+        if trivia.getSent(message.guild.id) == True:
             msg = trivia.getAnswer(message.guild.id)
             await message.channel.send(msg)
-        elif isSent == False:
+            trivia.setSent(message.guild.id, False)
+        elif trivia.getSent(message.guild.id) == False:
             msg = "You haven't asked a question yet!"
             await message.channel.send(msg)
-        isSent = False
         
     elif message.content.startswith(command("trivia score", message)):
         msg  = ("{0.author.mention}, your score is " + str(trivia.getScore(message.author.id))).format(message)
@@ -250,15 +250,15 @@ async def on_message(message):
     elif message.content.startswith(command("a", message)):
         #The user is attempting to answer the question.
         attempt = getRawArgument(command("a", message), message)
-        if isSent == True:
+        if trivia.getSent(message.guild.id) == True:
             #If the question is sent and the answer has not yet been revealed.
             if attempt.lower() == trivia.getAnswer(message.guild.id).lower():
                 #If the answer is correct.
                 msg = "{0.author.mention}, correct! The answer is ".format(message) + trivia.getAnswer(message.guild.id)
                 await message.channel.send(msg)
                 trivia.addPoint(message.guild.id, message.author.id)
-                isSent = False
-        elif isSent == False:
+                trivia.setSent(message.guild.id, False)
+        else:
             msg = "You haven't gotten a question yet!"
             await message.channel.send(msg)
     
@@ -385,6 +385,7 @@ async def on_ready():
     print("-------")
     print("loaded hugs: " + str(hugcount + 1)) # +1 because humans are not computers.
     print("loaded Ramsay quotes: " + str(ramsayCount + 1))
+    print("Loaded questions: " + str(trivia.getQuestionCount()))
     serversConnected = str(len(client.guilds))
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
     game=discord.Game(name='on ' + serversConnected + ' servers!')

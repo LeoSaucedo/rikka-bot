@@ -12,6 +12,9 @@ class triviaSet:
         self.question = question
         self.answer = answer
         
+    def setSent(self, sent):
+        self.isSent = sent
+        
     def getQuestion(self):
         return self.question
     
@@ -20,3 +23,6 @@ class triviaSet:
     
     def getServer(self):
         return self.serverID
+    
+    def getSent(self):
+        return self.isSent

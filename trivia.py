@@ -24,6 +24,9 @@ class triviaGame:
         
         self.setList = []
         
+    def getQuestionCount(self):
+        return self.questionCount
+        
     def getQuestion(self, serverID):
         #Returns a randomly selected question.
         inList = False
@@ -70,6 +73,20 @@ class triviaGame:
                 return splitLine [2]
         if userInList == False:
             return 0
+        
+    def getSent(self, serverID):
+        inList = False
+        for x in self.setList:
+            if x.getServer() == serverID:
+                inList = True
+                return x.getSent()
+        if inList == False:
+            return False
+        
+    def setSent(self, serverID, state):
+        for x in self.setList:
+            if x.getServer() == serverID:
+                x.setSent(state)
         
     def addPoint(self, serverID, userID):
         #Adds a point to the given user's score.
