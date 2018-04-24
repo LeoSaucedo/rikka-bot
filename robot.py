@@ -222,19 +222,19 @@ async def on_message(message):
     """
     if message.content == command("trivia", message):
         prefix = getServerPrefix(message.guild)
-        msg = "To get a question, type "+prefix+"trivia ask. To attempt an answer, type "+prefix+"trivia (attempt). To reveal the answer, type "+prefix+"trivia reveal."
+        msg = "To get a question, type "+prefix+"ask. To attempt an answer, type "+prefix+"a (attempt). To reveal the answer, type "+prefix+"reveal."
         await message.channel.send(msg)
         msg = "To check your score, type "+prefix+"trivia score. Good luck!"
         await message.channel.send(msg)
         
-    elif message.content.startswith(command("trivia ask", message)):
+    elif message.content.startswith(command("ask", message)):
         #Returns a randomly generated question.
         msg = trivia.getQuestion()
         await message.channel.send(msg)
         global isSent
         isSent = True
         
-    elif message.content.startswith(command("trivia reveal", message)):
+    elif message.content.startswith(command("reveal", message)):
         msg = trivia.getAnswer()
         await message.channel.send(msg)
         isSent = False
@@ -243,9 +243,9 @@ async def on_message(message):
         msg  = ("{0.author.mention}, your score is " + str(trivia.getScore(message.author.id))).format(message)
         await message.channel.send(msg)
         
-    elif message.content.startswith(command("attempt", message)):
+    elif message.content.startswith(command("a", message)):
         #The user is attempting to answer the question.
-        attempt = getRawArgument(command("attempt", message), message)
+        attempt = getRawArgument(command("a", message), message)
         if isSent == True:
             #If the question is sent and the answer has not yet been revealed.
             if attempt.lower() == trivia.getAnswer().lower():
