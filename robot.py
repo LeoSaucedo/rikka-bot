@@ -252,7 +252,7 @@ async def on_message(message):
         attempt = getRawArgument(command("a", message), message)
         if isSent == True:
             #If the question is sent and the answer has not yet been revealed.
-            if attempt.lower() == trivia.getAnswer(message.server.id).lower():
+            if attempt.lower() == trivia.getAnswer(message.guild.id).lower():
                 #If the answer is correct.
                 msg = "{0.author.mention}, correct! The answer is ".format(message) + trivia.getAnswer()
                 await message.channel.send(msg)
