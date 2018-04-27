@@ -29,7 +29,7 @@ A Discord bot that performs various functions.
 - `shocked, smile, hentai, blush, bdsm, rekt, boop, fuckoff, sanic, dreamy, kys`
 
 #### In the works
-- `trivia`  - Trivia module with global and local leaderboards
+- Server and global leaderboard for the trivia game.
 - Improved, proprietary AI, instead of cleverbot.
 
 ### Special Thanks
