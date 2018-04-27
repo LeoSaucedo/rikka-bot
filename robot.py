@@ -224,6 +224,8 @@ async def on_message(message):
         prefix = getServerPrefix(message.guild)
         msg = "To get a question, type "+prefix+"ask. To attempt an answer, type "+prefix+"a (attempt). To reveal the answer, type "+prefix+"reveal."
         await message.channel.send(msg)
+        msg = "If you believe a question is unfair, type "+prefix+"flag. It will be reviewed by our developers, and removed if appropriate."
+        await message.channel.send(msg)
         msg = "To check your score, type "+prefix+"trivia score. Good luck!"
         await message.channel.send(msg)
         
@@ -242,6 +244,11 @@ async def on_message(message):
         elif trivia.getSent(message.guild.id) == False:
             msg = "You haven't asked a question yet!"
             await message.channel.send(msg)
+            
+    elif message.content.startswith(command("flag", message)):
+        trivia.flag()
+        msg = "Flagged the question! Sorry about that."
+        await message.channel.send(msg)
         
     elif message.content.startswith(command("trivia score", message)):
         msg  = ("{0.author.mention}, your score is " + str(trivia.getScore(message.author.id))).format(message)
