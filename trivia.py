@@ -115,3 +115,30 @@ class triviaGame:
             leaderboardFile = open("leaderboard.txt", "a+")
             leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + "1")
             leaderboardFile.close()
+            
+    def format(self, attempt):
+        #Formats an attempt to make it easier to guess.
+        #Removes "the", "a", "an", and any parenthetical words.
+        formatted = attempt.lower()
+        words = formatted.split()
+        for word in words:
+            if word == "the":
+                words.remove(word)
+            if word == "a":
+                words.remove(word)
+            if word == "an":
+                words.remove(word)
+        index = 0
+        for word in words:
+            if word.startswith("("):
+                shortwords = words[:words.list(word)]
+                words = shortwords
+            else:
+                index+= 1
+        
+        for word in words:
+            formatted = ""
+            formatted+= word + " "
+        return formatted
+        
+        
