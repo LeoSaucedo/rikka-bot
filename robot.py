@@ -274,16 +274,7 @@ async def on_message(message):
     Administrator Commands.
     """
     if message.channel.permissions_for(message.author).administrator == True:
-        
-        if message.content.startswith(command("clear", message)):
-            number = int(getArgument(command("clear", message), message))
-            await message.channel.purge(limit=(number + 1), bulk=True)
-            msg = "deleted " + str(number) + " messages!".format(string)
-            await message.channel.send(msg)
-            sleep(5)
-            await message.channel.purge(limit = 1, bulk = True)
-        
-        elif message.content.startswith(command("prefix", message)):
+        if message.content.startswith(command("prefix", message)):
             #Changes the prefix to the specified string.
             prefixFile = open("server_prefixes.txt")
             prefixList = prefixFile.read().splitlines()
@@ -311,7 +302,36 @@ async def on_message(message):
                 msg = ("Set server prefix to " + newPrefix + " !").format(message)
                 await message.channel.send(msg)
     
-
+    elif message.channel.permissions_for(message.author).manage_messages == True:
+        if message.content.startswith(command("clear", message)):
+            #Clears a specified number of messages.
+            number = int(getArgument(command("clear", message), message))
+            await message.channel.purge(limit=(number + 1), bulk=True)
+            msg = "deleted " + str(number) + " messages!".format(string)
+            await message.channel.send(msg)
+            sleep(5)
+            await message.channel.purge(limit = 1, bulk = True)
+            
+        elif message.content.startswith(command("mute", message)):
+            if len(message.mentions) > 0:
+                sinner = message.mentions[0]
+                await message.channel.set_permissions(sinner, send_messages = False)
+                msg = "Muted {0.mentions[0].mention}!".format(message)
+                await message.channel.send(msg)
+            else:
+                msg = "You must specify a user."
+                await message.channel.send(msg)
+            
+        elif message.content.startswith(command("unmute", message)):
+            if len(message.mentions) > 0:
+                sinner = message.mentions[0]
+                await message.channel.set_permissions(sinner, send_messages = True)
+                msg = "Unmuted {0.mentions[0].mention}!".format(message)
+                await message.channel.send(msg)
+            else:
+                msg = "You must specify a user."
+                await message.channel.send(msg)
+    
     """
     Miscellaneous gifs.
     I know it's ugly, but I'll fix it eventually.
