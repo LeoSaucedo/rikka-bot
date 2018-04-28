@@ -6,6 +6,7 @@ Carlos Saucedo, 2018
 """
 from random import randint
 from triviaSet import triviaSet
+import re
 class triviaGame:
     def __init__(self, questionPath, answerPath):
         leaderboardFile = open("leaderboard.txt", "r")
@@ -119,25 +120,13 @@ class triviaGame:
         #Formats an attempt to make it easier to guess.
         #Removes "the", "a", "an", and any parenthetical words.
         formatted = attempt.lower()
-        words = formatted.split()
-        for word in words:
-            if word == "the":
-                words.remove(word)
-            if word == "a":
-                words.remove(word)
-            if word == "an":
-                words.remove(word)
-        index = 0
-        for word in words:
-            if word.startswith("("):
-                shortwords = words[:words.list(word)]
-                words = shortwords
-            else:
-                index+= 1
-        
-        for word in words:
-            formatted = ""
-            formatted+= word + " "
+        if attempt.startswith("a "):
+            formatted = formatted.replace("a ", "")
+        if attempt.startswith("the "):
+            formatted = formatted.replace("the ","")
+        if attempt.startswith("an "):
+            formatted = formatted.replace("an ", "")
+        formatted = re.sub("[\(\[].*?[\)\]]", "", formatted)
         return formatted
     
     def flag(self):
