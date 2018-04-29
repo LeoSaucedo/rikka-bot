@@ -302,7 +302,7 @@ async def on_message(message):
                 msg = ("Set server prefix to " + newPrefix + " !").format(message)
                 await message.channel.send(msg)
     
-    elif message.channel.permissions_for(message.author).manage_messages == True:
+    if message.channel.permissions_for(message.author).manage_messages == True:
         if message.content.startswith(command("clear", message)):
             #Clears a specified number of messages.
             number = int(getArgument(command("clear", message), message))
