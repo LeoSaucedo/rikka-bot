@@ -52,6 +52,10 @@ nsfwinsultfile = open("nsfwinsults.list")
 nsfwinsultlist = nsfwinsultfile.read().splitlines()
 nsfwInsultCount = len(nsfwinsultlist) -1
 nsfwinsultfile.close()
+highfile = open("highquotes.list")
+highlist = nsfwinsultfile.read().splitlines()
+highCount = len(nsfwinsultlist) -1
+highfile.close()
 
 #Instances
 client = discord.Client()
@@ -281,10 +285,15 @@ async def on_message(message):
         msg = "If you answer incorrectly then no points are given and the message-'Sorry incorrect! The correct answer is (answer)"
         await message.channel.send(msg)
     
-    if message.content == command("hdn play", message)
+    if message.content == command("hdn play", message):
         hdn = randint(1, 3)
-        if hdn == 1
-            msg = 
+        if hdn == 1:
+            question = highlist[randint(0,highCount)]
+            msg = (question)
+            await message.channel.send(msg)
+            msg = ("Is this person high drunk or neither?")
+            await message.channel.send(msg)
+            if message.content == command("high", message):
             
         
     """
