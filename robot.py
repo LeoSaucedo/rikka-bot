@@ -228,7 +228,7 @@ async def on_message(message):
         await message.channel.send(msg)
         msg = "To check your score, type "+prefix+"trivia score. Good luck!"
         await message.channel.send(msg)
-        
+       
     elif message.content.startswith(command("ask", message)):
         #Returns a randomly generated question.
         msg = trivia.getQuestion(message.guild.id)
@@ -268,7 +268,24 @@ async def on_message(message):
         else:
             msg = "You haven't gotten a question yet!"
             await message.channel.send(msg)
+            
+    """
+    High, Drunk, or Neither Commands
+    """
+    if message.content == command("hdn", message):
+        prefix = getServerPrefix(message.guild)
+        msg = "HDN or High, Drunk, or Neither is where a random quote from a drunk, high, or crazy person and you have to guess whether the person is high, drunk, or just random."
+        await message.channel.send(msg)
+        msg = "Inorder to get a quote, one must type "+prefix+"hdn play. To give an answer, type "+prefix+"high, "+prefix+"drunk, or "+prefix+"neither. To view score, type "+prefix+"hdn score. Have fun!"
+        await message.channel.send(msg)
+        msg = "If you answer incorrectly then no points are given and the message-'Sorry incorrect! The correct answer is (answer)"
+        await message.channel.send(msg)
     
+    if message.content == command("hdn play", message)
+        hdn = randint(1, 3)
+        if hdn == 1
+            msg = 
+            
         
     """
     Administrator Commands.
