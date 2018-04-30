@@ -6,6 +6,7 @@ Carlos Saucedo, 2018
 """
 from random import randint
 from triviaSet import triviaSet
+import re
 class triviaGame:
     def __init__(self, questionPath, answerPath):
         leaderboardFile = open("leaderboard.txt", "r")
@@ -20,7 +21,6 @@ class triviaGame:
         answerFile = open(answerPath, "r", encoding="utf8")
         self.answerList = answerFile.read().encode("ascii", "ignore").splitlines()
         answerFile.close()
-        self.questionNumber = None
         
         self.setList = []
         
@@ -34,19 +34,19 @@ class triviaGame:
             if x.getServer() == serverID:
                 #If the server has already started a question instance.
                 inList = True
-                questionNumber = randint(0, self.questionCount -1)
-                question = self.questionList[questionNumber]
+                self.questionNumber = randint(0, self.questionCount -1)
+                question = self.questionList[self.questionNumber]
                 question = question.decode("utf-8")
-                answer = self.answerList[questionNumber]
+                answer = self.answerList[self.questionNumber]
                 answer = answer.decode("utf-8")
                 x.setQuestion(question, answer)
                 return x.getQuestion()
         if inList == False:
             #The server has not initated a trivia game.
-            questionNumber = randint(0, self.questionCount -1)
-            question = self.questionList[questionNumber]
+            self.questionNumber = randint(0, self.questionCount -1)
+            question = self.questionList[self.questionNumber]
             question = question.decode("utf-8")
-            answer = self.answerList[questionNumber]
+            answer = self.answerList[self.questionNumber]
             answer = answer.decode("utf-8")
             x = triviaSet(serverID)
             x.setQuestion(question, answer)
@@ -115,3 +115,24 @@ class triviaGame:
             leaderboardFile = open("leaderboard.txt", "a+")
             leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + "1")
             leaderboardFile.close()
+            
+    def format(self, attempt):
+        #Formats an attempt to make it easier to guess.
+        #Removes "the", "a", "an", and any parenthetical words.
+        formatted = attempt.lower()
+        if attempt.startswith("a "):
+            formatted = formatted.replace("a ", "")
+        if attempt.startswith("the "):
+            formatted = formatted.replace("the ","")
+        if attempt.startswith("an "):
+            formatted = formatted.replace("an ", "")
+        formatted = re.sub("[\(\[].*?[\)\]]", "", formatted)
+        return formatted
+    
+    def flag(self):
+        #Adds the current question to the list of flagged questions.
+        flaggedFile = open("flagged_questions.list", "a+")
+        flaggedFile.write(str(self.questionNumber))
+        flaggedFile.close()
+        
+        

@@ -21,15 +21,16 @@ A Discord bot that performs various functions.
 - `;trivia` - A simple, global trivia game with over 250,000 questions.
 
 #### Admin commands
-- `;prefix (prefix)` - Changes the prefix to a set custom prefix.
-- `;clear (number)` - Clears a set number of messages from the given channel.
+- `;prefix (prefix)` - Changes the prefix to a set custom prefix. *(Must be admin)*
+- `;clear (number)` - Clears a set number of messages from the given channel. *(Must have manage message permission)*
+- `;mute / ;unmute (user)` - Mutes/unmutes specified user. *(Must have manage message permission)*
 
 #### Emotes
 *Note: All emotes are entirely SFW.*
 - `shocked, smile, hentai, blush, bdsm, rekt, boop, fuckoff, sanic, dreamy, kys`
 
 #### In the works
-- `trivia`  - Trivia module with global and local leaderboards
+- Server and global leaderboard for the trivia game.
 - Improved, proprietary AI, instead of cleverbot.
 
 ### Special Thanks
