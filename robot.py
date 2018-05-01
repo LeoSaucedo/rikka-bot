@@ -2,17 +2,19 @@
 Discord Rikka Bot.
 Carlos Saucedo, 2018
 """
-
+import os
 import discord
-import asyncio
-import gizoogle
+import Mods.gizoogle as gizoogle
 from random import randint
 import string
 from googletrans import Translator
 import dbl
-import CleverApi
+import Mods.CleverApi as CleverApi
 from time import sleep
-import trivia
+import Mods.trivia as trivia
+
+#Directory stuff
+root_dir = os.path.dirname(__file__)
 
 #Auth tokens
 tokenfile = open("auth_token.txt", "r")
@@ -36,19 +38,30 @@ except Exception as e:
     print("Failed to instantiate CleverBot.")
 
 #lists
-hugsfile = open("hug_gifs.list", "r")
+hug_relPath = "Lists/hug_gifs.list"
+hug_absPath = os.path.join(root_dir, hug_relPath)
+hugsfile = open(hug_absPath, "r")
 huglist = hugsfile.read().splitlines()
 hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
 hugsfile.close()
-ramsayfile = open("ramsay.list")
+
+ramsay_relPath = "Lists/ramsay.list"
+ramsay_absPath = os.path.join(root_dir, ramsay_relPath)
+ramsayfile = open(ramsay_absPath)
 ramsaylist = ramsayfile.read().splitlines()
 ramsayCount = len(ramsaylist) - 1
 ramsayfile.close()
-insultfile = open("sfwinsults.list")
+
+sfwinsult_relPath = "Lists/sfwinsults.list"
+sfwinsult_absPath = os.path.join(root_dir, sfwinsult_relPath)
+insultfile = open(sfwinsult_absPath)
 insultlist = insultfile.read().splitlines()
 insultCount = len(insultlist) - 1
 insultfile.close()
-nsfwinsultfile = open("nsfwinsults.list")
+
+nsfwinsult_relPath = "Lists/nsfwinsults.list"
+nsfwinsult_absPath = os.path.join(root_dir, nsfwinsult_relPath)
+nsfwinsultfile = open(nsfwinsult_absPath)
 nsfwinsultlist = nsfwinsultfile.read().splitlines()
 nsfwInsultCount = len(nsfwinsultlist) -1
 nsfwinsultfile.close()
@@ -62,8 +75,10 @@ botlist = dbl.Client(client, bltoken)
 defaultPrefix = ";"
 
 #Trivia instantiation
-questionPath = "trivia_questions.list"
-answerPath = "trivia_answers.list"
+question_relPath = "Lists/trivia_questions.list"
+questionPath = os.path.join(root_dir, question_relPath)
+answer_relPath = "Lists/trivia_answers.list"
+answerPath = os.path.join(root_dir, answer_relPath)
 trivia = trivia.triviaGame(questionPath, answerPath)
 isSent = False
 

@@ -5,7 +5,7 @@ The format for the leaderbaord is as follows:
 Carlos Saucedo, 2018
 """
 from random import randint
-from triviaSet import triviaSet
+from Mods.triviaSet import triviaSet
 import re
 class triviaGame:
     def __init__(self, questionPath, answerPath):
@@ -134,5 +134,4 @@ class triviaGame:
         flaggedFile = open("flagged_questions.list", "a+")
         flaggedFile.write(str(self.questionNumber))
         flaggedFile.close()
-        
         

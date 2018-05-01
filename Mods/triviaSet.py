@@ -3,7 +3,7 @@ Dataset for storing trivia instances.
 Stores serverID, question, and answer.
 Carlos Saucedo, 2018
 """
-import trivia
+
 class triviaSet:
     def __init__(self, serverID):
         self.serverID = serverID
