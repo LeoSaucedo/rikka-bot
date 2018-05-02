@@ -52,15 +52,15 @@ nsfwinsultfile = open("nsfwinsults.list")
 nsfwinsultlist = nsfwinsultfile.read().splitlines()
 nsfwInsultCount = len(nsfwinsultlist) -1
 nsfwinsultfile.close()
-highfile = open("highquotes.list")
+highfile = open("high.list")
 highlist = highfile.read().splitlines()
 highCount = len(highlist) -1
 highfile.close()
-drunkfile = open("drunkquotes.list")
+drunkfile = open("drunk.list")
 drunklist = drunkfile.read().splitlines()
 drunkCount = len(drunklist) -1
 drunkfile.close()
-crazyfile = open("crazyquotes.list")
+crazyfile = open("crazy.list")
 crazylist = crazyfile.read().splitlines()
 crazyCount = len(crazylist) -1
 crazyfile.close()
