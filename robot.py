@@ -2,19 +2,17 @@
 Discord Rikka Bot.
 Carlos Saucedo, 2018
 """
-import os
+
 import discord
-import Mods.gizoogle as gizoogle
+import asyncio
+import gizoogle
 from random import randint
 import string
 from googletrans import Translator
 import dbl
-import Mods.CleverApi as CleverApi
+import CleverApi
 from time import sleep
-import Mods.trivia as trivia
-
-#Directory stuff
-root_dir = os.path.dirname(__file__)
+import trivia
 
 #Auth tokens
 tokenfile = open("auth_token.txt", "r")
@@ -38,33 +36,34 @@ except Exception as e:
     print("Failed to instantiate CleverBot.")
 
 #lists
-hug_relPath = "Lists/hug_gifs.list"
-hug_absPath = os.path.join(root_dir, hug_relPath)
-hugsfile = open(hug_absPath, "r")
+hugsfile = open("hug_gifs.list", "r")
 huglist = hugsfile.read().splitlines()
 hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
 hugsfile.close()
-
-ramsay_relPath = "Lists/ramsay.list"
-ramsay_absPath = os.path.join(root_dir, ramsay_relPath)
-ramsayfile = open(ramsay_absPath)
+ramsayfile = open("ramsay.list")
 ramsaylist = ramsayfile.read().splitlines()
 ramsayCount = len(ramsaylist) - 1
 ramsayfile.close()
-
-sfwinsult_relPath = "Lists/sfwinsults.list"
-sfwinsult_absPath = os.path.join(root_dir, sfwinsult_relPath)
-insultfile = open(sfwinsult_absPath)
+insultfile = open("sfwinsults.list")
 insultlist = insultfile.read().splitlines()
 insultCount = len(insultlist) - 1
 insultfile.close()
-
-nsfwinsult_relPath = "Lists/nsfwinsults.list"
-nsfwinsult_absPath = os.path.join(root_dir, nsfwinsult_relPath)
-nsfwinsultfile = open(nsfwinsult_absPath)
+nsfwinsultfile = open("nsfwinsults.list")
 nsfwinsultlist = nsfwinsultfile.read().splitlines()
 nsfwInsultCount = len(nsfwinsultlist) -1
 nsfwinsultfile.close()
+highfile = open("high.list")
+highlist = highfile.read().splitlines()
+highCount = len(highlist) -1
+highfile.close()
+drunkfile = open("drunk.list")
+drunklist = drunkfile.read().splitlines()
+drunkCount = len(drunklist) -1
+drunkfile.close()
+crazyfile = open("crazy.list")
+crazylist = crazyfile.read().splitlines()
+crazyCount = len(crazylist) -1
+crazyfile.close()
 
 #Instances
 client = discord.Client()
@@ -75,10 +74,8 @@ botlist = dbl.Client(client, bltoken)
 defaultPrefix = ";"
 
 #Trivia instantiation
-question_relPath = "Lists/trivia_questions.list"
-questionPath = os.path.join(root_dir, question_relPath)
-answer_relPath = "Lists/trivia_answers.list"
-answerPath = os.path.join(root_dir, answer_relPath)
+questionPath = "trivia_questions.list"
+answerPath = "trivia_answers.list"
 trivia = trivia.triviaGame(questionPath, answerPath)
 isSent = False
 
@@ -220,10 +217,6 @@ async def on_message(message):
     elif message.content.startswith(command("donate", message)) or message.content.startswith(command("paypal", message)):
         msg = ("Help the humble programmer of this bot get himself a cup of tea to keep him going. https://www.paypal.me/LeoSaucedo").format(message)
         await message.channel.send(msg)
-        
-    elif message.content.startswith(command("vote", message)):
-        msg = "Vote for me to take over the world! https://discordbots.org/bot/430482288053059584/vote".format(message)
-        await message.channel.send(msg)
 
     elif message.content.startswith(command("insult ", message)):
         # Says a random insult using an insult generator
@@ -235,10 +228,11 @@ async def on_message(message):
         await message.channel.send(msg)
         await message.delete()
         
-    elif message.content == command("trivia", message):
-        """
-        Trivia commands.
-        """
+        
+    """
+    Trivia Commands.
+    """
+    if message.content == command("trivia", message):
         prefix = getServerPrefix(message.guild)
         msg = "To get a question, type "+prefix+"ask. To attempt an answer, type "+prefix+"a (attempt). To reveal the answer, type "+prefix+"reveal."
         await message.channel.send(msg)
@@ -246,7 +240,7 @@ async def on_message(message):
         await message.channel.send(msg)
         msg = "To check your score, type "+prefix+"trivia score. Good luck!"
         await message.channel.send(msg)
-        
+       
     elif message.content.startswith(command("ask", message)):
         #Returns a randomly generated question.
         msg = trivia.getQuestion(message.guild.id)
@@ -286,11 +280,88 @@ async def on_message(message):
         else:
             msg = "You haven't gotten a question yet!"
             await message.channel.send(msg)
+            
+    """
+    High, Drunk, or Neither Commands
+    """
+    if message.content == command("hdn", message):
+        prefix = getServerPrefix(message.guild)
+        msg = "HDN or High, Drunk, or Neither is where a random quote from a drunk, high, or crazy person and you have to guess whether the person is high, drunk, or just random."
+        await message.channel.send(msg)
+        msg = "Inorder to get a quote, one must type "+prefix+"hdn play. To give an answer, type "+prefix+"high, "+prefix+"drunk, or "+prefix+"neither. To view score, type "+prefix+"hdn score. Have fun!"
+        await message.channel.send(msg)
+        msg = "If you answer incorrectly then no points are given and the message-'Sorry incorrect! The correct answer is (answer)"
+        await message.channel.send(msg)
     
-    elif message.channel.permissions_for(message.author).manage_messages == True:
-        """
-        Moderator commands.
-        """
+    if message.content == command("hdn play", message):
+        hdn = randint(1, 3)
+        if hdn == 1:
+            question = highlist[randint(0,highCount)]
+            msg = question
+            await message.channel.send(msg)
+            msg = "Is this person high drunk or neither?"
+            await message.channel.send(msg)
+            if message.content == command("high", message):
+                msg = "Correct, {0.author.mention}, the answer is high"
+                await message.channel.send(msg)
+            else:
+                msg = "Incorrect the answer is high. No points are given"
+        elif hdn == 2:
+            question = drunklist[randint(0,drunkCount)]
+            msg = question
+            await message.channel.send(msg)
+            msg = "Is this person high drunk or neither?"
+            await message.channel.send(msg)
+            if message.content == command("drunk", message):
+                msg = "Correct, {0.author.mention}, the answer is drunk"
+                await message.channel.send(msg)
+            else:
+                msg = "Incorrect the answer is drunk. No points are given"
+        elif hdn == 3:
+            question = crazylist[randint(0,crazyCount)]
+            msg = question
+            await message.channel.send(msg)
+            msg= "Is this person high, drunk or neither?"
+            await message.channel.send(msg)
+            if message.content == command("neither", message):
+                msg = "Correct, {0.author.mention}, the answer is drunk"
+                await message.channel.send(msg)
+            else:
+                msg = "Incorrect this person is just crazy, or Harley. No points are given"
+                
+    """
+    Administrator Commands.
+    """
+    if message.channel.permissions_for(message.author).administrator == True:
+        if message.content.startswith(command("prefix", message)):
+            #Changes the prefix to the specified string.
+            prefixFile = open("server_prefixes.txt")
+            prefixList = prefixFile.read().splitlines()
+            prefixFile.close()
+            serverInList = False #Gotta initialize the variable
+            newPrefix = getRawArgument(command("prefix", message), message)
+            index = 0
+            for line in prefixList:
+                splitLine = line.split()
+                if(message.channel.guild.id == int(splitLine[0])):
+                    #If the server already has a custom prefix set
+                    serverInList = True
+                    prefixFile = open("server_prefixes.txt", "w+")
+                    prefixList[index] = (str(message.channel.guild.id) + " " + newPrefix)
+                    prefixFile.write("\n".join(prefixList))
+                    prefixFile.close()
+                    msg = ("Changed server prefix to " + newPrefix + " !").format(message)
+                    await message.channel.send(msg)
+                index = index + 1
+            if serverInList == False:
+                #If the server does not already have a custom prefix set
+                prefixFile = open("server_prefixes.txt", "a+")
+                prefixFile.write("\n" + str(message.channel.guild.id) + " " + newPrefix) #Adds line to prefixlist
+                prefixFile.close()
+                msg = ("Set server prefix to " + newPrefix + " !").format(message)
+                await message.channel.send(msg)
+    
+    if message.channel.permissions_for(message.author).manage_messages == True:
         if message.content.startswith(command("clear", message)):
             #Clears a specified number of messages.
             number = int(getArgument(command("clear", message), message))
@@ -320,42 +391,12 @@ async def on_message(message):
                 msg = "You must specify a user."
                 await message.channel.send(msg)
     
-    elif message.channel.permissions_for(message.author).administrator == True:
-        """
-        Administrator Commands.
-        """
-        if message.content.startswith(command("prefix", message)):
-            #Changes the prefix to the specified string.
-            prefixFile = open("server_prefixes.txt")
-            prefixList = prefixFile.read().splitlines()
-            prefixFile.close()
-            serverInList = False #Gotta initialize the variable
-            newPrefix = getRawArgument(command("prefix", message), message)
-            index = 0
-            for line in prefixList:
-                splitLine = line.split()
-                if(message.channel.guild.id == int(splitLine[0])):
-                    #If the server already has a custom prefix set
-                    serverInList = True
-                    prefixFile = open("server_prefixes.txt", "w+")
-                    prefixList[index] = (str(message.channel.guild.id) + " " + newPrefix)
-                    prefixFile.write("\n".join(prefixList))
-                    prefixFile.close()
-                    msg = ("Changed server prefix to " + newPrefix + " !").format(message)
-                    await message.channel.send(msg)
-                index = index + 1
-            if serverInList == False:
-                #If the server does not already have a custom prefix set
-                prefixFile = open("server_prefixes.txt", "a+")
-                prefixFile.write("\n" + str(message.channel.guild.id) + " " + newPrefix) #Adds line to prefixlist
-                prefixFile.close()
-                msg = ("Set server prefix to " + newPrefix + " !").format(message)
-                await message.channel.send(msg)
-                
-        """
-        Misc gif commands.
-        """
-    elif message.content == command("shocked", message):
+    """
+    Miscellaneous gifs.
+    I know it's ugly, but I'll fix it eventually.
+    """
+    #Rikka's actions
+    if message.content == command("shocked", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430591612637413389/image.gif"
         await message.channel.send(msg)
     elif message.content == command("smile", message):
@@ -431,6 +472,7 @@ async def on_ready():
     print("loaded hugs: " + str(hugcount + 1)) # +1 because humans are not computers.
     print("loaded Ramsay quotes: " + str(ramsayCount + 1))
     print("Loaded questions: " + str(trivia.getQuestionCount()))
+    print("Loaded High, Drunk, or Neither quotes: " + str(highCount + drunkCount + crazyCount + 1))
     serversConnected = str(len(client.guilds))
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
     game=discord.Game(name='on ' + serversConnected + ' servers!')
@@ -443,3 +485,4 @@ async def on_ready():
 
 while True:
     client.run(token) #runs the bot.
+    
