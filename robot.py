@@ -220,6 +220,10 @@ async def on_message(message):
     elif message.content.startswith(command("donate", message)) or message.content.startswith(command("paypal", message)):
         msg = ("Help the humble programmer of this bot get himself a cup of tea to keep him going. https://www.paypal.me/LeoSaucedo").format(message)
         await message.channel.send(msg)
+        
+    elif message.content.startswith(command("vote", message)):
+        msg = "Vote for me to take over the world! https://discordbots.org/bot/430482288053059584/vote".format(message)
+        await message.channel.send(msg)
 
     elif message.content.startswith(command("insult ", message)):
         # Says a random insult using an insult generator
@@ -231,11 +235,10 @@ async def on_message(message):
         await message.channel.send(msg)
         await message.delete()
         
-        
-    """
-    Trivia Commands.
-    """
-    if message.content == command("trivia", message):
+    elif message.content == command("trivia", message):
+        """
+        Trivia commands.
+        """
         prefix = getServerPrefix(message.guild)
         msg = "To get a question, type "+prefix+"ask. To attempt an answer, type "+prefix+"a (attempt). To reveal the answer, type "+prefix+"reveal."
         await message.channel.send(msg)
@@ -284,40 +287,10 @@ async def on_message(message):
             msg = "You haven't gotten a question yet!"
             await message.channel.send(msg)
     
-        
-    """
-    Administrator Commands.
-    """
-    if message.channel.permissions_for(message.author).administrator == True:
-        if message.content.startswith(command("prefix", message)):
-            #Changes the prefix to the specified string.
-            prefixFile = open("server_prefixes.txt")
-            prefixList = prefixFile.read().splitlines()
-            prefixFile.close()
-            serverInList = False #Gotta initialize the variable
-            newPrefix = getRawArgument(command("prefix", message), message)
-            index = 0
-            for line in prefixList:
-                splitLine = line.split()
-                if(message.channel.guild.id == int(splitLine[0])):
-                    #If the server already has a custom prefix set
-                    serverInList = True
-                    prefixFile = open("server_prefixes.txt", "w+")
-                    prefixList[index] = (str(message.channel.guild.id) + " " + newPrefix)
-                    prefixFile.write("\n".join(prefixList))
-                    prefixFile.close()
-                    msg = ("Changed server prefix to " + newPrefix + " !").format(message)
-                    await message.channel.send(msg)
-                index = index + 1
-            if serverInList == False:
-                #If the server does not already have a custom prefix set
-                prefixFile = open("server_prefixes.txt", "a+")
-                prefixFile.write("\n" + str(message.channel.guild.id) + " " + newPrefix) #Adds line to prefixlist
-                prefixFile.close()
-                msg = ("Set server prefix to " + newPrefix + " !").format(message)
-                await message.channel.send(msg)
-    
-    if message.channel.permissions_for(message.author).manage_messages == True:
+    elif message.channel.permissions_for(message.author).manage_messages == True:
+        """
+        Moderator commands.
+        """
         if message.content.startswith(command("clear", message)):
             #Clears a specified number of messages.
             number = int(getArgument(command("clear", message), message))
@@ -347,12 +320,42 @@ async def on_message(message):
                 msg = "You must specify a user."
                 await message.channel.send(msg)
     
-    """
-    Miscellaneous gifs.
-    I know it's ugly, but I'll fix it eventually.
-    """
-    #Rikka's actions
-    if message.content == command("shocked", message):
+    elif message.channel.permissions_for(message.author).administrator == True:
+        """
+        Administrator Commands.
+        """
+        if message.content.startswith(command("prefix", message)):
+            #Changes the prefix to the specified string.
+            prefixFile = open("server_prefixes.txt")
+            prefixList = prefixFile.read().splitlines()
+            prefixFile.close()
+            serverInList = False #Gotta initialize the variable
+            newPrefix = getRawArgument(command("prefix", message), message)
+            index = 0
+            for line in prefixList:
+                splitLine = line.split()
+                if(message.channel.guild.id == int(splitLine[0])):
+                    #If the server already has a custom prefix set
+                    serverInList = True
+                    prefixFile = open("server_prefixes.txt", "w+")
+                    prefixList[index] = (str(message.channel.guild.id) + " " + newPrefix)
+                    prefixFile.write("\n".join(prefixList))
+                    prefixFile.close()
+                    msg = ("Changed server prefix to " + newPrefix + " !").format(message)
+                    await message.channel.send(msg)
+                index = index + 1
+            if serverInList == False:
+                #If the server does not already have a custom prefix set
+                prefixFile = open("server_prefixes.txt", "a+")
+                prefixFile.write("\n" + str(message.channel.guild.id) + " " + newPrefix) #Adds line to prefixlist
+                prefixFile.close()
+                msg = ("Set server prefix to " + newPrefix + " !").format(message)
+                await message.channel.send(msg)
+                
+        """
+        Misc gif commands.
+        """
+    elif message.content == command("shocked", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430591612637413389/image.gif"
         await message.channel.send(msg)
     elif message.content == command("smile", message):
