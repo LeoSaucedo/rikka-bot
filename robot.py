@@ -66,6 +66,29 @@ nsfwinsultlist = nsfwinsultfile.read().splitlines()
 nsfwInsultCount = len(nsfwinsultlist) -1
 nsfwinsultfile.close()
 
+highquotes_relPath = "Lists/highquotes.list"
+highquotes_absPath = os.path.join(root_dir, highquotes_relPath)
+highfile = open("highquotes.list")
+highlist = highfile.read().splitlines()
+highCount = len(highlist) -1
+highfile.close()
+
+
+drunkquotes_relPath = "Lists/drunkquotes.list"
+drunkquotes_absPath = os.path.join(root_dir, durnkquotes_relPath)
+drunkfile = open("drunkquotes.list")
+drunklist = drunkfile.read().splitlines()
+drunkCount = len(drunklist) -1
+drunkfile.close()
+
+
+crazyquotes_relPath = "Lists/crazyquotes.list"
+crazyquotes_absPath = os.path.join(root_dir, crazyquotes_relPath)
+crazyfile = open("crazyquotes.list")
+crazylist = crazyfile.read().splitlines()
+crazyCount = len(crazylist) -1
+crazyfile.close()
+
 #Instances
 client = discord.Client()
 translator = Translator()
@@ -309,6 +332,55 @@ async def on_message(message):
             await message.channel.send(msg)
     
     elif message.channel.permissions_for(message.author).manage_messages == True:
+
+    """
+    High, Drunk, or Neither Commands
+    """
+    if message.content == command("hdn", message):
+        prefix = getServerPrefix(message.guild)
+        msg = "HDN or High, Drunk, or Neither is where a random quote from a drunk, high, or crazy person and you have to guess whether the person is high, drunk, or just random."
+        await message.channel.send(msg)
+        msg = "Inorder to get a quote, one must type "+prefix+"hdn play. To give an answer, type "+prefix+"high, "+prefix+"drunk, or "+prefix+"neither. To view score, type "+prefix+"hdn score. Have fun!"
+        await message.channel.send(msg)
+        msg = "If you answer incorrectly then no points are given and the message-'Sorry incorrect! The correct answer is (answer)"
+        await message.channel.send(msg)
+
+    if message.content == command("hdn play", message):
+        hdn = randint(1, 3)
+        if hdn == 1:
+            question = highlist[randint(0,highCount)]
+            msg = question
+            await message.channel.send(msg)
+            msg = "Is this person high drunk or neither?"
+            await message.channel.send(msg)
+            if message.content == command("high", message):
+                msg = "Correct, {0.author.mention}, the answer is high"
+                await message.channel.send(msg)
+            else:
+                msg = "Incorrect the answer is high. No points are given"
+        elif hdn == 2:
+            question = drunklist[randint(0,drunkCount)]
+            msg = question
+            await message.channel.send(msg)
+            msg = "Is this person high drunk or neither?"
+            await message.channel.send(msg)
+            if message.content == command("drunk", message):
+                msg = "Correct, {0.author.mention}, the answer is drunk"
+                await message.channel.send(msg)
+        else:
+                msg = "Incorrect the answer is drunk. No points are given"
+        elif hdn == 3:
+            question = crazylist[randint(0,crazyCount)]
+            msg = question
+            await message.channel.send(msg)
+            msg= "Is this person high, drunk or neither?"
+            await message.channel.send(msg)
+            if message.content == command("neither", message):
+                msg = "Correct, {0.author.mention}, the answer is drunk"
+                await message.channel.send(msg)
+            else:
+                msg = "Incorrect this person is just crazy, or Harley. No points are given"
+
         """
         Moderator commands.
         """
@@ -452,6 +524,7 @@ async def on_ready():
     print("loaded hugs: " + str(hugcount + 1)) # +1 because humans are not computers.
     print("loaded Ramsay quotes: " + str(ramsayCount + 1))
     print("Loaded questions: " + str(trivia.getQuestionCount()))
+    print("Loaded HDN quotes: " + str(crazyCount + highCount + drunkCount + 1))
     serversConnected = str(len(client.guilds))
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
     game=discord.Game(name='on ' + serversConnected + ' servers!')
