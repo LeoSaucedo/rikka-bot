@@ -33,6 +33,11 @@ A Discord bot that performs various functions.
 - `;reveal` - Reveals the answer, removing the ability to score for that specific question.
 - `;trivia score` - Reveals your current score, globally.
 
+##### High, Drunk, or Neither Game
+- `;hdn` - Returns help menu for High, Drunk, or Neither
+- `;hdn play` - Returns a randomly selected quote
+- `;high:;drunk:;neither` - Gives an answer to the quote
+
 ##### Casino Commands
 - `;roll` - Rolls a die.
 - `;flip` - Flips a coin.
