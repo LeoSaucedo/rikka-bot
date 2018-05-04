@@ -6,6 +6,7 @@ Carlos Saucedo, 2018
 """
 from random import randint
 from Mods.triviaSet import triviaSet
+from Mods.triviaScore import triviaScore
 import re
 class triviaGame:
     def __init__(self, questionPath, answerPath):
@@ -134,4 +135,15 @@ class triviaGame:
         flaggedFile = open("flagged_questions.list", "a+")
         flaggedFile.write(str(self.questionNumber))
         flaggedFile.close()
+        
+    def getGlobalLeaderboard(self):
+        unsortedScores = []
+        
+        #Adding all of the scores into the unsorted array.
+        i = 1
+        while i < len(self.leaderboardList):
+            splitLine = self.leaderboardList[i].split()
+            newSet = triviaSet(splitLine[0], splitLine[1], splitLine[2])
+            unsortedScores.append(newSet)
+            i += 1
         

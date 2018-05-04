@@ -241,6 +241,21 @@ async def on_message(message):
         await message.channel.send(msg)
         await message.delete()
         
+    elif message.content == command("flip", message):
+        #User is flipping a coin.
+        coinResult = randint(0, 1)
+        if coinResult == 0:
+            msg = "{0.author.mention} flips a coin. It lands on heads.".format(message)
+        elif coinResult == 1:
+            msg = "{0.author.mention} flips a coin. It lands on tails.".format(message)
+        await message.channel.send(msg)
+        
+    elif message.content == command("roll", message):
+        #User rolls a die.
+        diceResult = randint(1,6)
+        msg = ("{0.author.mention} rolls a die. It lands on "+str(diceResult)+".").format(message)
+        await message.channel.send(msg)
+    
     elif message.content == command("trivia", message):
         """
         Trivia commands.
