@@ -333,10 +333,10 @@ async def on_message(message):
     
     elif message.channel.permissions_for(message.author).manage_messages == True:
 
+    elif message.content == command("hdn", message):     
     """
     High, Drunk, or Neither Commands
     """
-    if message.content == command("hdn", message):
         prefix = getServerPrefix(message.guild)
         msg = "HDN or High, Drunk, or Neither is where a random quote from a drunk, high, or crazy person and you have to guess whether the person is high, drunk, or just random."
         await message.channel.send(msg)
