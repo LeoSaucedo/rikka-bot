@@ -153,6 +153,12 @@ async def on_message(message):
         #Makes sure bot does not reply to another bot.
         return
     
+    elif str(message.channel).startswith("Direct Message"):
+        #If message is direct message.
+        msg = "Hi there! Here is my commands list. https://discordbots.org/bot/430482288053059584".format(message)
+        await message.channel.send(msg)
+    
+    
     elif message.content.startswith(command("help", message)):
         #Returns the README on the GitHub.
         msg = "{0.author.mention} https://discordbots.org/bot/430482288053059584".format(message)
