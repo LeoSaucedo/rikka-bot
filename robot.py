@@ -255,6 +255,15 @@ async def on_message(message):
         diceResult = randint(1,6)
         msg = ("{0.author.mention} rolls a die. It lands on "+str(diceResult)+".").format(message)
         await message.channel.send(msg)
+        
+    elif message.content.startswith(command("suggest", message)):
+        #Adds ability to suggest new features.
+        suggestion = getRawArgument(command("suggest", message), message)
+        suggestionsFile = open("suggestions.txt", "a+")
+        suggestionsFile.write(suggestion)
+        msg = "{0.author.mention} Added your suggestion! It will be processed and may be added soon! Thanks for the help!".format(message)
+        await message.channel.send(msg)
+        
     
     elif message.content == command("trivia", message):
         """

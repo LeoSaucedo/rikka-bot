@@ -15,6 +15,7 @@ A Discord bot that performs various functions.
 - `;clever (text)` - Returns the cleverbot response to the given text.
 - `;gizoogle (text)` - Yranslates a given text with gizoogle.
 - `;translate (text)` - Translates the specified text to English.
+- `;suggest (suggestion)` - Adds a completely anonymous suggestion to better the bot.
 
 ##### Fun Commands
 - `;insult (user)` - Sends a random insult to the given user.
