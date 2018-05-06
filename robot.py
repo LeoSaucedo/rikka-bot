@@ -251,6 +251,7 @@ async def on_message(message):
         voteMsg = await message.channel.send(embed=voteEmbed)
         await voteMsg.add_reaction("👍")
         await voteMsg.add_reaction("👎")
+        await message.delete()
         
     elif message.content.startswith(command("suggest", message)):
         #Adds ability to suggest new features.
