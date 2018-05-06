@@ -330,8 +330,6 @@ async def on_message(message):
         else:
             msg = "You haven't gotten a question yet!"
             await message.channel.send(msg)
-    
-    elif message.channel.permissions_for(message.author).manage_messages == True:
 
     elif message.content == command("hdn", message):     
     """
@@ -380,6 +378,8 @@ async def on_message(message):
                 await message.channel.send(msg)
             else:
                 msg = "Incorrect this person is just crazy, or Harley. No points are given"
+                              
+    elif message.channel.permissions_for(message.author).manage_messages == True:
 
         """
         Moderator commands.
