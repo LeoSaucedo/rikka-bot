@@ -179,7 +179,7 @@ async def on_message(message):
     
     elif message.content.startswith(command("hugme", message)) or message.content == command("hug", message):
         #Hugs the author of the message.
-        msg = "{0.author.mention}: ".format(message) + huglist[randint(0,hugCount)] 
+        msg = "{0.author.mention}: ".format(message) + huglist[randint(0,hugCount - 1)] 
         await message.channel.send(msg)
     
     elif message.content.startswith(command("hug ", message)):
