@@ -16,6 +16,7 @@ A Discord bot that performs various functions.
 - `;gizoogle (text)` - Translates a given text with gizoogle.
 - `;translate (text)` - Translates the specified text to English.
 - `;suggest (suggestion)` - Adds a completely anonymous suggestion to better the bot.
+- `;quickvote (vote)` - Creates a message with thumbs up and thumbs down, in a pretty text embed.
 
 ##### Fun Commands
 - `;insult (user)` - Sends a random insult to the given user.

@@ -12,6 +12,7 @@ import dbl
 import Mods.CleverApi as CleverApi
 from time import sleep
 import Mods.trivia as trivia
+from discord.emoji import Emoji
 
 #Directory stuff
 root_dir = os.path.dirname(__file__)
@@ -42,28 +43,28 @@ hug_relPath = "Lists/hug_gifs.list"
 hug_absPath = os.path.join(root_dir, hug_relPath)
 hugsfile = open(hug_absPath, "r")
 huglist = hugsfile.read().splitlines()
-hugcount = len(huglist) - 1 # -1 to compensate for array lengths.
+hugCount = len(huglist)
 hugsfile.close()
 
 ramsay_relPath = "Lists/ramsay.list"
 ramsay_absPath = os.path.join(root_dir, ramsay_relPath)
 ramsayfile = open(ramsay_absPath)
 ramsaylist = ramsayfile.read().splitlines()
-ramsayCount = len(ramsaylist) - 1
+ramsayCount = len(ramsaylist)
 ramsayfile.close()
 
 sfwinsult_relPath = "Lists/sfwinsults.list"
 sfwinsult_absPath = os.path.join(root_dir, sfwinsult_relPath)
 insultfile = open(sfwinsult_absPath)
 insultlist = insultfile.read().splitlines()
-insultCount = len(insultlist) - 1
+insultCount = len(insultlist)
 insultfile.close()
 
 nsfwinsult_relPath = "Lists/nsfwinsults.list"
 nsfwinsult_absPath = os.path.join(root_dir, nsfwinsult_relPath)
 nsfwinsultfile = open(nsfwinsult_absPath)
 nsfwinsultlist = nsfwinsultfile.read().splitlines()
-nsfwInsultCount = len(nsfwinsultlist) -1
+nsfwInsultCount = len(nsfwinsultlist)
 nsfwinsultfile.close()
 
 #Instances
@@ -178,18 +179,18 @@ async def on_message(message):
     
     elif message.content.startswith(command("hugme", message)) or message.content == command("hug", message):
         #Hugs the author of the message.
-        msg = "{0.author.mention}: ".format(message) + huglist[randint(0,hugcount)] 
+        msg = "{0.author.mention}: ".format(message) + huglist[randint(0,hugCount)] 
         await message.channel.send(msg)
     
     elif message.content.startswith(command("hug ", message)):
         #Hugs the first user mentioned by the author.
-        msg = "{0.author.mention} hugs {0.mentions[0].mention}! ".format(message) + huglist[randint(0,hugcount)]
+        msg = "{0.author.mention} hugs {0.mentions[0].mention}! ".format(message) + huglist[randint(0,hugCount - 1)]
         await message.channel.send(msg)
         await message.delete()
         
     elif message.content.startswith(command("ramsay", message)):
         #Replies with a random Gordon Ramsay quote.
-        msg = ramsaylist[randint(0, ramsayCount)]
+        msg = ramsaylist[randint(0, ramsayCount - 1)]
         await message.channel.send(msg)
     
     elif message.content.startswith(command("gay", message)):
@@ -235,13 +236,34 @@ async def on_message(message):
         # Says a random insult using an insult generator
         if message.channel.is_nsfw():
             #If the channel is isfw.
-            msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + nsfwinsultlist[randint(0,nsfwInsultCount)]+"!"
+            msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + nsfwinsultlist[randint(0,nsfwInsultCount - 1)]+"!"
         else:
-            msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + insultlist[randint(0,insultCount)]+"!"
+            msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + insultlist[randint(0,insultCount - 1)]+"!"
         await message.channel.send(msg)
         await message.delete()
         
+    elif message.content.startswith(command("quickvote", message)):
+        #Makes a new vote, and adds a yes and a no reaction option.
+        voteText = getRawArgument(command("quickvote", message), message)
+        voteEmbed=discord.Embed(color=0x0080c0)
+        voteEmbed.set_thumbnail(url=message.author.avatar_url)
+        voteEmbed.add_field(name="New Vote by " + message.author.name + "!", value=voteText, inline=False)
+        voteMsg = await message.channel.send(embed=voteEmbed)
+        await voteMsg.add_reaction("👍")
+        await voteMsg.add_reaction("👎")
+        
+    elif message.content.startswith(command("suggest", message)):
+        #Adds ability to suggest new features.
+        suggestion = getRawArgument(command("suggest", message), message)
+        suggestionsFile = open("suggestions.txt", "a+")
+        suggestionsFile.write(suggestion)
+        msg = "{0.author.mention} Added your suggestion! It will be processed and may be added soon! Thanks for the help!".format(message)
+        await message.channel.send(msg)
+        
     elif message.content == command("flip", message):
+        """
+        "Casino" Commands
+        """
         #User is flipping a coin.
         coinResult = randint(0, 1)
         if coinResult == 0:
@@ -255,15 +277,6 @@ async def on_message(message):
         diceResult = randint(1,6)
         msg = ("{0.author.mention} rolls a die. It lands on "+str(diceResult)+".").format(message)
         await message.channel.send(msg)
-        
-    elif message.content.startswith(command("suggest", message)):
-        #Adds ability to suggest new features.
-        suggestion = getRawArgument(command("suggest", message), message)
-        suggestionsFile = open("suggestions.txt", "a+")
-        suggestionsFile.write(suggestion)
-        msg = "{0.author.mention} Added your suggestion! It will be processed and may be added soon! Thanks for the help!".format(message)
-        await message.channel.send(msg)
-        
     
     elif message.content == command("trivia", message):
         """
@@ -302,7 +315,7 @@ async def on_message(message):
         msg  = ("{0.author.mention}, your score is " + str(trivia.getScore(message.author.id))).format(message)
         await message.channel.send(msg)
         
-    elif message.content.startswith(command("a", message)):
+    elif message.content.startswith(command("a", message) + " "):
         #The user is attempting to answer the question.
         attempt = getRawArgument(command("a", message), message)
         if trivia.getSent(message.guild.id) == True:
@@ -326,9 +339,9 @@ async def on_message(message):
             number = int(getArgument(command("clear", message), message))
             await message.channel.purge(limit=(number + 1), bulk=True)
             msg = "deleted " + str(number) + " messages!".format(string)
-            await message.channel.send(msg)
+            deletemsg = await message.channel.send(msg)
             sleep(5)
-            await message.channel.purge(limit = 1, bulk = True)
+            await deletemsg.delete()
             
         elif message.content.startswith(command("mute", message)):
             if len(message.mentions) > 0:
@@ -458,8 +471,8 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print("-------")
-    print("loaded hugs: " + str(hugcount + 1)) # +1 because humans are not computers.
-    print("loaded Ramsay quotes: " + str(ramsayCount + 1))
+    print("loaded hugs: " + str(hugCount))
+    print("loaded Ramsay quotes: " + str(ramsayCount))
     print("Loaded questions: " + str(trivia.getQuestionCount()))
     serversConnected = str(len(client.guilds))
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
