@@ -66,24 +66,24 @@ nsfwinsultlist = nsfwinsultfile.read().splitlines()
 nsfwInsultCount = len(nsfwinsultlist) -1
 nsfwinsultfile.close()
 
-highexasperations_relPath = "Lists/highexasperations.list"
-highexasperations_absPath = os.path.join(root_dir, highquotes_relPath)
+highquotes_relPath = "Lists/highexasperations.list"
+highquotes_absPath = os.path.join(root_dir, highquotes_relPath)
 highfile = open("highexasperations.list")
 highlist = highfile.read().splitlines()
 highCount = len(highlist) -1
 highfile.close()
 
 
-drunkexasperations_relPath = "Lists/drunkexasperations.list"
-drunkexasperations_absPath = os.path.join(root_dir, drunkquotes_relPath)
+drunkquotes_relPath = "Lists/drunkexasperations.list"
+drunkquotes_absPath = os.path.join(root_dir, drunkquotes_relPath)
 drunkfile = open("drunkexasperations.list")
 drunklist = drunkfile.read().splitlines()
 drunkCount = len(drunklist) -1
 drunkfile.close()
 
 
-crazyexasperations_relPath = "Lists/crazyexasperations.list"
-crazyexasperations_absPath = os.path.join(root_dir, crazyquotes_relPath)
+crazyquotes_relPath = "Lists/crazyexasperations.list"
+crazyquotes_absPath = os.path.join(root_dir, crazyquotes_relPath)
 crazyfile = open("crazyexasperations.list")
 crazylist = crazyfile.read().splitlines()
 crazyCount = len(crazylist) -1
@@ -332,9 +332,9 @@ async def on_message(message):
             await message.channel.send(msg)
 
     elif message.content == command("hdn", message):     
-    """
-    High, Drunk, or Neither Commands
-    """
+        """
+        High, Drunk, or Neither Commands
+        """
         prefix = getServerPrefix(message.guild)
         msg = "HDN or High, Drunk, or Neither is where a random quote from a drunk, high, or crazy person and you have to guess whether the person is high, drunk, or just random."
         await message.channel.send(msg)
@@ -365,7 +365,7 @@ async def on_message(message):
             if message.content == command("drunk", message):
                 msg = "Correct, {0.author.mention}, the answer is drunk"
                 await message.channel.send(msg)
-        else:
+            else:
                 msg = "Incorrect the answer is drunk. No points are given"
         elif hdn == 3:
             question = crazylist[randint(0,crazyCount)]
