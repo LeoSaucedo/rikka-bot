@@ -224,7 +224,7 @@ async def on_message(message):
         msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: " + getServerPrefix(message.channel.guild) + ". To get help, use " + getServerPrefix(message.channel.guild) + "help.").format(message)
         await message.channel.send(msg)
         
-    elif message.content.startswith(command("donate", message)) or message.content.startswith(command("paypal", message)):
+    elif message.content.startswith(command("donate", message)) or message.content.startswith(command("patreon", message)):
         msg = ("Help my programmer out, become a patron today! https://www.patreon.com/LeoSaucedo").format(message)
         await message.channel.send(msg)
         
