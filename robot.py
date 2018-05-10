@@ -68,7 +68,6 @@ nsfwinsultfile.close()
 
 highquotes_relPath = "Lists/highexasperations.list"
 highquotes_absPath = os.path.join(root_dir, highquotes_relPath)
-highfile = open("highexasperations.list")
 highlist = highfile.read().splitlines()
 highCount = len(highlist) -1
 highfile.close()
@@ -76,7 +75,7 @@ highfile.close()
 
 drunkquotes_relPath = "Lists/drunkexasperations.list"
 drunkquotes_absPath = os.path.join(root_dir, drunkquotes_relPath)
-drunkfile = open("drunkexasperations.list")
+drunkfile = open(drunkquotes_absPath)
 drunklist = drunkfile.read().splitlines()
 drunkCount = len(drunklist) -1
 drunkfile.close()
@@ -84,7 +83,7 @@ drunkfile.close()
 
 crazyquotes_relPath = "Lists/crazyexasperations.list"
 crazyquotes_absPath = os.path.join(root_dir, crazyquotes_relPath)
-crazyfile = open("crazyexasperations.list")
+crazyfile = open(crazyquotes_absPath)
 crazylist = crazyfile.read().splitlines()
 crazyCount = len(crazylist) -1
 crazyfile.close()
