@@ -225,7 +225,7 @@ async def on_message(message):
         await message.channel.send(msg)
         
     elif message.content.startswith(command("donate", message)) or message.content.startswith(command("paypal", message)):
-        msg = ("Help the humble programmer of this bot get himself a cup of tea to keep him going. https://www.paypal.me/LeoSaucedo").format(message)
+        msg = ("Help my programmer out, become a patron today! https://www.patreon.com/LeoSaucedo").format(message)
         await message.channel.send(msg)
         
     elif message.content.startswith(command("vote", message)):
