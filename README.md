@@ -1,4 +1,4 @@
-![Python 3.5, 3.6](https://img.shields.io/badge/python-3.5%2C%203.6-blue.svg) [![Discord Bots](https://discordbots.org/api/widget/status/430482288053059584.svg)](https://discordbots.org/bot/430482288053059584)
+![Python 3.5, 3.6](https://img.shields.io/badge/python-3.5%2C%203.6-blue.svg) [![Discord Bots](https://discordbots.org/api/widget/status/430482288053059584.svg)](https://discordbots.org/bot/430482288053059584) [![Discord Bots](https://discordbots.org/api/widget/servers/430482288053059584.svg)](https://discordbots.org/bot/430482288053059584)
 # rikka-bot
 
 A Discord bot that performs various functions.
