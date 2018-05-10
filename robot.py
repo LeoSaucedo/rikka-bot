@@ -68,6 +68,7 @@ nsfwinsultfile.close()
 
 highquotes_relPath = "Lists/highexasperations.list"
 highquotes_absPath = os.path.join(root_dir, highquotes_relPath)
+highfile = open(highquotes_absPath)
 highlist = highfile.read().splitlines()
 highCount = len(highlist) -1
 highfile.close()
