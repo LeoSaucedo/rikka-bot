@@ -11,7 +11,7 @@ A Discord bot that performs various functions.
 - `;info` - Returns information about the bot.
 - `@mention help` - Returns a command list.
 - `;paypal` - Returns donation link to contribute to server hosting.
-- `;vote` - Returns this server's vote link on [discordbots.org](discordbots.org).
+- `;vote` - Returns this server's vote link on [discordbots.org](https://discordbots.org/).
 - `;clever (text)` - Returns the cleverbot response to the given text.
 - `;gizoogle (text)` - Translates a given text with gizoogle.
 - `;translate (text)` - Translates the specified text to English.
