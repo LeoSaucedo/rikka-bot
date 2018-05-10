@@ -52,6 +52,8 @@ A Discord bot that performs various functions.
 #### In the works
 - Server and global leaderboard for the trivia game.
 - Improved, proprietary AI, instead of cleverbot.
+- Fighting simulator
+- Marry RP function
 
 ### Special Thanks
 - Special thanks to user chafla for their code [gizoogle.py](https://github.com/Rapptz/discord.py/tree/rewrite), which helped make this program possible.
