@@ -66,25 +66,25 @@ nsfwinsultlist = nsfwinsultfile.read().splitlines()
 nsfwInsultCount = len(nsfwinsultlist) -1
 nsfwinsultfile.close()
 
-highquotes_relPath = "Lists/highexasperations.list"
+highquotes_relPath = "Lists/high.list"
 highquotes_absPath = os.path.join(root_dir, highquotes_relPath)
-highfile = open("highexasperations.list")
+highfile = open(highquotes_absPath)
 highlist = highfile.read().splitlines()
 highCount = len(highlist) -1
 highfile.close()
 
 
-drunkquotes_relPath = "Lists/drunkexasperations.list"
+drunkquotes_relPath = "Lists/drunk.list"
 drunkquotes_absPath = os.path.join(root_dir, drunkquotes_relPath)
-drunkfile = open("drunkexasperations.list")
+drunkfile = open(drunkquotes_absPath)
 drunklist = drunkfile.read().splitlines()
 drunkCount = len(drunklist) -1
 drunkfile.close()
 
 
-crazyquotes_relPath = "Lists/crazyexasperations.list"
+crazyquotes_relPath = "Lists/crazy.list"
 crazyquotes_absPath = os.path.join(root_dir, crazyquotes_relPath)
-crazyfile = open("crazyexasperations.list")
+crazyfile = open(crazyquotes_absPath)
 crazylist = crazyfile.read().splitlines()
 crazyCount = len(crazylist) -1
 crazyfile.close()
@@ -238,7 +238,7 @@ async def on_message(message):
         
     elif message.content.startswith(command("info", message)):
         #Returns information about the bot.
-        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: " + getServerPrefix(message.channel.guild) + ". To get help, use " + getServerPrefix(message.channel.guild) + "help.").format(message)
+        msg = ("Hi there! I'm Rikka. This robot was c    reated by Leo. This server's command Prefix is: " + getServerPrefix(message.channel.guild) + ". To get help, use " + getServerPrefix(message.channel.guild) + "help.").format(message)
         await message.channel.send(msg)
         
     elif (len(message.mentions) > 0) and (message.mentions[0] == client.user) and ("help" in message.content):
