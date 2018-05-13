@@ -253,7 +253,7 @@ async def on_message(message):
         await voteMsg.add_reaction("👎")
         await message.delete()
         
-    elif message.content.startswith(command("suggest", message)):
+    elif message.content.startswith(command("suggest ", message)) or message.content.startswith(command("suggestion ", message)):
         #Adds ability to suggest new features.
         suggestion = getRawArgument(command("suggest", message), message)
         suggestionsFile = open("suggestions.txt", "a+")
