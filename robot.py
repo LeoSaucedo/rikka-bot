@@ -364,7 +364,7 @@ async def on_message(message):
                 msg = "You must specify a user."
                 await message.channel.send(msg)
     
-    elif message.channel.permissions_for(message.author).administrator == True:
+    if message.channel.permissions_for(message.author).administrator == True:
         """
         Administrator Commands.
         """
@@ -399,7 +399,7 @@ async def on_message(message):
         """
         Misc gif commands.
         """
-    elif message.content == command("shocked", message):
+    if message.content == command("shocked", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430591612637413389/image.gif"
         await message.channel.send(msg)
     elif message.content == command("smile", message):
