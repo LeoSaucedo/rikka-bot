@@ -352,7 +352,7 @@ async def on_message(message):
             msg = "Is this person high drunk or neither?"
             await message.channel.send(msg)
             if message.content == command("high", message):
-                msg = "Correct, {0.author.mention}, the answer is high"
+                msg = "Correct, {0.author.mention}, the answer is high".format(message)
                 await message.channel.send(msg)
             else:
                 msg = "Incorrect the answer is high. No points are given"
@@ -363,7 +363,7 @@ async def on_message(message):
             msg = "Is this person high drunk or neither?"
             await message.channel.send(msg)
             if message.content == command("drunk", message):
-                msg = "Correct, {0.author.mention}, the answer is drunk"
+                msg = "Correct, {0.author.mention}, the answer is drunk".format(message)
                 await message.channel.send(msg)
             else:
                 msg = "Incorrect the answer is drunk. No points are given"
@@ -374,10 +374,11 @@ async def on_message(message):
             msg= "Is this person high, drunk or neither?"
             await message.channel.send(msg)
             if message.content == command("neither", message):
-                msg = "Correct, {0.author.mention}, the answer is drunk"
+                msg = "Correct, {0.author.mention}, the answer is drunk".format(message)
                 await message.channel.send(msg)
             else:
                 msg = "Incorrect this person is just crazy, or Harley. No points are given"
+                await message.channel.send(msg)
                               
     elif message.channel.permissions_for(message.author).manage_messages == True:
 
