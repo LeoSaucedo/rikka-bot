@@ -67,6 +67,29 @@ nsfwinsultlist = nsfwinsultfile.read().splitlines()
 nsfwInsultCount = len(nsfwinsultlist)
 nsfwinsultfile.close()
 
+highquotes_relPath = "Lists/high.list"
+highquotes_absPath = os.path.join(root_dir, highquotes_relPath)
+highfile = open(highquotes_absPath)
+highlist = highfile.read().splitlines()
+highCount = len(highlist) -1
+highfile.close()
+
+
+drunkquotes_relPath = "Lists/drunk.list"
+drunkquotes_absPath = os.path.join(root_dir, drunkquotes_relPath)
+drunkfile = open(drunkquotes_absPath)
+drunklist = drunkfile.read().splitlines()
+drunkCount = len(drunklist) -1
+drunkfile.close()
+
+
+crazyquotes_relPath = "Lists/crazy.list"
+crazyquotes_absPath = os.path.join(root_dir, crazyquotes_relPath)
+crazyfile = open(crazyquotes_absPath)
+crazylist = crazyfile.read().splitlines()
+crazyCount = len(crazylist) -1
+crazyfile.close()
+
 #Instances
 client = discord.Client()
 translator = Translator()
@@ -216,7 +239,7 @@ async def on_message(message):
         
     elif message.content.startswith(command("info", message)):
         #Returns information about the bot.
-        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: " + getServerPrefix(message.channel.guild) + ". To get help, use " + getServerPrefix(message.channel.guild) + "help.").format(message)
+        msg = ("Hi there! I'm Rikka. This robot was c    reated by Leo. This server's command Prefix is: " + getServerPrefix(message.channel.guild) + ". To get help, use " + getServerPrefix(message.channel.guild) + "help.").format(message)
         await message.channel.send(msg)
         
     elif (len(message.mentions) > 0) and (message.mentions[0] == client.user) and ("help" in message.content):
@@ -330,8 +353,58 @@ async def on_message(message):
         else:
             msg = "You haven't gotten a question yet!"
             await message.channel.send(msg)
-    
+
+    elif message.content == command("hdn", message):     
+        """
+        High, Drunk, or Neither Commands
+        """
+        prefix = getServerPrefix(message.guild)
+        msg = "HDN or High, Drunk, or Neither is where a random quote from a drunk, high, or crazy person and you have to guess whether the person is high, drunk, or just random."
+        await message.channel.send(msg)
+        msg = "Inorder to get a quote, one must type "+prefix+"hdn play. To give an answer, type "+prefix+"high, "+prefix+"drunk, or "+prefix+"neither. To view score, type "+prefix+"hdn score. Have fun!"
+        await message.channel.send(msg)
+        msg = "If you answer incorrectly then no points are given and the message-'Sorry incorrect! The correct answer is (answer)"
+        await message.channel.send(msg)
+
+    elif message.content == command("hdn play", message):
+        hdn = randint(1, 3)
+        if hdn == 1:
+            question = highlist[randint(0,highCount)]
+            msg = question
+            await message.channel.send(msg)
+            msg = "Is this person high drunk or neither?"
+            await message.channel.send(msg)
+            if message.content == command("high", message):
+                msg = "Correct, {0.author.mention}, the answer is high".format(message)
+                await message.channel.send(msg)
+            else:
+                msg = "Incorrect the answer is high. No points are given"
+        elif hdn == 2:
+            question = drunklist[randint(0,drunkCount)]
+            msg = question
+            await message.channel.send(msg)
+            msg = "Is this person high drunk or neither?"
+            await message.channel.send(msg)
+            if message.content == command("drunk", message):
+                msg = "Correct, {0.author.mention}, the answer is drunk".format(message)
+                await message.channel.send(msg)
+            else:
+                msg = "Incorrect the answer is drunk. No points are given"
+        elif hdn == 3:
+            question = crazylist[randint(0,crazyCount)]
+            msg = question
+            await message.channel.send(msg)
+            msg= "Is this person high, drunk or neither?"
+            await message.channel.send(msg)
+            if message.content == command("neither", message):
+                msg = "Correct, {0.author.mention}, the answer is drunk".format(message)
+                await message.channel.send(msg)
+            else:
+                msg = "Incorrect this person is just crazy, or Harley. No points are given"
+                await message.channel.send(msg)
+                              
     elif message.channel.permissions_for(message.author).manage_messages == True:
+
         """
         Moderator commands.
         """
@@ -475,6 +548,7 @@ async def on_ready():
     print("loaded hugs: " + str(hugCount))
     print("loaded Ramsay quotes: " + str(ramsayCount))
     print("Loaded questions: " + str(trivia.getQuestionCount()))
+    print("Loaded HDN quotes: " + str(crazyCount + highCount + drunkCount + 1))
     serversConnected = str(len(client.guilds))
     print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
     game=discord.Game(name='on ' + serversConnected + ' servers!')
