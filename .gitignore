@@ -6,3 +6,4 @@ robotold.py
 .pydevproject
 bot_prefixes.list
 /.settings/*
+!requirements.txt
