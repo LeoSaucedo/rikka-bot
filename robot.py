@@ -331,6 +331,34 @@ async def on_message(message):
             msg = "You haven't gotten a question yet!"
             await message.channel.send(msg)
     
+    elif message.content.startswith(command("kick", message)):
+        """
+        Kick command.
+        """
+        if message.channel.permissions_for(message.author).kick_members == True:
+            user = message.mentions[0]
+            try:
+                await message.guild.kick(user)
+                msg = "Kicked "+user.name+"!"
+                await message.channel.send(msg)
+            except exception:
+                msg = "Failed to kick user."
+                await message.channel.send(msg)
+
+    elif message.content.startswith(command("ban", message)):
+        """
+        Ban command.
+        """
+        if message.channel.permissions_for(message.author).ban_members == True:
+            user = message.mentions[0]
+            try:
+                await message.guild.ban(user)
+                msg = "Banned "+user.name+"!"
+                await message.channel.send(msg)
+            except:
+                msg = "Failed to ban user."
+                await message.channel.send(msg)
+    
     elif message.channel.permissions_for(message.author).manage_messages == True:
         """
         Moderator commands.
