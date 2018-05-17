@@ -41,6 +41,7 @@ A Discord bot that performs various functions.
 ##### Casino Commands
 - `;roll` - Rolls a die.
 - `;flip` - Flips a coin.
+- `;8ball (question)` - Tells you the future.
 
 ##### Admin Commands
 - `;prefix (prefix)` - Changes the prefix to a set custom prefix. *(Must be admin)*

@@ -13,6 +13,7 @@ import Mods.CleverApi as CleverApi
 from time import sleep
 import Mods.trivia as trivia
 from discord.emoji import Emoji
+import Mods.EightBall as EightBall
 
 #Directory stuff
 root_dir = os.path.dirname(__file__)
@@ -82,6 +83,9 @@ answer_relPath = "Lists/trivia_answers.list"
 answerPath = os.path.join(root_dir, answer_relPath)
 trivia = trivia.triviaGame(questionPath, answerPath)
 isSent = False
+
+#Eight ball instantiation
+eight = EightBall.eightBallGenerator()
 
 def getServerPrefix(guild):
     #Returns the server prefix.
@@ -278,6 +282,14 @@ async def on_message(message):
         diceResult = randint(1,6)
         msg = ("{0.author.mention} rolls a die. It lands on "+str(diceResult)+".").format(message)
         await message.channel.send(msg)
+    
+    elif message.content.startswith(command("8ball", message)):
+        result = eight.getAnswer()
+        ballText = ("{0.author.mention}, "+result).format(message)
+        ballEmbed = discord.Embed(color=0x8000ff)
+        ballEmbed.set_author(name="Magic 8-Ball",icon_url="https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/134/billiards_1f3b1.png")
+        ballEmbed.add_field(name="Prediction:", value=ballText, inline =False)
+        await message.channel.send(embed=ballEmbed)
     
     elif message.content == command("trivia", message):
         """
