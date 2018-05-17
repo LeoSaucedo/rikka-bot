@@ -56,6 +56,7 @@ A Discord bot that performs various functions.
 
 #### In the works
 - Server and global leaderboard for the trivia game.
+- Dynamic "playing" statuses for communication between devs and member servers.
 - Improved, proprietary AI, instead of cleverbot.
 - Fighting simulator
 - Marry RP function
