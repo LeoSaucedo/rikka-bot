@@ -261,7 +261,7 @@ async def on_message(message):
         #Rates a certain user or thing.
         thingToRate = getRawArgument(command("rate", message), message)
         rateScore = randint(0, 10)
-        msg = ("I rate "+thingToRate+" a **"+str(rateScore)+"/10.**").format(message)
+        msg = ("I rate "+thingToRate+" a **"+str(rateScore)+"/10**.").format(message)
         await message.channel.send(msg)
         
     elif message.content.startswith(command("suggest ", message)) or message.content.startswith(command("suggestion ", message)):
