@@ -287,7 +287,7 @@ async def on_message(message):
     elif message.content == command("roll", message):
         #User rolls a die.
         diceResult = randint(1,6)
-        msg = ("{0.author.mention} rolls a die. It lands on "+diceResult+".").format(message)
+        msg = ("{0.author.mention} rolls a die. It lands on "+str(diceResult)+".").format(message)
         await message.channel.send(msg)
     
     elif message.content.startswith(command("8ball", message)):
