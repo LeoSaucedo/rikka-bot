@@ -25,6 +25,7 @@ A Discord bot that performs various functions.
 - `;insult (user)` - Sends a random insult to the given user.
 - `;ramsay` - Returns a random Gordon Ramsay quote.
 - `;gay` - no u
+- `;rate (thing to rate)` - Rates whatever you tell it to rate on a scale of 1-10.
 
 ##### Gif Commands
 - `;hello` - Says hi.

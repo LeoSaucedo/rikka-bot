@@ -261,8 +261,8 @@ async def on_message(message):
         #Rates a certain user or thing.
         thingToRate = getRawArgument(command("rate", message), message)
         rateScore = randint(0, 10)
-        msg = ("I rate "+thingToRate+" a *"+str(rateScore)+"/10.*"
-        await message.send(msg)
+        msg = ("I rate "+thingToRate+" a **"+str(rateScore)+"/10.**").format(message)
+        await message.channel.send(msg)
         
     elif message.content.startswith(command("suggest ", message)) or message.content.startswith(command("suggestion ", message)):
         #Adds ability to suggest new features.
@@ -287,7 +287,7 @@ async def on_message(message):
     elif message.content == command("roll", message):
         #User rolls a die.
         diceResult = randint(1,6)
-        msg = ("{0.author.mention} rolls a die. It lands on "+42diceResult)+".").format(message)
+        msg = ("{0.author.mention} rolls a die. It lands on "+diceResult+".").format(message)
         await message.channel.send(msg)
     
     elif message.content.startswith(command("8ball", message)):
