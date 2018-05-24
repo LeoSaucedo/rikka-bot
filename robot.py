@@ -249,9 +249,8 @@ async def on_message(message):
     elif message.content.startswith(command("quickvote", message)):
         #Makes a new vote, and adds a yes and a no reaction option.
         voteText = getRawArgument(command("quickvote", message), message)
-        voteEmbed=discord.Embed(color=0x0080c0)
-        voteEmbed.set_thumbnail(url=message.author.avatar_url)
-        voteEmbed.add_field(name="New Vote by " + message.author.name + "!", value=voteText, inline=False)
+        voteEmbed=discord.Embed(color=0x0080c0, description=voteText)
+        voteEmbed.set_author(name="New Vote by " + message.author.name + "!", icon_url=message.author.avatar_url)
         voteMsg = await message.channel.send(embed=voteEmbed)
         await voteMsg.add_reaction("👍")
         await voteMsg.add_reaction("👎")
@@ -261,7 +260,7 @@ async def on_message(message):
         #Rates a certain user or thing.
         thingToRate = getRawArgument(command("rate", message), message)
         rateScore = randint(0, 10)
-        msg = ("I rate "+thingToRate+" a **"+str(rateScore)+"/10.**").format(message)
+        msg = ("I rate "+thingToRate+" a **"+str(rateScore)+"/10**.").format(message)
         await message.channel.send(msg)
         
     elif message.content.startswith(command("suggest ", message)) or message.content.startswith(command("suggestion ", message)):
@@ -287,7 +286,7 @@ async def on_message(message):
     elif message.content == command("roll", message):
         #User rolls a die.
         diceResult = randint(1,6)
-        msg = ("{0.author.mention} rolls a die. It lands on "+diceResult+".").format(message)
+        msg = ("{0.author.mention} rolls a die. It lands on "+str(diceResult)+".").format(message)
         await message.channel.send(msg)
     
     elif message.content.startswith(command("8ball", message)):
