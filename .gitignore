@@ -7,3 +7,4 @@ robotold.py
 bot_prefixes.list
 /.settings/*
 !requirements.txt
+config.json
