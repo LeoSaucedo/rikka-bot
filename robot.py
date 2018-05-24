@@ -249,9 +249,8 @@ async def on_message(message):
     elif message.content.startswith(command("quickvote", message)):
         #Makes a new vote, and adds a yes and a no reaction option.
         voteText = getRawArgument(command("quickvote", message), message)
-        voteEmbed=discord.Embed(color=0x0080c0)
-        voteEmbed.set_thumbnail(url=message.author.avatar_url)
-        voteEmbed.add_field(name="New Vote by " + message.author.name + "!", value=voteText, inline=False)
+        voteEmbed=discord.Embed(color=0x0080c0, description=voteText)
+        voteEmbed.set_author(name="New Vote by " + message.author.name + "!", icon_url=message.author.avatar_url)
         voteMsg = await message.channel.send(embed=voteEmbed)
         await voteMsg.add_reaction("👍")
         await voteMsg.add_reaction("👎")
