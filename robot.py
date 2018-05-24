@@ -267,7 +267,7 @@ async def on_message(message):
         #Adds ability to suggest new features.
         suggestion = getRawArgument(command("suggest", message), message)
         suggestionsFile = open("suggestions.txt", "a+")
-        suggestionsFile.write(suggestion)
+        suggestionsFile.write(suggestion+"\n")
         msg = "{0.author.mention} Added your suggestion! It will be processed and may be added soon! Thanks for the help!".format(message)
         await message.channel.send(msg)
         
