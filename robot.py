@@ -87,7 +87,6 @@ isSent = False
 # Eight ball instantiation
 eight = EightBall.eightBallGenerator()
 
-
 def getServerPrefix(guild):
     # Returns the server prefix.
     # If there is no server prefix set, it returns the defaultPrefix.
@@ -153,7 +152,6 @@ async def on_guild_remove(guild):
     
 @client.event
 async def on_message(message):
-    
     """
     Universal commands
     """
@@ -550,14 +548,15 @@ async def on_ready():
     print("Loaded questions: " + str(trivia.getQuestionCount()))
     serversConnected = str(len(client.guilds))
     print("Guilds connected: " + serversConnected)  # Returns number of guilds connected to
-    game = discord.Game(name='on ' + serversConnected + ' servers!')
+    usersConnected = str(len(client.users))
+    print("Users connected: " + usersConnected)
+    game = discord.Game(name='with ' + usersConnected + ' users, on '+serversConnected+" servers!")
     await client.change_presence(activity=game)
     try:
         await botlist.post_server_count(serversConnected, shardCount)
         print("Successfully published server count to dbl.")
     except Exception as e:
         print("Failed to post server count to tbl.")
-
-
+    
 while True:
     client.run(token)  # runs the bot.
