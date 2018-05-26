@@ -8,7 +8,7 @@ bot.on("ready", () =>{
 });
 
 bot.on("messageReactionAdd", (reaction, user) =>{
-  if (reaction.emoji.name !== '💠') return;
+  if (reaction.emoji.name !== '⭐') return;
   if (reaction.count === 3) {
     const boardMSG = new Discord.RichEmbed()
     .setAuthor(reaction.message.author.username, reaction.message.author.avatarURL)

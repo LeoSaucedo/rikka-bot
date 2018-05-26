@@ -146,4 +146,7 @@ class triviaGame:
             newSet = triviaSet(splitLine[0], splitLine[1], splitLine[2])
             unsortedScores.append(newSet)
             i += 1
+            
+        #Sorting elements in previously created array.
+        
         

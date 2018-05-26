@@ -51,6 +51,10 @@ A Discord bot that performs various functions.
 - `;kick (user)` - Kicks the specified user. *(Must have kick permission)*
 - `;ban (user)` - Bans the specified user. *(Must have ban permission)*
 
+##### Board Functionality
+The board functionality allows popular messages to be posted on a special channel, titled `board`.
+To use this functionality, you must first run `;board enable`.
+Afterwards, every message with 3 reactions with the "⭐" will get posted to the board.
 
 ##### Emotes
 *Note: All emotes are entirely SFW.*

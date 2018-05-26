@@ -15,10 +15,10 @@ import Mods.trivia as trivia
 from discord.emoji import Emoji
 import Mods.EightBall as EightBall
 
-#Directory stuff
+# Directory stuff
 root_dir = os.path.dirname(__file__)
 
-#Auth tokens
+# Auth tokens
 tokenfile = open("auth_token.txt", "r")
 rawtoken = tokenfile.read().splitlines()
 token = rawtoken[0]
@@ -26,20 +26,20 @@ token = rawtoken[0]
 bltokenfile = open("dbl_token.txt", "r")
 rawbltoken = bltokenfile.read().splitlines()
 bltoken = rawbltoken[0]
-shardCount = 1 #Keeping it simple with 1 for now.
+shardCount = 1  # Keeping it simple with 1 for now.
 
 clevertokenfile = open("clever_token.txt", "r")
 rawclevertoken = clevertokenfile.read().splitlines()
 userapi = rawclevertoken[0]
 keyapi = rawclevertoken[1]
 
-#Cleverbot
+# Cleverbot
 try:
     clever = CleverApi.Bot(userapi, keyapi)
 except Exception as e:
     print("Failed to instantiate CleverBot.")
 
-#lists
+# lists
 hug_relPath = "Lists/hug_gifs.list"
 hug_absPath = os.path.join(root_dir, hug_relPath)
 hugsfile = open(hug_absPath, "r")
@@ -68,15 +68,15 @@ nsfwinsultlist = nsfwinsultfile.read().splitlines()
 nsfwInsultCount = len(nsfwinsultlist)
 nsfwinsultfile.close()
 
-#Instances
+# Instances
 client = discord.Client()
 translator = Translator()
 botlist = dbl.Client(client, bltoken)
 
-#Prefix things
+# Prefix things
 defaultPrefix = ";"
 
-#Trivia instantiation
+# Trivia instantiation
 question_relPath = "Lists/trivia_questions.list"
 questionPath = os.path.join(root_dir, question_relPath)
 answer_relPath = "Lists/trivia_answers.list"
@@ -84,12 +84,13 @@ answerPath = os.path.join(root_dir, answer_relPath)
 trivia = trivia.triviaGame(questionPath, answerPath)
 isSent = False
 
-#Eight ball instantiation
+# Eight ball instantiation
 eight = EightBall.eightBallGenerator()
 
+
 def getServerPrefix(guild):
-    #Returns the server prefix.
-    #If there is no server prefix set, it returns the defaultPrefix.
+    # Returns the server prefix.
+    # If there is no server prefix set, it returns the defaultPrefix.
     prefixFile = open("server_prefixes.txt", "r+")
     prefixList = prefixFile.read().splitlines()
     prefixFile.close()
@@ -100,49 +101,55 @@ def getServerPrefix(guild):
             serverInList = True
             return splitLine[1]
     if serverInList == False:
-        #If server does not have default prefix set
+        # If server does not have default prefix set
         return defaultPrefix
 
+
 def command(string, message):
-    #Builds a command out of the given string.
+    # Builds a command out of the given string.
     serverPrefix = getServerPrefix(message.channel.guild)
     return serverPrefix + string
 
+
 def getArgument(command, message):
-    #Gets the argument text as a string.
+    # Gets the argument text as a string.
     argument = message.content.replace(command + " ", "")
     argument = argument.encode("ascii", "ignore")
     return argument
 
+
 def getRawArgument(command, message):
     argument = message.content.replace(command + " ", "")
     return argument
+
     
 @client.event
 async def on_guild_join(guild):
     serversConnected = str(len(client.guilds))
     print("Joined server " + guild.name + "!")
-    print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
-    game=discord.Game(name='on ' + serversConnected + ' servers!')
+    print("Guilds connected: " + serversConnected)  # Returns number of guilds connected to
+    game = discord.Game(name='on ' + serversConnected + ' servers!')
     await client.change_presence(activity=game)
     try:
         await botlist.post_server_count(serversConnected, shardCount)
         print("Successfully published server count to dbl.")
     except Exception as e:
         print("Failed to post server count to tbl.")
+
     
 @client.event
 async def on_guild_remove(guild):
     serversConnected = str(len(client.guilds))
     print("Left server " + guild.name + "!")
-    print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
-    game=discord.Game(name='on ' + serversConnected + ' servers!')
+    print("Guilds connected: " + serversConnected)  # Returns number of guilds connected to
+    game = discord.Game(name='on ' + serversConnected + ' servers!')
     await client.change_presence(activity=game)
     try:
         await botlist.post_server_count(serversConnected, shardCount)
         print("Successfully published server count to dbl.")
     except Exception as e:
         print("Failed to post server count to tbl.") 
+
     
 @client.event
 async def on_message(message):
@@ -151,65 +158,64 @@ async def on_message(message):
     Universal commands
     """
     if message.author == client.user:
-        #Makes sure bot does not reply to itself
+        # Makes sure bot does not reply to itself
         return
     
     elif message.author.bot == True:
-        #Makes sure bot does not reply to another bot.
+        # Makes sure bot does not reply to another bot.
         return
     
     elif str(message.channel).startswith("Direct Message"):
-        #If message is direct message.
+        # If message is direct message.
         msg = "Hi there! Here is my commands list. https://discordbots.org/bot/430482288053059584".format(message)
         await message.channel.send(msg)
     
-    
     elif message.content.startswith(command("help", message)):
-        #Returns the README on the GitHub.
+        # Returns the README on the GitHub.
         msg = "{0.author.mention} https://discordbots.org/bot/430482288053059584".format(message)
         await message.channel.send(msg)
     
     elif message.content == command("hi", message) or message.content == command("hello", message):
-        #Says hi and embeds a gif, mentioning the author of the message.
+        # Says hi and embeds a gif, mentioning the author of the message.
         msg = "h-hello {0.author.mention}-chan! ".format(message) + 'https://cdn.discordapp.com/attachments/402744318013603840/430592483282386974/image.gif'
         await message.channel.send(msg)
     
     elif message.content.startswith(command("gizoogle", message)):
-        #Gizoogles the given string and returns it.
+        # Gizoogles the given string and returns it.
         translatedMessage = gizoogle.text(getArgument(command("gizoogle", message), message))
         msg = "{0.author.mention} says: ".format(message) + translatedMessage.format(message)
         await message.channel.send(msg)
         await message.delete()
     
     elif message.content.startswith(command("hugme", message)) or message.content == command("hug", message):
-        #Hugs the author of the message.
-        msg = "{0.author.mention}: ".format(message) + huglist[randint(0,hugCount - 1)] 
+        # Hugs the author of the message.
+        msg = "{0.author.mention}: ".format(message) + huglist[randint(0, hugCount - 1)] 
         await message.channel.send(msg)
     
     elif message.content.startswith(command("hug ", message)):
-        #Hugs the first user mentioned by the author.
-        msg = "{0.author.mention} hugs {0.mentions[0].mention}! ".format(message) + huglist[randint(0,hugCount - 1)]
+        # Hugs the first user mentioned by the author.
+        msg = "{0.author.mention} hugs {0.mentions[0].mention}! ".format(message) + huglist[randint(0, hugCount - 1)]
         await message.channel.send(msg)
         await message.delete()
         
     elif message.content.startswith(command("ramsay", message)):
-        #Replies with a random Gordon Ramsay quote.
+        # Replies with a random Gordon Ramsay quote.
         msg = ramsaylist[randint(0, ramsayCount - 1)]
         await message.channel.send(msg)
     
     elif message.content.startswith(command("gay", message)):
-        #no u
+        # no u
         msg = "no u {0.author.mention}".format(message)
         await message.channel.send(msg)
 
     elif message.content.startswith(command("translate", message)):
-        #Translates the given text into english.
+        # Translates the given text into english.
         translatedMessage = translator.translate(getRawArgument(command("translate", message), message)).text
         msg = ("{0.author.mention}: translated text - " + translatedMessage).format(message)
         await message.channel.send(msg)
         
     elif message.content.startswith(command("clever", message)):
-        #Returns CleverBot's response.
+        # Returns CleverBot's response.
         async with message.channel.typing():
             query = getRawArgument(command("clever", message), message)
             try:
@@ -219,12 +225,12 @@ async def on_message(message):
             await message.channel.send(msg)
         
     elif message.content.startswith(command("info", message)):
-        #Returns information about the bot.
+        # Returns information about the bot.
         msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: " + getServerPrefix(message.channel.guild) + ". To get help, use " + getServerPrefix(message.channel.guild) + "help.").format(message)
         await message.channel.send(msg)
         
     elif (len(message.mentions) > 0) and (message.mentions[0] == client.user) and ("help" in message.content):
-        #Returns information about the bot.
+        # Returns information about the bot.
         msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: " + getServerPrefix(message.channel.guild) + ". To get help, use " + getServerPrefix(message.channel.guild) + "help.").format(message)
         await message.channel.send(msg)
         
@@ -239,17 +245,17 @@ async def on_message(message):
     elif message.content.startswith(command("insult ", message)):
         # Says a random insult using an insult generator
         if message.channel.is_nsfw():
-            #If the channel is isfw.
-            msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + nsfwinsultlist[randint(0,nsfwInsultCount - 1)]+"!"
+            # If the channel is isfw.
+            msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + nsfwinsultlist[randint(0, nsfwInsultCount - 1)] + "!"
         else:
-            msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + insultlist[randint(0,insultCount - 1)]+"!"
+            msg = "{0.author.mention} calls {0.mentions[0].mention} ".format(message) + insultlist[randint(0, insultCount - 1)] + "!"
         await message.channel.send(msg)
         await message.delete()
         
     elif message.content.startswith(command("quickvote", message)):
-        #Makes a new vote, and adds a yes and a no reaction option.
+        # Makes a new vote, and adds a yes and a no reaction option.
         voteText = getRawArgument(command("quickvote", message), message)
-        voteEmbed=discord.Embed(color=0x0080c0, description=voteText)
+        voteEmbed = discord.Embed(color=0x0080c0, description=voteText)
         voteEmbed.set_author(name="New Vote by " + message.author.name + "!", icon_url=message.author.avatar_url)
         voteMsg = await message.channel.send(embed=voteEmbed)
         await voteMsg.add_reaction("👍")
@@ -257,17 +263,17 @@ async def on_message(message):
         await message.delete()
         
     elif message.content.startswith(command("rate", message)):
-        #Rates a certain user or thing.
+        # Rates a certain user or thing.
         thingToRate = getRawArgument(command("rate", message), message)
         rateScore = randint(0, 10)
-        msg = ("I rate "+thingToRate+" a **"+str(rateScore)+"/10**.").format(message)
+        msg = ("I rate " + thingToRate + " a **" + str(rateScore) + "/10**.").format(message)
         await message.channel.send(msg)
         
     elif message.content.startswith(command("suggest ", message)) or message.content.startswith(command("suggestion ", message)):
-        #Adds ability to suggest new features.
+        # Adds ability to suggest new features.
         suggestion = getRawArgument(command("suggest", message), message)
         suggestionsFile = open("suggestions.txt", "a+")
-        suggestionsFile.write(suggestion+"\n")
+        suggestionsFile.write(suggestion + "\n")
         msg = "{0.author.mention} Added your suggestion! It will be processed and may be added soon! Thanks for the help!".format(message)
         await message.channel.send(msg)
         
@@ -275,7 +281,7 @@ async def on_message(message):
         """
         "Casino" Commands
         """
-        #User is flipping a coin.
+        # User is flipping a coin.
         coinResult = randint(0, 1)
         if coinResult == 0:
             msg = "{0.author.mention} flips a coin. It lands on heads.".format(message)
@@ -284,17 +290,17 @@ async def on_message(message):
         await message.channel.send(msg)
         
     elif message.content == command("roll", message):
-        #User rolls a die.
-        diceResult = randint(1,6)
-        msg = ("{0.author.mention} rolls a die. It lands on "+str(diceResult)+".").format(message)
+        # User rolls a die.
+        diceResult = randint(1, 6)
+        msg = ("{0.author.mention} rolls a die. It lands on " + str(diceResult) + ".").format(message)
         await message.channel.send(msg)
     
     elif message.content.startswith(command("8ball", message)):
         result = eight.getAnswer()
-        ballText = ("{0.author.mention}, "+result).format(message)
+        ballText = ("{0.author.mention}, " + result).format(message)
         ballEmbed = discord.Embed(color=0x8000ff)
-        ballEmbed.set_author(name="Magic 8-Ball",icon_url="https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/134/billiards_1f3b1.png")
-        ballEmbed.add_field(name="Prediction:", value=ballText, inline =False)
+        ballEmbed.set_author(name="Magic 8-Ball", icon_url="https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/134/billiards_1f3b1.png")
+        ballEmbed.add_field(name="Prediction:", value=ballText, inline=False)
         await message.channel.send(embed=ballEmbed)
     
     elif message.content == command("trivia", message):
@@ -302,15 +308,15 @@ async def on_message(message):
         Trivia commands.
         """
         prefix = getServerPrefix(message.guild)
-        msg = "To get a question, type "+prefix+"ask. To attempt an answer, type "+prefix+"a (attempt). To reveal the answer, type "+prefix+"reveal."
+        msg = "To get a question, type " + prefix + "ask. To attempt an answer, type " + prefix + "a (attempt). To reveal the answer, type " + prefix + "reveal."
         await message.channel.send(msg)
-        msg = "If you believe a question is unfair, type "+prefix+"flag. It will be reviewed by our developers, and removed if appropriate."
+        msg = "If you believe a question is unfair, type " + prefix + "flag. It will be reviewed by our developers, and removed if appropriate."
         await message.channel.send(msg)
-        msg = "To check your score, type "+prefix+"trivia score. Good luck!"
+        msg = "To check your score, type " + prefix + "trivia score. Good luck!"
         await message.channel.send(msg)
         
     elif message.content.startswith(command("ask", message)):
-        #Returns a randomly generated question.
+        # Returns a randomly generated question.
         msg = trivia.getQuestion(message.guild.id)
         await message.channel.send(msg)
         global isSent
@@ -331,16 +337,16 @@ async def on_message(message):
         await message.channel.send(msg)
         
     elif message.content.startswith(command("trivia score", message)):
-        msg  = ("{0.author.mention}, your score is " + str(trivia.getScore(message.author.id))).format(message)
+        msg = ("{0.author.mention}, your score is " + str(trivia.getScore(message.author.id))).format(message)
         await message.channel.send(msg)
         
     elif message.content.startswith(command("a", message) + " "):
-        #The user is attempting to answer the question.
+        # The user is attempting to answer the question.
         attempt = getRawArgument(command("a", message), message)
         if trivia.getSent(message.guild.id) == True:
-            #If the question is sent and the answer has not yet been revealed.
+            # If the question is sent and the answer has not yet been revealed.
             if trivia.format(attempt) == trivia.format(trivia.getAnswer(message.guild.id)):
-                #If the answer is correct.
+                # If the answer is correct.
                 msg = "{0.author.mention}, correct! The answer is ".format(message) + trivia.getAnswer(message.guild.id)
                 await message.channel.send(msg)
                 trivia.addPoint(message.guild.id, message.author.id)
@@ -348,7 +354,16 @@ async def on_message(message):
         else:
             msg = "You haven't gotten a question yet!"
             await message.channel.send(msg)
-    
+            
+            
+    elif message.cotnent.startswith(command("board", message)):
+        """
+        Board enable command.
+        """
+        if message.channel.permissions_for(message.author).manage_channels == True:
+            if getRawArgument(command("board", message), message) == "enable":
+                await message.guild.create_text_channel('board')
+        
     elif message.content.startswith(command("kick", message)):
         """
         Kick command.
@@ -357,11 +372,14 @@ async def on_message(message):
             user = message.mentions[0]
             try:
                 await message.guild.kick(user)
-                msg = "Kicked "+user.name+"!"
+                msg = "Kicked " + user.name + "!"
                 await message.channel.send(msg)
-            except exception:
+            except exception as e:
                 msg = "Failed to kick user."
                 await message.channel.send(msg)
+        else:
+            msg = "Insufficient permissions."
+            await message.channel.send(msg)
 
     elif message.content.startswith(command("ban", message)):
         """
@@ -371,18 +389,22 @@ async def on_message(message):
             user = message.mentions[0]
             try:
                 await message.guild.ban(user)
-                msg = "Banned "+user.name+"!"
+                msg = "Banned " + user.name + "!"
                 await message.channel.send(msg)
             except:
                 msg = "Failed to ban user."
                 await message.channel.send(msg)
+                
+        else:
+            msg = "Insufficient permissions."
+            await message.channel.send(msg)
     
     elif message.channel.permissions_for(message.author).manage_messages == True:
         """
         Moderator commands.
         """
         if message.content.startswith(command("clear", message)):
-            #Clears a specified number of messages.
+            # Clears a specified number of messages.
             number = int(getArgument(command("clear", message), message))
             await message.channel.purge(limit=(number + 1), bulk=True)
             msg = "deleted " + str(number) + " messages!".format(string)
@@ -393,7 +415,7 @@ async def on_message(message):
         elif message.content.startswith(command("mute", message)):
             if len(message.mentions) > 0:
                 sinner = message.mentions[0]
-                await message.channel.set_permissions(sinner, send_messages = False)
+                await message.channel.set_permissions(sinner, send_messages=False)
                 msg = "Muted {0.mentions[0].mention}!".format(message)
                 await message.channel.send(msg)
             else:
@@ -403,7 +425,7 @@ async def on_message(message):
         elif message.content.startswith(command("unmute", message)):
             if len(message.mentions) > 0:
                 sinner = message.mentions[0]
-                await message.channel.set_permissions(sinner, send_messages = True)
+                await message.channel.set_permissions(sinner, send_messages=True)
                 msg = "Unmuted {0.mentions[0].mention}!".format(message)
                 await message.channel.send(msg)
             else:
@@ -415,17 +437,17 @@ async def on_message(message):
         Administrator Commands.
         """
         if message.content.startswith(command("prefix", message)):
-            #Changes the prefix to the specified string.
+            # Changes the prefix to the specified string.
             prefixFile = open("server_prefixes.txt")
             prefixList = prefixFile.read().splitlines()
             prefixFile.close()
-            serverInList = False #Gotta initialize the variable
+            serverInList = False  # Gotta initialize the variable
             newPrefix = getRawArgument(command("prefix", message), message)
             index = 0
             for line in prefixList:
                 splitLine = line.split()
                 if(message.channel.guild.id == int(splitLine[0])):
-                    #If the server already has a custom prefix set
+                    # If the server already has a custom prefix set
                     serverInList = True
                     prefixFile = open("server_prefixes.txt", "w+")
                     prefixList[index] = (str(message.channel.guild.id) + " " + newPrefix)
@@ -435,9 +457,9 @@ async def on_message(message):
                     await message.channel.send(msg)
                 index = index + 1
             if serverInList == False:
-                #If the server does not already have a custom prefix set
+                # If the server does not already have a custom prefix set
                 prefixFile = open("server_prefixes.txt", "a+")
-                prefixFile.write("\n" + str(message.channel.guild.id) + " " + newPrefix) #Adds line to prefixlist
+                prefixFile.write("\n" + str(message.channel.guild.id) + " " + newPrefix)  # Adds line to prefixlist
                 prefixFile.close()
                 msg = ("Set server prefix to " + newPrefix + " !").format(message)
                 await message.channel.send(msg)
@@ -485,7 +507,7 @@ async def on_message(message):
         msg = "https://imgur.com/YfYwzcN"
         await message.channel.send(msg)
     
-    #SyCW Commands - By special request.
+    # SyCW Commands - By special request.
     elif message.channel.guild.id == 329383300848418816:
         if message.content == command("assad", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430787413888073728/image.jpg"
@@ -508,10 +530,13 @@ async def on_message(message):
         elif message.content == command("abuhajaar", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430804463016476672/image.png"
             await message.channel.send(msg)
+
         
 """
 Bot login actions
 """
+
+
 @client.event
 async def on_ready():
     print("Logged in as")
@@ -522,8 +547,8 @@ async def on_ready():
     print("loaded Ramsay quotes: " + str(ramsayCount))
     print("Loaded questions: " + str(trivia.getQuestionCount()))
     serversConnected = str(len(client.guilds))
-    print("Guilds connected: " + serversConnected)#Returns number of guilds connected to
-    game=discord.Game(name='on ' + serversConnected + ' servers!')
+    print("Guilds connected: " + serversConnected)  # Returns number of guilds connected to
+    game = discord.Game(name='on ' + serversConnected + ' servers!')
     await client.change_presence(activity=game)
     try:
         await botlist.post_server_count(serversConnected, shardCount)
@@ -531,5 +556,6 @@ async def on_ready():
     except Exception as e:
         print("Failed to post server count to tbl.")
 
+
 while True:
-    client.run(token) #runs the bot.
+    client.run(token)  # runs the bot.
