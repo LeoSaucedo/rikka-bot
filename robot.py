@@ -356,7 +356,7 @@ async def on_message(message):
             await message.channel.send(msg)
             
             
-    elif message.cotnent.startswith(command("board", message)):
+    elif message.content.startswith(command("board", message)):
         """
         Board enable command.
         """
