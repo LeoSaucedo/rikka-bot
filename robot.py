@@ -125,9 +125,11 @@ def getRawArgument(command, message):
 @client.event
 async def on_guild_join(guild):
     serversConnected = str(len(client.guilds))
+    usersConnected = str(len(client.users))
     print("Joined server " + guild.name + "!")
     print("Guilds connected: " + serversConnected)  # Returns number of guilds connected to
-    game = discord.Game(name='on ' + serversConnected + ' servers!')
+    print("Users connected: "+ usersConnected)
+    game = discord.Game(name='with ' + usersConnected + ', on ' + serversConnected + ' servers!')
     await client.change_presence(activity=game)
     try:
         await botlist.post_server_count(serversConnected, shardCount)
@@ -139,9 +141,9 @@ async def on_guild_join(guild):
 @client.event
 async def on_guild_remove(guild):
     serversConnected = str(len(client.guilds))
-    print("Left server " + guild.name + "!")
     print("Guilds connected: " + serversConnected)  # Returns number of guilds connected to
-    game = discord.Game(name='on ' + serversConnected + ' servers!')
+    print("Users connected: "+ usersConnected)
+    game = discord.Game(name='with ' + usersConnected + ', on ' + serversConnected + ' servers!')
     await client.change_presence(activity=game)
     try:
         await botlist.post_server_count(serversConnected, shardCount)
