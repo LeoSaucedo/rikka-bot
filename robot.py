@@ -141,6 +141,7 @@ async def on_guild_join(guild):
 @client.event
 async def on_guild_remove(guild):
     serversConnected = str(len(client.guilds))
+    usersConnected = str(len(client.users))
     print("Guilds connected: " + serversConnected)  # Returns number of guilds connected to
     print("Users connected: "+ usersConnected)
     game = discord.Game(name='with ' + usersConnected + ' users, on ' + serversConnected + ' servers!')
