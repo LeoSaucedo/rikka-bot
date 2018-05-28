@@ -283,8 +283,9 @@ async def on_message(message):
         numberOfPlayers = len(message.mentions)
         victorNumber = randint(0, numberOfPlayers)
         rewardAmount = randint(1,5)
-        if numberOfPlayers < 1:
+        if (numberOfPlayers < 1) or (message.author in message.mentions):
             msg = "{0.author.mention}, you can't fight yourself! Choose a set of opponents.".format(message)
+            await message.channel.send(msg)
         else:
             if victorNumber == numberOfPlayers:
                 victor = message.author
