@@ -291,6 +291,8 @@ async def on_message(message):
                 victor = message.author
             else:
                 victor = message.mentions[victorNumber]
+                if numberOfPlayers < 3:
+                    trivia.subtractPoints(message.guild.id, message.author.id, rewardAmount)
             #TODO embed this and make it pretty.
             trivia.addPoints(message.guild.id, victor.id, rewardAmount)
             msg = ("{0.mention} wins! +"+str(rewardAmount)+" points.").format(victor)

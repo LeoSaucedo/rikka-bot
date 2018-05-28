@@ -139,6 +139,34 @@ class triviaGame:
             leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + "1")
             leaderboardFile.close()
             
+    def subtractPoints(self, serverID, userID, amount):
+        #Adds a set amount of points to the given user's score
+        leaderboardFile = open("leaderboard.txt", "r")
+        self.leaderboardList = leaderboardFile.read().splitlines()
+        leaderboardFile.close()
+        userInList = False
+        index = 0
+        self.user = str(userID)
+        self.server = str(serverID)
+        for line in self.leaderboardList:
+            splitLine = line.split()
+            if splitLine[1] == self.user:
+                self.server = splitLine[0]
+                currentPoints = int(splitLine[2])
+                newPoints = currentPoints - amount
+                userInList = True # User is in leaderboard.
+                #Replace line in leaderboard file
+                leaderboardList = open("leaderboard.txt").read().splitlines()
+                leaderboardList[index] = self.server + " " + self.user + " " + str(newPoints)
+                open("leaderboard.txt", "w").write("\n".join(leaderboardList))
+            index = index + 1    
+    
+        if userInList == False:
+            #User is not in the leaderboard.
+            leaderboardFile = open("leaderboard.txt", "a+")
+            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + "1")
+            leaderboardFile.close()   
+            
     def format(self, attempt):
         #Formats an attempt to make it easier to guess.
         #Removes "the", "a", "an", and any parenthetical words.
