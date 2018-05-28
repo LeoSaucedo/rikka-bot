@@ -9,6 +9,22 @@ A Discord bot that performs various functions.
 ### Commands
 *Right now, this bot's prefix is* `;`*.*
 
+##### Economy System
+Rikka's economy system consists of a global leaderboard. Currently, you can get points in two ways: Getting questions right with the `;trivia` command, and upvoting the bot.
+- `;score` - Displays your score, globally.
+- `;collect vote` - Collects 5 points if you have upvoted the bot [here](https://discordbots.org/bot/430482288053059584/vote).
+- `;collect daily` - Gets your daily collections.
+##### Trivia Commands
+- `;trivia` - Returns the help menu for trivia.
+- `;ask` - Returns a randomly selected question.
+- `;a (attempt)` - Tests the given attempt to see if it is correct. If it is correct, you are granted a point.
+- `;reveal` - Reveals the answer, removing the ability to score for that specific question.
+
+##### Board Functionality
+The board functionality allows popular messages to be posted on a special channel, titled `board`.
+To use this functionality, you must first run `;board enable`.
+Afterwards, every message with 3 reactions with the "⭐" will get posted to the board.
+
 ##### Utility Commands
 - `;help` - Returns a command list.
 - `;info` - Returns information about the bot.
@@ -32,17 +48,6 @@ A Discord bot that performs various functions.
 - `;hugme` - Hugs you.
 - `;hug @user` - Hugs the specified user.
 
-##### Economy System
-Rikka's economy system consists of a global leaderboard. Currently, you can get points in two ways: Getting questions right with the `;trivia` command, and upvoting the bot.
-- `;score` - Displays your score, globally.
-- `;collect vote` - Collects 5 points if you have upvoted the bot [here](https://discordbots.org/bot/430482288053059584/vote).
-- `;collect daily` - Gets your daily collections.
-##### Trivia Commands
-- `;trivia` - Returns the help menu for trivia.
-- `;ask` - Returns a randomly selected question.
-- `;a (attempt)` - Tests the given attempt to see if it is correct. If it is correct, you are granted a point.
-- `;reveal` - Reveals the answer, removing the ability to score for that specific question.
-
 ##### Casino Commands
 - `;roll` - Rolls a die.
 - `;flip` - Flips a coin.
@@ -54,11 +59,6 @@ Rikka's economy system consists of a global leaderboard. Currently, you can get 
 - `;mute / ;unmute (user)` - Mutes/unmutes specified user. *(Must have manage message permission)*
 - `;kick (user)` - Kicks the specified user. *(Must have kick permission)*
 - `;ban (user)` - Bans the specified user. *(Must have ban permission)*
-
-##### Board Functionality
-The board functionality allows popular messages to be posted on a special channel, titled `board`.
-To use this functionality, you must first run `;board enable`.
-Afterwards, every message with 3 reactions with the "⭐" will get posted to the board.
 
 ##### Emotes
 *Note: All emotes are entirely SFW.*
