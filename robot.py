@@ -344,7 +344,7 @@ async def on_message(message):
         await message.channel.send(msg)
         msg = "If you believe a question is unfair, type " + prefix + "flag. It will be reviewed by our developers, and removed if appropriate."
         await message.channel.send(msg)
-        msg = "To check your score, type " + prefix + "trivia score. Good luck!"
+        msg = "To check your score, type " + prefix + "score. Good luck!"
         await message.channel.send(msg)
         
     elif message.content.startswith(command("ask", message)):
@@ -368,7 +368,7 @@ async def on_message(message):
         msg = "Flagged the question! Sorry about that."
         await message.channel.send(msg)
         
-    elif message.content.startswith(command("trivia score", message)):
+    elif message.content.startswith(command("score", message)):
         msg = ("{0.author.mention}, your score is " + str(trivia.getScore(message.author.id))).format(message)
         await message.channel.send(msg)
         
