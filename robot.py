@@ -305,23 +305,11 @@ async def on_message(message):
         ballEmbed.set_author(name="Magic 8-Ball", icon_url="https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/134/billiards_1f3b1.png")
         ballEmbed.add_field(name="Prediction:", value=ballText, inline=False)
         await message.channel.send(embed=ballEmbed)
-    
-    elif message.content == command("collect vote", message):
+            
+    elif message.content == command("collect daily", message):
         """
         Economy commands.
         """
-        userID = message.author.id
-        serverID = message.guild.id
-        upvotes = botlist.get_upvote_info(onlyids=True, days=1)
-        if userID in upvotes:
-            trivia.addPoints(serverID, userID, 5)
-            msg = "{0.author.mention}, thanks for voting! +5 points!".format(message)
-            await message.channel.send(msg)
-        elif userID not in upvotes:
-            msg = "{0.author.mention}, you have not yet voted today. To get your points, vote at https://discordbots.org/bot/430482288053059584/vote"
-            await message.channel.send(msg)
-            
-    elif message.content == command("collect daily", message):
         userID = message.author.id
         serverID = message.guild.id
         if econ.hasCollectedToday(userID):
@@ -333,7 +321,6 @@ async def on_message(message):
             econ.setCollectionDate(userID)
             msg = ("{0.author.mention}, your daily points are "+str(pointsToAdd)+"!").format(message)
             await message.channel.send(msg)
-            
         
     
     elif message.content == command("trivia", message):
