@@ -279,6 +279,22 @@ async def on_message(message):
         msg = "{0.author.mention} Added your suggestion! It will be processed and may be added soon! Thanks for the help!".format(message)
         await message.channel.send(msg)
         
+    elif message.content.startswith(command("fight ", message)):
+        numberOfPlayers = len(message.mentions)
+        victorNumber = randint(0, numberOfPlayers)
+        rewardAmount = randint(1,5)
+        if numberOfPlayers < 1:
+            msg = "{0.author.mention}, you can't fight yourself! Choose a set of opponents.".format(message)
+        else:
+            if victorNumber == numberOfPlayers:
+                victor = message.author
+            else:
+                victor = message.mentions[victorNumber]
+            #TODO embed this and make it pretty.
+            trivia.addPoints(message.guild.id, victor.id, rewardAmount)
+            msg = ("{0.mention} wins! +"+str(rewardAmount)+" points.").format(victor)
+            await message.channel.send(msg)
+            
         
     elif message.content == command("flip", message):
         """
@@ -369,7 +385,8 @@ async def on_message(message):
                 # If the answer is correct.
                 msg = "{0.author.mention}, correct! The answer is ".format(message) + trivia.getAnswer(message.guild.id)
                 await message.channel.send(msg)
-                trivia.addPoint(message.guild.id, message.author.id)
+                reward = randint(1,15)
+                trivia.addPoints(message.guild.id, message.author.id, reward)
                 trivia.setSent(message.guild.id, False)
         else:
             msg = "You haven't gotten a question yet!"
