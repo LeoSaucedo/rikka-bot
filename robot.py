@@ -279,6 +279,7 @@ async def on_message(message):
         msg = "{0.author.mention} Added your suggestion! It will be processed and may be added soon! Thanks for the help!".format(message)
         await message.channel.send(msg)
         
+        
     elif message.content == command("flip", message):
         """
         "Casino" Commands
@@ -312,11 +313,11 @@ async def on_message(message):
         userID = message.author.id
         serverID = message.guild.id
         upvotes = botlist.get_upvote_info(onlyids=True, days=1)
-        if userID in botlist:
+        if userID in upvotes:
             trivia.addPoints(serverID, userID, 5)
             msg = "{0.author.mention}, thanks for voting! +5 points!".format(message)
             await message.channel.send(msg)
-        elif userID not in botlist:
+        elif userID not in upvotes:
             msg = "{0.author.mention}, you have not yet voted today. To get your points, vote at https://discordbots.org/bot/430482288053059584/vote"
             await message.channel.send(msg)
             
