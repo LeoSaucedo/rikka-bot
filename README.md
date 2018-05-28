@@ -32,12 +32,16 @@ A Discord bot that performs various functions.
 - `;hugme` - Hugs you.
 - `;hug @user` - Hugs the specified user.
 
+##### Economy System
+Rikka's economy system consists of a global leaderboard. Currently, you can get points in two ways: Getting questions right with the `;trivia` command, and upvoting the bot.
+- `;score` - Displays your score, globally.
+- `;collect vote` - Collects 5 points if you have upvoted the bot [here](https://discordbots.org/bot/430482288053059584/vote).
+- `;collect daily` - Gets your daily collections.
 ##### Trivia Commands
 - `;trivia` - Returns the help menu for trivia.
 - `;ask` - Returns a randomly selected question.
 - `;a (attempt)` - Tests the given attempt to see if it is correct. If it is correct, you are granted a point.
 - `;reveal` - Reveals the answer, removing the ability to score for that specific question.
-- `;trivia score` - Reveals your current score, globally.
 
 ##### Casino Commands
 - `;roll` - Rolls a die.
