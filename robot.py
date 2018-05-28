@@ -118,9 +118,21 @@ def getArgument(command, message):
 
 
 def getRawArgument(command, message):
+    # Gets the raw argument, without being formatted.
     argument = message.content.replace(command + " ", "")
     return argument
 
+def collectVote(message):
+    userID = message.author.id
+    serverID = message.guild.id
+    upvotes = botlist.get_upvote_info(onlyids=true, days=1)
+    if userID in upvotes:
+        trivia.addPoints(serverID, userID, 5)
+        msg = "{0.author.mention}, Thanks for voting! +5 points!".format(message)
+        await message.channel.send(msg)
+    elif userID not in upvotes:
+        msg = "{0.author.mention}, You have not yet voted today. "
+        await message.channel.send(msg)
     
 @client.event
 async def on_guild_join(guild):
