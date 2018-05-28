@@ -388,7 +388,7 @@ async def on_message(message):
                 # If the answer is correct.
                 msg = "{0.author.mention}, correct! The answer is ".format(message) + trivia.getAnswer(message.guild.id)
                 await message.channel.send(msg)
-                reward = randint(1,15)
+                reward = randint(1,20)
                 trivia.addPoints(message.guild.id, message.author.id, reward)
                 trivia.setSent(message.guild.id, False)
         else:
