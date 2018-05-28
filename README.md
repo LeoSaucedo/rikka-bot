@@ -14,11 +14,6 @@ Rikka's economy system consists of a global leaderboard. Currently, you can get 
 - `;score` - Displays your score, globally.
 - `;collect vote` - Collects 5 points if you have upvoted the bot [here](https://discordbots.org/bot/430482288053059584/vote).
 - `;collect daily` - Gets your daily collections.
-##### Trivia Commands
-- `;trivia` - Returns the help menu for trivia.
-- `;ask` - Returns a randomly selected question.
-- `;a (attempt)` - Tests the given attempt to see if it is correct. If it is correct, you are granted a point.
-- `;reveal` - Reveals the answer, removing the ability to score for that specific question.
 
 ##### Board Functionality
 The board functionality allows popular messages to be posted on a special channel, titled `board`.
@@ -47,6 +42,12 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;hello` - Says hi.
 - `;hugme` - Hugs you.
 - `;hug @user` - Hugs the specified user.
+
+##### Trivia Commands
+- `;trivia` - Returns the help menu for trivia.
+- `;ask` - Returns a randomly selected question.
+- `;a (attempt)` - Tests the given attempt to see if it is correct. If it is correct, you are granted a point.
+- `;reveal` - Reveals the answer, removing the ability to score for that specific question.
 
 ##### Casino Commands
 - `;roll` - Rolls a die.
