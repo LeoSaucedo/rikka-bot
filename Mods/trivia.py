@@ -188,6 +188,9 @@ class triviaGame:
         flaggedFile.close()
         
     def getGlobalLeaderboard(self):
+        leaderboardFile = open("leaderboard.txt", "r")
+        self.leaderboardList = leaderboardFile.read().splitlines()
+        leaderboardFile.close()
         globalScores = []
         
         #Adding all of the scores into the unsorted array.
@@ -206,6 +209,9 @@ class triviaGame:
         return globalScores
     
     def getLocalLeaderboard(self, serverID):
+        leaderboardFile = open("leaderboard.txt", "r")
+        self.leaderboardList = leaderboardFile.read().splitlines()
+        leaderboardFile.close()
         localScores = []
         server = str(serverID)
         i = 1
