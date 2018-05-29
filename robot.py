@@ -436,7 +436,6 @@ async def on_message(message):
             # If the question is sent and the answer has not yet been revealed.
             if trivia.format(attempt) == trivia.format(trivia.getAnswer(message.guild.id)):
                 # If the answer is correct.
-                msg = "{0.author.mention}, correct! The answer is ".format(message) + trivia.getAnswer(message.guild.id)
                 reward = randint(1,20)
                 msg = ("{0.author.mention}, correct! The answer is " + trivia.getAnswer(message.guild.id)+". +"+ reward +" points!").format(message)
                 await message.channel.send(msg)
