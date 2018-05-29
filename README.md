@@ -13,6 +13,8 @@ A Discord bot that performs various functions.
 Rikka's economy system consists of a global leaderboard. Currently, you can get points in two ways: Getting questions right with the `;trivia` command, and upvoting the bot.
 - `;score` - Displays your score, globally.
 - `;collect daily` - Gets your daily collections.
+- `;leaderboard global` - View the global leaderboard across all of rikka's servers.
+- `;leaderboard local` - View the local leaderboard across all of the users on the current server.
 
 ##### Board Functionality
 The board functionality allows popular messages to be posted on a special channel, titled `board`.

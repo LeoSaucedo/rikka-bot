@@ -8,6 +8,7 @@ from random import randint
 from Mods.triviaSet import triviaSet
 from Mods.triviaScore import triviaScore
 import re
+from array import array
 class triviaGame:
     def __init__(self, questionPath, answerPath):
         leaderboardFile = open("leaderboard.txt", "r")
@@ -187,18 +188,39 @@ class triviaGame:
         flaggedFile.close()
         
     def getGlobalLeaderboard(self):
-        unsortedScores = []
-        sortedScores = []
+        globalScores = []
         
         #Adding all of the scores into the unsorted array.
         i = 1
         while i < len(self.leaderboardList):
             splitLine = self.leaderboardList[i].split()
-            newSet = triviaSet(splitLine[0], splitLine[1], splitLine[2])
-            unsortedScores.append(newSet)
+            newSet = triviaScore(splitLine[0], splitLine[1], splitLine[2])
+            globalScores.append(newSet)
             i += 1
         #Sorting elements in previously created array.
-        i = 0
-        while i < len(unsortedScores):
-            
+        n = len(globalScores)
+        for i in range(n):
+            for j in range(0, n-i-1):
+                if int(globalScores[j].getScore()) < int(globalScores[j+1].getScore()):
+                    globalScores[j], globalScores[j+1] = globalScores[j+1], globalScores[j]
+        return globalScores
+    
+    def getLocalLeaderboard(self, serverID):
+        localScores = []
+        server = str(serverID)
+        i = 1
+        while i < len(self.leaderboardList):
+            splitline = self.leaderboardList[i].split()
+            if splitline[0] == server:
+                newSet = triviaScore(splitline[0], splitline[1], splitline[2])
+                localScores.append(newSet)
+            i += 1
+        
+        #Sorting elements in previously created array.
+        n = len(localScores)
+        for i in range(n):
+            for j in range(0, n-i-1):
+                if int(localScores[j].getScore()) < int(localScores[j+1].getScore()):
+                    localScores[j], localScores[j+1] = localScores[j+1], localScores[j]
+        return localScores            
         

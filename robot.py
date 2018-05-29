@@ -12,6 +12,7 @@ import dbl
 import Mods.CleverApi as CleverApi
 from time import sleep
 import Mods.trivia as trivia
+import Mods.triviaScore as triviaScore
 from discord.emoji import Emoji
 import Mods.EightBall as EightBall
 import Mods.economy as econ
@@ -340,7 +341,51 @@ async def on_message(message):
             econ.setCollectionDate(userID)
             msg = ("{0.author.mention}, your daily points are "+str(pointsToAdd)+"!").format(message)
             await message.channel.send(msg)
+            
+    elif message.content == command("leaderboard global", message):
+        scoreList = ""
+        globalScores = trivia.getGlobalLeaderboard()
+        if len(globalScores) < 10:
+            place = 1
+            for score in globalScores:
+                username = client.get_user(int(score.getUser())).name
+                score = score.getScore()
+                scoreList = scoreList + (str(place) + ": "+ username + " with "+score + " points!\n")
+                place = place + 1
+        else:
+            i = 0
+            place = 1
+            while i < 10:
+                username = client.get_user(int(globalScores[i].getUser())).name
+                score = globalScores[i].getScore()
+                scoreList = scoreList + (str(place) + ": "+ username + " with "+score + " points!\n")
+                place = place + 1
+                i = i + 1
+            
+        scoreEmbed = discord.Embed(title= "Global Leaderboard", color=0x107c02, description=scoreList)
+        await message.channel.send(embed=scoreEmbed)
         
+    elif message.content == command("leaderboard local", message):
+        scoreList = ""
+        localScores = trivia.getLocalLeaderboard(message.guild.id)
+        if len(localScores) < 10:
+            place = 1
+            for score in localScores:
+                username = client.get_user(int(score.getUser())).name
+                score = score.getScore()
+                scoreList = scoreList + (str(place) + ": "+ username + " with "+score + " points!\n")
+                place = place + 1
+        else:
+            i = 0
+            place = 1
+            while i < 10:
+                username = client.get_user(int(localScores[i].getUser())).name
+                score = localScores[i].getScore()
+                scoreList = scoreList + (str(place) + ": "+ username + " with "+score + " points!\n")
+                place = place + 1
+                i = i + 1
+        scoreEmbed = discord.Embed(title= "Local Leaderboard", color=0x107c02, description=scoreList)
+        await message.channel.send(embed=scoreEmbed)
     
     elif message.content == command("trivia", message):
         """
