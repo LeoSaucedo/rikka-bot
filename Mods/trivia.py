@@ -136,7 +136,7 @@ class triviaGame:
         if userInList == False:
             #User is not in the leaderboard.
             leaderboardFile = open("leaderboard.txt", "a+")
-            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + "1")
+            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + str(newPoints))
             leaderboardFile.close()
             
     def subtractPoints(self, serverID, userID, amount):
@@ -164,7 +164,7 @@ class triviaGame:
         if userInList == False:
             #User is not in the leaderboard.
             leaderboardFile = open("leaderboard.txt", "a+")
-            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + "1")
+            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + str(newPoints*-1))
             leaderboardFile.close()   
             
     def format(self, attempt):
@@ -188,6 +188,7 @@ class triviaGame:
         
     def getGlobalLeaderboard(self):
         unsortedScores = []
+        sortedScores = []
         
         #Adding all of the scores into the unsorted array.
         i = 1
@@ -196,7 +197,8 @@ class triviaGame:
             newSet = triviaSet(splitLine[0], splitLine[1], splitLine[2])
             unsortedScores.append(newSet)
             i += 1
-            
         #Sorting elements in previously created array.
-        
+        i = 0
+        while i < len(unsortedScores):
+            
         
