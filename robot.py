@@ -284,6 +284,7 @@ async def on_message(message):
         numberOfPlayers = len(message.mentions)
         victorNumber = randint(0, numberOfPlayers)
         rewardAmount = randint(1,5)
+        authorLoses = False
         if (numberOfPlayers < 1) or (message.author in message.mentions):
             msg = "{0.author.mention}, you can't fight yourself! Choose a set of opponents.".format(message)
             await message.channel.send(msg)
@@ -294,10 +295,14 @@ async def on_message(message):
                 victor = message.mentions[victorNumber]
                 if numberOfPlayers < 3:
                     trivia.subtractPoints(message.guild.id, message.author.id, rewardAmount)
+                    authorLoses = True
             #TODO embed this and make it pretty.
             trivia.addPoints(message.guild.id, victor.id, rewardAmount)
             msg = ("{0.mention} wins! +"+str(rewardAmount)+" points.").format(victor)
             await message.channel.send(msg)
+            if authorLoses = True:
+                msg = ("{0.author.mention}: For your loss, you lose "+str(rewardAmount)+" points. Better luck next time!").format(message)
+                await message.channel.send(msg)
             
         
     elif message.content == command("flip", message):
