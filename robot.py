@@ -300,7 +300,7 @@ async def on_message(message):
             trivia.addPoints(message.guild.id, victor.id, rewardAmount)
             msg = ("{0.mention} wins! +"+str(rewardAmount)+" points.").format(victor)
             await message.channel.send(msg)
-            if authorLoses = True:
+            if authorLoses == True:
                 msg = ("{0.author.mention}: For your loss, you lose "+str(rewardAmount)+" points. Better luck next time!").format(message)
                 await message.channel.send(msg)
             
