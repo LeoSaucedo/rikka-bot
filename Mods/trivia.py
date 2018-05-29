@@ -104,11 +104,11 @@ class triviaGame:
             if splitLine[1] == self.user:
                 self.server = splitLine[0]
                 currentPoints = int(splitLine[2])
-                newPoints = currentPoints + 1
+                self.newPoints = currentPoints + 1
                 userInList = True # User is in leaderboard.
                 #Replace line in leaderboard file
                 leaderboardList = open("leaderboard.txt").read().splitlines()
-                leaderboardList[index] = self.server + " " + self.user + " " + str(newPoints)
+                leaderboardList[index] = self.server + " " + self.user + " " + str(self.newPoints)
                 open("leaderboard.txt", "w").write("\n".join(leaderboardList))
             index = index + 1
     
@@ -126,18 +126,18 @@ class triviaGame:
             if splitLine[1] == self.user:
                 self.server = splitLine[0]
                 currentPoints = int(splitLine[2])
-                newPoints = currentPoints + amount
+                self.newPoints = currentPoints + amount
                 userInList = True # User is in leaderboard.
                 #Replace line in leaderboard file
                 leaderboardList = open("leaderboard.txt").read().splitlines()
-                leaderboardList[index] = self.server + " " + self.user + " " + str(newPoints)
+                leaderboardList[index] = self.server + " " + self.user + " " + str(self.newPoints)
                 open("leaderboard.txt", "w").write("\n".join(leaderboardList))
             index = index + 1    
     
         if userInList == False:
             #User is not in the leaderboard.
             leaderboardFile = open("leaderboard.txt", "a+")
-            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + str(newPoints))
+            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + str(self.newPoints))
             leaderboardFile.close()
             
     def subtractPoints(self, serverID, userID, amount):
@@ -154,18 +154,18 @@ class triviaGame:
             if splitLine[1] == self.user:
                 self.server = splitLine[0]
                 currentPoints = int(splitLine[2])
-                newPoints = currentPoints - amount
+                self.newPoints = currentPoints - amount
                 userInList = True # User is in leaderboard.
                 #Replace line in leaderboard file
                 leaderboardList = open("leaderboard.txt").read().splitlines()
-                leaderboardList[index] = self.server + " " + self.user + " " + str(newPoints)
+                leaderboardList[index] = self.server + " " + self.user + " " + str(self.newPoints)
                 open("leaderboard.txt", "w").write("\n".join(leaderboardList))
             index = index + 1    
     
         if userInList == False:
             #User is not in the leaderboard.
             leaderboardFile = open("leaderboard.txt", "a+")
-            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + str(newPoints*-1))
+            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + str(self.newPoints*-1))
             leaderboardFile.close()   
             
     def format(self, attempt):
