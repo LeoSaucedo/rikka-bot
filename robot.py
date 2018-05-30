@@ -341,7 +341,7 @@ async def on_message(message):
             msg = "{0.author.mention}, you have already collected today. Try again tomorrow!".format(message)
             await message.channel.send(msg)
         else:
-            pointsToAdd = randint(1,5)
+            pointsToAdd = randint(1,25)
             trivia.addPoints(serverID, userID, pointsToAdd)
             econ.setCollectionDate(userID)
             msg = ("{0.author.mention}, your daily points are "+str(pointsToAdd)+"!").format(message)
