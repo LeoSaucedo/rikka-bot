@@ -293,7 +293,7 @@ async def on_message(message):
                 victor = message.author
             else:
                 victor = message.mentions[victorNumber]
-                if numberOfPlayers < 3:
+                if numberOfPlayers < 2:
                     trivia.subtractPoints(message.guild.id, message.author.id, rewardAmount)
                     authorLoses = True
             #TODO embed this and make it pretty.
@@ -437,7 +437,7 @@ async def on_message(message):
             if trivia.format(attempt) == trivia.format(trivia.getAnswer(message.guild.id)):
                 # If the answer is correct.
                 reward = randint(1,20)
-                msg = ("{0.author.mention}, correct! The answer is " + trivia.getAnswer(message.guild.id)+". +"+ reward +" points!").format(message)
+                msg = ("{0.author.mention}, correct! The answer is " + trivia.getAnswer(message.guild.id)+". +"+ str(reward) +" points!").format(message)
                 await message.channel.send(msg)
                 trivia.addPoints(message.guild.id, message.author.id, reward)
                 trivia.setSent(message.guild.id, False)
