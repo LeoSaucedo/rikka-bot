@@ -134,7 +134,7 @@ async def on_guild_join(guild):
     game = discord.Game(name='with ' + usersConnected + ' users, on ' + serversConnected + ' servers!')
     await client.change_presence(activity=game)
     try:
-        await botlist.post_server_count(serversConnected, shardCount)
+        await botlist.post_server_count()
         print("Successfully published server count to dbl.")
     except Exception as e:
         print("Failed to post server count to tbl.")
@@ -149,7 +149,7 @@ async def on_guild_remove(guild):
     game = discord.Game(name='with ' + usersConnected + ' users, on ' + serversConnected + ' servers!')
     await client.change_presence(activity=game)
     try:
-        await botlist.post_server_count(serversConnected, shardCount)
+        await botlist.post_server_count()
         print("Successfully published server count to dbl.")
     except Exception as e:
         print("Failed to post server count to tbl.") 
@@ -638,14 +638,15 @@ async def on_ready():
     print("loaded hugs: " + str(hugCount))
     print("loaded Ramsay quotes: " + str(ramsayCount))
     print("Loaded questions: " + str(trivia.getQuestionCount()))
-    serversConnected = str(len(client.guilds))
-    print("Guilds connected: " + serversConnected)  # Returns number of guilds connected to
-    usersConnected = str(len(client.users))
-    print("Users connected: " + usersConnected)
-    game = discord.Game(name='with ' + usersConnected + ' users, on '+serversConnected+" servers!")
+    serversConnected = len(client.guilds)
+    usersConnected = len(client.users)
+    print("Guilds connected: " + str(serversConnected))  # Returns number of guilds connected to
+    print("Shards connected: "+ str(shardCount))
+    print("Users connected: " + str(usersConnected))
+    game = discord.Game(name='with ' + str(usersConnected) + ' users, on '+str(serversConnected)+" servers!")
     await client.change_presence(activity=game)
     try:
-        await botlist.post_server_count(serversConnected, shardCount)
+        await botlist.post_server_count()
         print("Successfully published server count to dbl.")
     except Exception as e:
         print("Failed to post server count to tbl.")
