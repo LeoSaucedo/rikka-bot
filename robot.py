@@ -452,10 +452,14 @@ async def on_message(message):
         """
         if message.channel.permissions_for(message.author).manage_channels == True:
             if getRawArgument(command("board", message), message) == "enable":
-                await message.guild.create_text_channel('board')
-                msg = "Created board channel! You might want to change the channel permissions/category."
-                await message.channel.send(msg)
-        
+                if message.channel.permissions_for(message.author).manage_channels == True:
+                    await message.guild.create_text_channel('board')
+                    msg = "Created board channel! You might want to change the channel permissions/category."
+                    await message.channel.send(msg)
+                else:
+                    msg = "Insufficient permissions."
+                    await message.channel.send(msg)
+                
     elif message.content.startswith(command("kick", message)):
         """
         Kick command.
