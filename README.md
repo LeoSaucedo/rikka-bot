@@ -67,7 +67,6 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `shocked, smile, hentai, blush, bdsm, rekt, boop, fuckoff, sanic, dreamy, kys`
 
 #### In the works
-- Server and global leaderboard for the trivia game.
 - Dynamic "playing" statuses for communication between devs and member servers.
 - Improved, proprietary AI, instead of cleverbot.
 - Marry RP function
