@@ -501,12 +501,32 @@ async def on_message(message):
         """
         if message.content.startswith(command("clear", message)):
             # Clears a specified number of messages.
-            number = int(getArgument(command("clear", message), message))
-            await message.channel.purge(limit=(number + 1), bulk=True)
-            msg = "deleted " + str(number) + " messages!".format(string)
-            deletemsg = await message.channel.send(msg)
-            sleep(5)
-            await deletemsg.delete()
+            
+            if(len(message.mentions) > 0):
+                #Clear command contains a mention.
+                number = 0
+                messages = []
+                async for msg in message.channel.history():
+                    if msg.author == message.mentions[0]:
+                        messages.append(msg)
+                        number = number+1
+                if(len(messages) < 1):
+                   msg = "Could not find any messages from the specified user."
+                   await message.channel.send(msg)
+                else:
+                    await message.channel.delete_messages(messages)
+                    msg = "deleted " + str(number) + " messages!".format(message)
+                    deletemsg = await message.channel.send(msg)
+                    sleep(5)
+                    await deletemsg.delete()
+                
+            else:
+                number = int(getArgument(command("clear", message), message))
+                await message.channel.purge(limit=(number + 1), bulk=True)
+                msg = "deleted " + str(number) + " messages!".format(string)
+                deletemsg = await message.channel.send(msg)
+                sleep(5)
+                await deletemsg.delete()
             
         elif message.content.startswith(command("mute", message)):
             if len(message.mentions) > 0:
