@@ -622,7 +622,10 @@ async def on_message(message):
     elif message.content == command("kys", message):
         msg = "https://imgur.com/YfYwzcN"
         await message.channel.send(msg)
-    
+    elif message.content == command("ping", message):
+        msg = "Why did you feel the need to ping everyone? What could possibly be so important that you decided to alert everyone on this god-forsaken server to what you had to say? Did you get a girlfriend? Lose your virginity? Did you become president of the goddamn world? Is that why you had to ping us? I bet you're so proud of yourself, snickering to yourself as you watch the chaos unfold after your ping. You think you're so funny, interrupting everyone's day with your asinine messages. But guess what, you're pathetic. The only way you were able to get someone's attention is by shoving down your sad excuse of a thought down everyone's throat, shattering their focus with that loud PING! I wonder how many people you've killed by doing this. Maybe someone was driving and the ping caused them to lose control and crash. Maybe a surgeon was performing open heart surgery and was jolted by the obnoxious pinging noise of a new notification. Can you live with yourself knowing how many lives you've cost by thinking you had something important to say? I hope you're happy with yourself."
+        await message.channel.send(msg)
+
     # SyCW Commands - By special request.
     elif message.channel.guild.id == 329383300848418816:
         if message.content == command("assad", message):
