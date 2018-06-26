@@ -353,18 +353,20 @@ async def on_message(message):
         if len(globalScores) < 10:
             place = 1
             for score in globalScores:
-                username = client.get_user(int(score.getUser())).name
-                score = score.getScore()
-                scoreList = scoreList + (str(place) + ": "+ username + " with "+score + " points!\n")
-                place = place + 1
+                user = client.get_user(int(score.getUser()))
+                if user != None:
+                    score = score.getScore()
+                    scoreList = scoreList + (str(place) + ": "+ user.name + " with "+score + " points!\n")
+                    place = place + 1
         else:
             i = 0
             place = 1
             while i < 10:
-                username = client.get_user(int(globalScores[i].getUser())).name
-                score = globalScores[i].getScore()
-                scoreList = scoreList + (str(place) + ": "+ username + " with "+score + " points!\n")
-                place = place + 1
+                user = client.get_user(int(globalScores[i].getUser()))
+                if user != None:
+                    score = globalScores[i].getScore()
+                    scoreList = scoreList + (str(place) + ": "+ user.name + " with "+score + " points!\n")
+                    place = place + 1
                 i = i + 1
             
         scoreEmbed = discord.Embed(title= "Global Leaderboard", color=0x107c02, description=scoreList)
@@ -376,18 +378,20 @@ async def on_message(message):
         if len(localScores) < 10:
             place = 1
             for score in localScores:
-                username = client.get_user(int(score.getUser())).name
-                score = score.getScore()
-                scoreList = scoreList + (str(place) + ": "+ username + " with "+score + " points!\n")
-                place = place + 1
+                user = client.get_user(int(score.getUser())).name
+                if user != None:
+                    score = score.getScore()
+                    scoreList = scoreList + ("".join((str(place),": ",user.name," with ",score," points!\n")))
+                    place = place + 1
         else:
             i = 0
             place = 1
             while i < 10:
-                username = client.get_user(int(localScores[i].getUser())).name
-                score = localScores[i].getScore()
-                scoreList = scoreList + (str(place) + ": "+ username + " with "+score + " points!\n")
-                place = place + 1
+                user = client.get_user(int(localScores[i].getUser()))
+                if user != None:
+                    score = localScores[i].getScore()
+                    scoreList = scoreList + ("".join((str(place),": ",user.name," with ",score," points!\n")))
+                    place = place + 1
                 i = i + 1
         scoreEmbed = discord.Embed(title= "Local Leaderboard", color=0x107c02, description=scoreList)
         await message.channel.send(embed=scoreEmbed)
