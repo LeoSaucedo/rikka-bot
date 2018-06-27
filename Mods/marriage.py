@@ -4,7 +4,6 @@ Carlos Saucedo, 2018
 """
 
 import discord
-from builtins import True
 
 marriageFile = open("marriages.txt", "r")
 marriageList = marriageFile.read().splitlines()
