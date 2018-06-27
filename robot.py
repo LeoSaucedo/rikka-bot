@@ -16,7 +16,7 @@ import Mods.triviaScore as triviaScore
 from discord.emoji import Emoji
 import Mods.EightBall as EightBall
 import Mods.economy as econ
-import mods.marriage as marriage
+import Mods.marriage as marriage
 
 # Directory stuff
 root_dir = os.path.dirname(__file__)
