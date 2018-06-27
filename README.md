@@ -38,6 +38,7 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;ramsay` - Returns a random Gordon Ramsay quote.
 - `;gay` - no u
 - `;rate (thing to rate)` - Rates whatever you tell it to rate on a scale of 1-10.
+- `;ping` - For that annoying person who keeps `@everyone`ing.
 
 ##### Gif Commands
 - `;hello` - Says hi.
