@@ -16,7 +16,6 @@ import Mods.triviaScore as triviaScore
 from discord.emoji import Emoji
 import Mods.EightBall as EightBall
 import Mods.economy as econ
-import Mods.marriage as marriage
 
 # Directory stuff
 root_dir = os.path.dirname(__file__)
@@ -449,21 +448,7 @@ async def on_message(message):
         else:
             msg = "You haven't gotten a question yet!"
             await message.channel.send(msg)
-            
-    elif message.content.startswith(command("marriage", message)):
-        """
-        Marriage RP commands.
-        """
-        if message.content.startswith(command("marriage propose", message)):
-            """
-            User is proposing to another user.
-            """
-            proposer = message.author
-            proposee = message.mentions[0]
-            
-            
-            
-            
+               
     elif message.content.startswith(command("board", message)):
         """
         Board enable command.
