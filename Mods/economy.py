@@ -48,5 +48,5 @@ def setCollectionDate(userID):
         index = index + 1
     if userInList == False:
         collectionFile = open("collectiondates.txt", "a+")
-        collectionFile.write(user + " " + getCurrentDay())
+        collectionFile.write("\n" + user + " " + getCurrentDay())
         collectionFile.close()
