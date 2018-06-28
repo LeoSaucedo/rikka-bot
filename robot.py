@@ -360,16 +360,14 @@ async def on_message(message):
                     place = place + 1
         else:
             i = 0
-            j = 0
             place = 1
             while i < 10:
-                user = client.get_user(int(globalScores[j].getUser()))
+                user = client.get_user(int(globalScores[i].getUser()))
                 if user != None:
-                    score = globalScores[j].getScore()
+                    score = globalScores[i].getScore()
                     scoreList = scoreList + (str(place) + ": "+ user.name + " with "+score + " points!\n")
                     place = place + 1
-                    i = i + 1
-                j = j + 1
+                i = i + 1
             
         scoreEmbed = discord.Embed(title= "Global Leaderboard", color=0x107c02, description=scoreList)
         await message.channel.send(embed=scoreEmbed)
@@ -387,16 +385,14 @@ async def on_message(message):
                     place = place + 1
         else:
             i = 0
-            j = 0
             place = 1
             while i < 10:
-                user = client.get_user(int(localScores[j].getUser()))
+                user = client.get_user(int(localScores[i].getUser()))
                 if user != None:
-                    score = localScores[j].getScore()
+                    score = localScores[i].getScore()
                     scoreList = scoreList + ("".join((str(place),": ",user.name," with ",score," points!\n")))
-                    i = i + 1
-                place = place + 1
-                j = j + 1
+                    place = place + 1
+                i = i + 1
         scoreEmbed = discord.Embed(title= "Local Leaderboard", color=0x107c02, description=scoreList)
         await message.channel.send(embed=scoreEmbed)
     
@@ -452,7 +448,8 @@ async def on_message(message):
         else:
             msg = "You haven't gotten a question yet!"
             await message.channel.send(msg)
-               
+            
+            
     elif message.content.startswith(command("board", message)):
         """
         Board enable command.
