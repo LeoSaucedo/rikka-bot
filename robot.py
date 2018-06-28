@@ -344,7 +344,7 @@ async def on_message(message):
             pointsToAdd = randint(1,25)
             trivia.addPoints(serverID, userID, pointsToAdd)
             econ.setCollectionDate(userID)
-            msg = ("{0.author.mention}, your daily points are "+str(pointsToAdd)+"!").format(message)
+            msg = "".join(map(str,(message.author.mention,"your have gained ",pointsToAdd,"! Your total points are now",trivia.getScore(message.author.id))))
             await message.channel.send(msg)
             
     elif message.content == command("leaderboard global", message):
