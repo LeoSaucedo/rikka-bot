@@ -16,6 +16,7 @@ import Mods.triviaScore as triviaScore
 from discord.emoji import Emoji
 import Mods.EightBall as EightBall
 import Mods.economy as econ
+import Mods.beemovie as beemovie
 
 # Directory stuff
 root_dir = os.path.dirname(__file__)
@@ -279,6 +280,14 @@ async def on_message(message):
         suggestionsFile.write(suggestion + "\n")
         msg = "{0.author.mention} Added your suggestion! It will be processed and may be added soon! Thanks for the help!".format(message)
         await message.channel.send(msg)
+        
+    elif message.content == command("beemovie", message):
+        #Bee movie command.
+        # TODO possible embed?
+        quote = beemovie.getQuote()
+        msg = quote.format(message)
+        await message.channel.send(msg)
+        
         
     elif message.content.startswith(command("fight ", message)):
         numberOfPlayers = len(message.mentions)
