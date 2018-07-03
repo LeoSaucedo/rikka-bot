@@ -39,6 +39,7 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;gay` - no u
 - `;rate (thing to rate)` - Rates whatever you tell it to rate on a scale of 1-10.
 - `;ping` - For that annoying person who keeps `@everyone`ing.
+- `;beemovie` - Returns a random bee movie quote.
 
 ##### Gif Commands
 - `;hello` - Says hi.
@@ -77,3 +78,4 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - Special thanks to user chafla for their code [gizoogle.py](https://github.com/chafla/gizoogle-py), which helped make this program possible.
 - Hat tip to Rapptz for developing the [Discord API Wrapper](https://github.com/Rapptz/discord.py) used in this program.
 - Credit to phl4nk for their [implementation of the cleverbot.io API for python](https://github.com/phl4nk/CleverApi).
+- Thanks to [Wes](https://github.com/NeonWizard) for his [website](http://wizardlywonders.xyz:3054/) that generates the Bee Movie quotes!
