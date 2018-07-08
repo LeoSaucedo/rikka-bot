@@ -64,6 +64,8 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;mute / ;unmute (user)` - Mutes/unmutes specified user. *(Must have manage message permission)*
 - `;kick (user)` - Kicks the specified user. *(Must have kick permission)*
 - `;ban (user)` - Bans the specified user. *(Must have ban permission)*
+- `;addpoints (points) (user(s))` - Adds a set number of points to mentioned user(s). *(Must be admin)*
+- `;subtractpoints (points) (user(s))` - Subtracts a set number of points from mentioned user(s). *(Must be admin)*
 
 ##### Emotes
 *Note: All emotes are entirely SFW.*
