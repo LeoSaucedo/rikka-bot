@@ -598,7 +598,7 @@ async def on_message(message):
                 victors = message.mentions
                 mentions = []
                 for victor in victors:
-                    trivia.addPoints(message.channel.guild.id,victor.id,points)
+                    trivia.addPoints(message.channel.guild.id,victor.id,int(points))
                     mentions.append(victor.mention)
                 await message.channel.send("".join(("Added ",points," points to ",(", ".join(mentions)),"!")))
 
@@ -607,7 +607,7 @@ async def on_message(message):
                 victims = message.mentions
                 mentions = []
                 for victim in victims:
-                    trivia.subtractPoints(message.channel.guild.id,victim.id,points)
+                    trivia.subtractPoints(message.channel.guild.id,victim.id,int(points))
                     mentions.append(victim.mention)
                 await message.channel.send("".join(("Took ",points," points from ",(", ".join(mentions)),"!")))
         """
