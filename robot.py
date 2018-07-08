@@ -592,7 +592,24 @@ async def on_message(message):
                 prefixFile.close()
                 msg = ("Set server prefix to " + newPrefix + " !").format(message)
                 await message.channel.send(msg)
-                
+        if (message.author.id != 400360503622369291) and (message.channel.guild.id == 401480405561114624):
+            if message.content.startswith(command("addpoints", message)):
+                points = getRawArgument(command("addpoints",message),message).split(" ")[0]
+                victors = message.mentions
+                mentions = []
+                for victor in victors:
+                    trivia.addPoints(message.channel.guild.id,victor.id,points)
+                    mentions.append(victor.mention)
+                await message.channel.send("".join(("Added ",points," points to ",(", ".join(mentions)),"!")))
+
+            elif message.content.startswith(command("subtractpoints", message)):
+                points = getRawArgument(command("subtractpoints",message),message).split(" ")[0]
+                victims = message.mentions
+                mentions = []
+                for victim in victims:
+                    trivia.subtractPoints(message.channel.guild.id,victim.id,points)
+                    mentions.append(victim.mention)
+                await message.channel.send("".join(("Took ",points," points from ",(", ".join(mentions)),"!")))
         """
         Misc gif commands.
         """
