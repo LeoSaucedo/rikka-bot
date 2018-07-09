@@ -84,3 +84,4 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - Hat tip to Rapptz for developing the [Discord API Wrapper](https://github.com/Rapptz/discord.py) used in this program.
 - Credit to phl4nk for their [implementation of the cleverbot.io API for python](https://github.com/phl4nk/CleverApi).
 - Thanks to [Wes](https://github.com/NeonWizard) for his [website](http://wizardlywonders.xyz:3054/) that generates the Bee Movie quotes!
+- Of course, credit to [XKCD](https://xkcd.com/) for the wonderful comic that is a great feature of this bot.
