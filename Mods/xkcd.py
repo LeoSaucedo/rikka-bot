@@ -46,11 +46,11 @@ def getComic(comicID):
     return _formatComic(data,imgsrc)
 
 def _formatComic(data,imgsrc):
-    if data["month"] < 10:
+    if int(data["month"]) < 10:
         month = "".join(("0",str(data["month"])))
     else:
         month = data["month"]
-    if data["day"] < 10:
+    if int(data["day"]) < 10:
         day = "".join(("0",str(data["day"])))
     else:
         day = data["day"]
