@@ -40,6 +40,9 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;rate (thing to rate)` - Rates whatever you tell it to rate on a scale of 1-10.
 - `;ping` - For that annoying person who keeps `@everyone`ing.
 - `;beemovie` - Returns a random bee movie quote.
+- `;xkcd` - Returns a random XKCD comic.
+- `;xkcd (number)` - Returns a specific XKCD comic.
+- `;xkcd latest` - Returns the latest XKCD comic.
 
 ##### Gif Commands
 - `;hello` - Says hi.
