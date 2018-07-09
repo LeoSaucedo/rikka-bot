@@ -46,9 +46,18 @@ def getComic(comicID):
     return _formatComic(data,imgsrc)
 
 def _formatComic(data,imgsrc):
+    if data["month"] < 10:
+        month = "".join(("0",str(data["month"])))
+    else:
+        month = data["month"]
+    if data["day"] < 10:
+        day = "".join(("0",str(data["day"])))
+    else:
+        day = data["day"]
+        
     imgtitle = data["title"]
-    imgdate = "".join((data["year"],"-",data["month"],"-",data["day"]))
     imgalt = data["alt"]
+    imgdate = "".join((data["year"],"-",month,"-",day))
     
     e = Embed(color=0x7610ba)
     e.set_image(url=imgsrc)
