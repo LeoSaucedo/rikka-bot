@@ -16,8 +16,8 @@ def getLatestComic():
     
     e = Embed(color=0x7610ba)
     e.set_image(url=imgsrc)
-    e.set_footer(text=imgdate)
-    e.add_field(name=imgtitle, value=imgalt, inline=False)
+    e.set_footer(text=imgalt)
+    e.add_field(name=imgtitle, value=imgdate, inline=False)
     
     return e
     
@@ -38,8 +38,8 @@ def getRandomComic():
     
     e = Embed(color=0x7610ba)
     e.set_image(url=imgsrc)
-    e.set_footer(text=imgdate)
-    e.add_field(name=imgtitle, value=imgalt, inline=False)
+    e.set_footer(text=imgalt)
+    e.add_field(name=imgtitle, value=imgdate, inline=False)
     
     return e
     
@@ -61,7 +61,7 @@ def getComic(comicID):
         
         e = Embed(color=0x7610ba)
         e.set_image(url=imgsrc)
-        e.set_footer(text=imgdate)
-        e.add_field(name=imgtitle, value=imgalt, inline=False)
+        e.set_footer(text=imgalt)
+        e.add_field(name=imgtitle, value=imgdate, inline=False)
     
     return e
