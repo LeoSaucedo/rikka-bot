@@ -17,6 +17,7 @@ from discord.emoji import Emoji
 import Mods.EightBall as EightBall
 import Mods.economy as econ
 import Mods.beemovie as beemovie
+import Mods.xkcd as xkcd
 
 # Directory stuff
 root_dir = os.path.dirname(__file__)
@@ -287,6 +288,26 @@ async def on_message(message):
         quote = beemovie.getQuote()
         msg = quote.format(message)
         await message.channel.send(msg)
+        
+    elif message.content.startswith(command("xkcd", message)):
+        """
+        XKCD Command.
+        """
+        if (message.content == command("xkcd random", message)) or (message.content == command("xkcd", message)) :
+            await message.channel.send(xkcd.getRandomComic())
+            
+        elif message.content == command("xkcd latest", message):
+            await message.channel.send(xkcd.getLatestComic())
+            
+        else:
+            comicID = int(getRawArgument(command("xkcd", message), message))
+            imageUrl = xkcd.getComic(comicID)
+            if imageUrl == None:
+                msg = "{0.author.mention}, invalid comic ID!".format(message)
+                await message.channel.send(msg)
+            else:
+                await message.channel.send(imageUrl)
+            
         
         
     elif message.content.startswith(command("fight ", message)):
