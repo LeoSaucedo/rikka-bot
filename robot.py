@@ -294,19 +294,19 @@ async def on_message(message):
         XKCD Command.
         """
         if (message.content == command("xkcd random", message)) or (message.content == command("xkcd", message)) :
-            await message.channel.send(xkcd.getRandomComic())
+            await message.channel.send(embed=xkcd.getRandomComic())
             
         elif message.content == command("xkcd latest", message):
-            await message.channel.send(xkcd.getLatestComic())
+            await message.channel.send(embed=xkcd.getLatestComic())
             
         else:
             comicID = int(getRawArgument(command("xkcd", message), message))
-            imageUrl = xkcd.getComic(comicID)
-            if imageUrl == None:
+            image = xkcd.getComic(comicID)
+            if image == None:
                 msg = "{0.author.mention}, invalid comic ID!".format(message)
                 await message.channel.send(msg)
             else:
-                await message.channel.send(imageUrl)
+                await message.channel.send(embed=image)
             
         
         

@@ -1,6 +1,6 @@
-import urllib.request
-import json
+import urllib.request, json
 from random import randint
+from discord import Embed
 
 # Feteches the JSON of the latest submission.
 with urllib.request.urlopen("https://xkcd.com/info.0.json") as url:
@@ -9,8 +9,18 @@ with urllib.request.urlopen("https://xkcd.com/info.0.json") as url:
 latestComicID = data["num"]
 
 def getLatestComic():
-    return data["img"]
-
+    imgsrc =  data["img"]
+    imgtitle = data["title"]
+    imgdate = data["month"]+"/" + data["day"] + "/" + data["year"]
+    imgalt = data["alt"]
+    
+    e = Embed(color=0x7610ba)
+    e.set_image(url=imgsrc)
+    e.set_footer(text=imgdate)
+    e.add_field(name=imgtitle, value=imgalt, inline=False)
+    
+    return e
+    
 def getRandomComic():
     
     # Generates a random number to represent the ComicID.
@@ -21,17 +31,37 @@ def getRandomComic():
     with urllib.request.urlopen("http://xkcd.com/" + str(randomComicID) + "/info.0.json") as randomUrl:
         data = json.load(randomUrl)
         
-    return data["img"]
+    imgsrc =  data["img"]
+    imgtitle = data["title"]
+    imgdate = data["month"]+"/" + data["day"] + "/" + data["year"]
+    imgalt = data["alt"]
+    
+    e = Embed(color=0x7610ba)
+    e.set_image(url=imgsrc)
+    e.set_footer(text=imgdate)
+    e.add_field(name=imgtitle, value=imgalt, inline=False)
+    
+    return e
     
 def getComic(comicID):
     
-    imageUrl = None
+    e = None
     
     if comicID > 1 and comicID <= latestComicID:
         # Comic ID is valid.
         
         with urllib.request.urlopen("http://xkcd.com/" + str(comicID) + "/info.0.json") as comicUrl:
             data = json.load(comicUrl)
-        imageUrl = data["img"]
+            
+            imgsrc =  data["img"]
+            
+        imgtitle = data["title"]
+        imgdate = data["month"]+"/" + data["day"] + "/" + data["year"]
+        imgalt = data["alt"]
         
-    return imageUrl
+        e = Embed(color=0x7610ba)
+        e.set_image(url=imgsrc)
+        e.set_footer(text=imgdate)
+        e.add_field(name=imgtitle, value=imgalt, inline=False)
+    
+    return e
