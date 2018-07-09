@@ -35,7 +35,7 @@ def getComic(comicID):
     
     e = None
     
-    if comicID > 1 and comicID <= latest["num"]:
+    if comicID > 0 and comicID <= latest["num"]:
         # Comic ID is valid.
         
         with urllib.request.urlopen("http://xkcd.com/" + str(comicID) + "/info.0.json") as comicUrl:
