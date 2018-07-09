@@ -63,6 +63,6 @@ def _formatComic(data,imgsrc):
     e = Embed(color=0x7610ba)
     e.set_image(url=imgsrc)
     e.set_footer(text=imgalt)
-    e.add_field(name=imgtitle, value=imgdate + " | " + imgnum, inline=False)
+    e.add_field(name=imgtitle, value=imgdate + " | " + str(imgnum), inline=False)
         
     return e
