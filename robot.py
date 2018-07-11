@@ -465,7 +465,7 @@ async def on_message(message):
         msg = "Flagged the question! Sorry about that."
         await message.channel.send(msg)
         
-    elif message.content.startswith(command("score", message)):
+    elif message.content == (command("score", message)):
         msg = ("{0.author.mention}, your score is " + str(trivia.getScore(message.author.id))).format(message)
         await message.channel.send(msg)
         
