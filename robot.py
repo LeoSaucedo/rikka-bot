@@ -308,7 +308,13 @@ async def on_message(message):
             else:
                 await message.channel.send(embed=image)
             
-        
+    elif message.content.startswith(command("raffle", message)):
+        nbusers = []
+        for user in message.channel.guild.members:
+            if not user.bot:
+                nbusers.append(user)
+        victim = nbusers[randint(0,len(nbusers))]
+        await message.channel.send("".join((victim.mention," Has been chosen!")))
         
     elif message.content.startswith(command("fight ", message)):
         numberOfPlayers = len(message.mentions)
