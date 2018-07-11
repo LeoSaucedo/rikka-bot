@@ -18,6 +18,7 @@ import Mods.EightBall as EightBall
 import Mods.economy as econ
 import Mods.beemovie as beemovie
 import Mods.xkcd as xkcd
+import apscheduler.schedulers.background
 
 # Directory stuff
 root_dir = os.path.dirname(__file__)
@@ -91,6 +92,39 @@ isSent = False
 # Eight ball instantiation
 eight = EightBall.eightBallGenerator()
 
+#scheduler initialization and functions
+rikkaGuild = 401480405561114624
+raffleIntervalMin = 10
+raffleIntervalMax = 20
+raffleInterval = randint(raffleIntervalMin,raffleIntervalMax)
+raffleAwardMin = 50
+raffleAwardMax = 100
+raffleInterval = randint(raffleIntervalMin,raffleIntervalMax)
+randomRaffleTimePath = os.path.join(root_dir, "randomRaffleTimePath")
+def raffle():
+    users = getRealUsers(client.get_guild(rikkaGuild))
+    winner = users(randint(0,len(users)))
+    points = randint(raffleAwardMin,raffleAwardMax)
+    channel = client.get_guild(rikkaGuild).get_channel(401480405561114626)
+    channel.send("".join(("Congratulations, ",winner.mention," You have won ",points," points! Your total is now ",str(int(trivia.getScore(winner.id)) + points))))
+    trivia.addPoints(client.get_guild(rikkaGuild),winner.id,points)
+        
+def time(function):
+    randomRaffleTime = open(randomRaffleTimePath,"rw")
+    current = int(randomRaffleTime.read())
+    new = current + 1
+    if new == 168: #7d
+        new = 0
+        raffle()
+
+    randomRaffleTime.seek(0,0)
+    randomRaffleTime.write(new)
+    randomRaffleTime.close()
+
+scheduler = apscheduler.schedulers.background.BackgroundScheduler()
+scheduler.add_job(time(raffle), 'interval', hours = 1)
+scheduler.start()
+
 def getServerPrefix(guild):
     # Returns the server prefix.
     # If there is no server prefix set, it returns the defaultPrefix.
@@ -125,6 +159,13 @@ def getRawArgument(command, message):
     # Gets the raw argument, without being formatted.
     argument = message.content.replace(command + " ", "")
     return argument
+
+def getRealUsers(guild):
+    realUsers = []
+    for member in guild.members:
+        if not member.isbot():
+            realUsers.append(member)
+    return realUsers
     
 @client.event
 async def on_guild_join(guild):
@@ -309,10 +350,7 @@ async def on_message(message):
                 await message.channel.send(embed=image)
             
     elif message.content.startswith(command("raffle", message)):
-        nbusers = []
-        for user in message.channel.guild.members:
-            if not user.bot:
-                nbusers.append(user)
+        nbusers = getRealUsers(message.channel.guild)
         victim = nbusers[randint(0,len(nbusers))]
         await message.channel.send("".join((victim.mention," Has been chosen!")))
         
