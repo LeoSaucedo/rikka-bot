@@ -11,10 +11,11 @@ A Discord bot that performs various functions.
 
 ##### Economy System
 Rikka's economy system consists of a global leaderboard. Currently, you can get points in two ways: Getting questions right with the `;trivia` command, and upvoting the bot.
-- `;score` - Displays your score, globally.
+- `;score` - Displays your score, or another user's score, globally.
 - `;collect daily` - Gets your daily collections.
 - `;leaderboard global` - View the global leaderboard across all of rikka's servers.
 - `;leaderboard local` - View the local leaderboard across all of the users on the current server.
+- `;givepoints (points) (user)` - donate points to another user.
 
 ##### Board Functionality
 The board functionality allows popular messages to be posted on a special channel, titled `board`.
@@ -59,6 +60,7 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;roll` - Rolls a die.
 - `;flip` - Flips a coin.
 - `;8ball (question)` - Tells you the future.
+- `;raffle` - Select a random (non-bot) user from your server
 
 ##### Admin Commands
 - `;prefix (prefix)` - Changes the prefix to a set custom prefix. *(Must be admin)*
