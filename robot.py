@@ -469,6 +469,9 @@ async def on_message(message):
         msg = ("{0.author.mention}, your score is " + str(trivia.getScore(message.author.id))).format(message)
         await message.channel.send(msg)
         
+    elif message.content.startswith(command("score", message)) and len(message.mentions) > 0:
+        msg = ("{0.mentions[0].mention}'s score is " + str(trivia.getScore(message.mentions[0].id))).format(message)
+        
     elif message.content.startswith(command("a", message) + " "):
         # The user is attempting to answer the question.
         attempt = getRawArgument(command("a", message), message)
