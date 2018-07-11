@@ -471,6 +471,7 @@ async def on_message(message):
         
     elif message.content.startswith(command("score", message)) and len(message.mentions) > 0:
         msg = ("{0.mentions[0].mention}'s score is " + str(trivia.getScore(message.mentions[0].id))).format(message)
+        await message.channel.send(msg)
         
     elif message.content.startswith(command("a", message) + " "):
         # The user is attempting to answer the question.
