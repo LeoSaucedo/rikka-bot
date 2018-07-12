@@ -173,7 +173,13 @@ async def on_message(message):
     
     elif message.content.startswith(command("sayd", message)):
         # Anonymous comment.
-        msg = getRawArgument(command("sayd", message), message)
+        arg = getRawArgument(command("sayd", message), message)
+        arglist= arg.split()
+        msg = ""
+        for word in arglist:
+            if "@everyone" in word:
+                word = "everyone"
+            msg = msg + " " + word
         await message.channel.send(msg)
         await message.delete()
     
