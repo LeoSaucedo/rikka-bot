@@ -316,6 +316,20 @@ async def on_message(message):
         victim = nbusers[randint(0,len(nbusers))]
         await message.channel.send("".join((victim.mention," Has been chosen!")))
         
+    elif message.content == command("givepoints",message):
+        donorOriginalPoints = trivia.getScore(message.author.id)
+        modPoints = getRawArgument(command("givepoints",message),message).split(" ")[0]
+        if (type(modPoints) == int):
+            if (modPoints > 0) and (donorOriginalPoints <= modPoints) and (len(message.mentions) == 1):
+                trivia.subtractPoints(message.channel.guild.id,message.author.id,modPoints)
+                trivia.addPoints(message.channel.guild.id,message.mention.id,modPoints)
+            elif modPoints < 1:
+                await message.channel.send("".join((message.author.mention,", please enter a positive amount to give, thief!")))
+            elif len(message.mentions) != 1:
+                await message.channel.send("".join((message.author.mention,", please mention 1 user to give your points to!")))
+        else:
+            await message.channel.send("".join((message.author.mention,", \"",modPoints,"\" is not a valid number.")))
+        
     elif message.content.startswith(command("fight ", message)):
         numberOfPlayers = len(message.mentions)
         victorNumber = randint(0, numberOfPlayers)
