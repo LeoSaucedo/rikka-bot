@@ -173,7 +173,7 @@ async def on_message(message):
     
     elif message.content.startswith(command("sayd", message)):
         # Anonymous comment.
-        msg = getRawArgument(command("sayd", message), message))
+        msg = getRawArgument(command("sayd", message), message)))
         await message.channel.send(msg)
         await message.delete()
     
