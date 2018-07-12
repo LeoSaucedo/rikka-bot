@@ -171,6 +171,12 @@ async def on_message(message):
         # Makes sure bot does not reply to another bot.
         return
     
+    elif message.content.startswith(command("sayd", message)):
+        # Anonymous comment.
+        msg = getRawArgument(command("sayd", message), message))
+        await message.channel.send(msg)
+        await message.delete()
+    
     elif str(message.channel).startswith("Direct Message"):
         # If message is direct message.
         msg = "Hi there! Here is my commands list. https://discordbots.org/bot/430482288053059584".format(message)
