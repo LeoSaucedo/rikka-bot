@@ -33,6 +33,7 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;translate (text)` - Translates the specified text to English.
 - `;suggest (suggestion)` - Adds a completely anonymous suggestion to better the bot.
 - `;quickvote (vote)` - Creates a message with thumbs up and thumbs down, in a pretty text embed.
+- `;sayd (message)` - Allows you to say an anonymous message by saying what you tell it to, and then deleting your message. Prevents `@everyone`, of course.
 
 ##### Fun Commands
 - `;insult (user)` - Sends a random insult to the given user.
