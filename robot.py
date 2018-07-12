@@ -317,9 +317,9 @@ async def on_message(message):
         victim = nbusers[randint(0,len(nbusers))]
         await message.channel.send("".join((victim.mention," Has been chosen!")))
         
-    elif message.content.startswith(command("givepoints",message)):
+    elif message.content.startswith(command("give",message)):
         donorOriginalPoints = trivia.getScore(message.author.id)
-        modPoints = getRawArgument(command("givepoints",message),message).split(" ")[0]
+        modPoints = getRawArgument(command("give",message),message).split(" ")[0]
         if (type(modPoints) == int):
             if (modPoints > 0) and (donorOriginalPoints <= modPoints) and (len(message.mentions) == 1):
                 trivia.subtractPoints(message.channel.guild.id,message.author.id,modPoints)
@@ -639,8 +639,8 @@ async def on_message(message):
                 msg = ("Set server prefix to " + newPrefix + " !").format(message)
                 await message.channel.send(msg)
         if (message.author.id != 400360503622369291) and (message.channel.guild.id == 401480405561114624):
-            if message.content.startswith(command("addpoints", message)):
-                points = getRawArgument(command("addpoints",message),message).split(" ")[0]
+            if message.content.startswith(command("add", message)):
+                points = getRawArgument(command("add",message),message).split(" ")[0]
                 victors = message.mentions
                 mentions = []
                 for victor in victors:
@@ -648,8 +648,8 @@ async def on_message(message):
                     mentions.append(victor.mention)
                 await message.channel.send("".join(("Added ",points," points to ",(", ".join(mentions)),"!")))
 
-            elif message.content.startswith(command("subtractpoints", message)):
-                points = getRawArgument(command("subtractpoints",message),message).split(" ")[0]
+            elif message.content.startswith(command("subtract", message)):
+                points = getRawArgument(command("subtract",message),message).split(" ")[0]
                 victims = message.mentions
                 mentions = []
                 for victim in victims:
