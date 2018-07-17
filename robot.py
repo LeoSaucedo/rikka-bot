@@ -332,7 +332,7 @@ async def on_message(message):
     elif message.content.startswith(command("give",message)):
         donorOriginalPoints = int(trivia.getScore(message.author.id))
         modPoints = int(getRawArgument(command("give",message),message).split(" ")[0])
-        if (modPoints.isnumeric()):
+        if (str(modPoints).isnumeric()):
             if (modPoints > 0) and (donorOriginalPoints <= modPoints) and (len(message.mentions) == 1):
                 trivia.subtractPoints(message.channel.guild.id,message.author.id,modPoints)
                 trivia.addPoints(message.channel.guild.id,message.mention.id,modPoints)
