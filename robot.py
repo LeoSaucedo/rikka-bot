@@ -332,15 +332,11 @@ async def on_message(message):
     elif message.content.startswith(command("give",message)):
         donorOriginalPoints = int(trivia.getScore(message.author.id))
         modPoints = getRawArgument(command("give",message),message).split(" ")[0]
-        print("".join(["[DEBUG] donorOriginalPoints = ",str(donorOriginalPoints)]))
-        print("".join(["[DEBUG] modpoints = ",str(modPoints)]))
         if (modPoints.isnumeric()):
-            print("[DEBUG] passed isnumeric")
             if (int(modPoints) > 0) and (int(donorOriginalPoints) >= int(modPoints)) and (len(message.mentions) == 1):
-                print("[DEBUG] passed non-zero,etc checks")
                 trivia.subtractPoints(message.channel.guild.id,message.author.id,int(modPoints))
                 trivia.addPoints(message.channel.guild.id,message.mentions[0].id,int(modPoints))
-                await message.channel.send("".join((message.author.mention," has given ",message.mention," ",modPoints," points!")))
+                await message.channel.send("".join((message.author.mention," has given ",message.mentions[0].mention," ",modPoints," points!")))
             elif int(modPoints) < 1:
                 await message.channel.send("".join((message.author.mention,", please enter a positive amount to give, thief!")))
             elif len(message.mentions) != 1:
