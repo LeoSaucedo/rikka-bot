@@ -339,7 +339,7 @@ async def on_message(message):
             if (int(modPoints) > 0) and (int(donorOriginalPoints) >= int(modPoints)) and (len(message.mentions) == 1):
                 print("[DEBUG] passed non-zero,etc checks")
                 trivia.subtractPoints(message.channel.guild.id,message.author.id,int(modPoints))
-                trivia.addPoints(message.channel.guild.id,message.mention.id,int(modPoints))
+                trivia.addPoints(message.channel.guild.id,message.mentions[0].id,int(modPoints))
                 await message.channel.send("".join((message.author.mention," has given ",message.mention," ",modPoints," points!")))
             elif int(modPoints) < 1:
                 await message.channel.send("".join((message.author.mention,", please enter a positive amount to give, thief!")))
