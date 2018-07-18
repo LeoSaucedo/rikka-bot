@@ -332,8 +332,8 @@ async def on_message(message):
     elif message.content.startswith(command("give",message)):
         donorOriginalPoints = int(trivia.getScore(message.author.id))
         modPoints = getRawArgument(command("give",message),message).split(" ")[0]
-        print("".join(["[DEBUG] donorOriginalPoints = ",int(donorOriginalPoints)]))
-        print("".join(["[DEBUG] modpoints = ",int(modPoints)]))
+        print("".join(["[DEBUG] donorOriginalPoints = ",str(donorOriginalPoints)]))
+        print("".join(["[DEBUG] modpoints = ",str(modPoints)]))
         if (modPoints.isnumeric()):
             print("[DEBUG] passed isnumeric")
             if (int(modPoints) > 0) and (int(donorOriginalPoints) >= int(modPoints)) and (len(message.mentions) == 1):
