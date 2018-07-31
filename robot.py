@@ -179,6 +179,8 @@ async def on_message(message):
         for word in arglist:
             if "@everyone" in word:
                 word = "everyone"
+            if "@here" in word:
+                word = "here"
             msg = msg + " " + word
         await message.channel.send(msg)
         await message.delete()
