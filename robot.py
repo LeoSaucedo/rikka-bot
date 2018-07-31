@@ -695,37 +695,41 @@ async def on_message(message):
         the lewd
         """
     if message.content.startswith(command("gelbooru",message)):
-        cmd = message.content.lstrip(command("gelbooru",message))
-        args = cmd.lstrip(cmd.split(" ")[0]).lstrip(" ")
-        with urllib.request.urlopen("https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1") as req:
-            data = json.load(req)
-        embed = discord.Embed(color=0xff0000,title="Error",description="baaka, you need to specify a subcommand. desu.")
-        if args == "random":
-            post = data[randint(0,len(data)-1)]["id"]
-            embed = fetchBooruPost(post)
-        if args == "latest":
-            post = data[0]["id"]
-            embed = fetchBooruPost(post)
-        if args.startswith("tags"):
-            tags = args.split(" ")[1].split(",")
-            try:
-                with urllib.request.request.urlopen("".join(("https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&tags=","+".join(map(str,tags))))) as req:
-                    data = json.load(req)
+        if message.channel.is_nsfw() == True:
+            cmd = message.content.lstrip(command("gelbooru",message))
+            args = cmd.lstrip(cmd.split(" ")[0]).lstrip(" ")
+            with urllib.request.urlopen("https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1") as req:
+                data = json.load(req)
+            embed = discord.Embed(color=0xff0000,title="Error",description="baaka, you need to specify a subcommand. desu.")
+            if args == "random":
                 post = data[randint(0,len(data)-1)]["id"]
                 embed = fetchBooruPost(post)
-            except e as exception:
-                print("".join(("[Error] ",e)))
-                embed = discord.Embed(color=0xff0000,title="Error",description=str(e))
-        if args.startswith("id"):
-            id = args.split(" ")[1]
-            if int(id) <= data[0]["id"] and int(id) > 0:
-                embed = fetchBooruPost(id)
-            else:
-                embed = discord.Embed(color=0xff0000,title="Error",description="Invalid post ID")
-        await message.channel.send(embed=embed)
-        """
-        Misc gif commands.
-        """
+            if args == "latest":
+                post = data[0]["id"]
+                embed = fetchBooruPost(post)
+            if args.startswith("tags"):
+                tags = args.split(" ")[1].split(",")
+                try:
+                    with urllib.request.request.urlopen("".join(("https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&tags=","+".join(map(str,tags))))) as req:
+                        data = json.load(req)
+                    post = data[randint(0,len(data)-1)]["id"]
+                    embed = fetchBooruPost(post)
+                except e as exception:
+                    print("".join(("[Error] ",e)))
+                    embed = discord.Embed(color=0xff0000,title="Error",description=str(e))
+            if args.startswith("id"):
+                id = args.split(" ")[1]
+                if int(id) <= data[0]["id"] and int(id) > 0:
+                    embed = fetchBooruPost(id)
+                else:
+                    embed = discord.Embed(color=0xff0000,title="Error",description="Invalid post ID")
+            await message.channel.send(embed=embed)
+        else:
+            await message.channel.send("This command requires the channel to be NSFW.")
+    
+    """
+    Misc gif commands.
+    """
     if message.content == command("shocked", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430591612637413389/image.gif"
         await message.channel.send(msg)
