@@ -24,7 +24,7 @@ import json
 root_dir = os.path.dirname(__file__)
 
 # Auth tokens
-with open("json/bot.cfg","r") as h:
+with open("json/config.json","r") as h:
     config = json.load(h)
 with open("json/indicators.json","r") as h:
     indicators = json.load(h)
@@ -576,8 +576,8 @@ async def on_message(message):
                         messages.append(msg)
                         number = number+1
                 if(len(messages) < 1):
-                   msg = "Could not find any messages from the specified user."
-                   await message.channel.send(msg)
+                    msg = "Could not find any messages from the specified user."
+                    await message.channel.send(msg)
                 else:
                     await message.channel.delete_messages(messages)
                     msg = "deleted " + str(number) + " messages!".format(message)
