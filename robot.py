@@ -25,23 +25,15 @@ import json
 root_dir = os.path.dirname(__file__)
 
 # Auth tokens
-tokenfile = open("auth_token.txt", "r")
-rawtoken = tokenfile.read().splitlines()
-token = rawtoken[0]
+with open("json/config.json","r") as h:
+    config = json.load(h)
+with open("json/indicators.json","r") as h:
+    indicators = json.load(h)
 
-bltokenfile = open("dbl_token.txt", "r")
-rawbltoken = bltokenfile.read().splitlines()
-bltoken = rawbltoken[0]
 shardCount = 1  # Keeping it simple with 1 for now.
-
-clevertokenfile = open("clever_token.txt", "r")
-rawclevertoken = clevertokenfile.read().splitlines()
-userapi = rawclevertoken[0]
-keyapi = rawclevertoken[1]
-
 # Cleverbot
 try:
-    clever = CleverApi.Bot(userapi, keyapi)
+    clever = CleverApi.Bot(config["userapi"], config["keyapi"])
 except Exception as e:
     print("Failed to instantiate CleverBot.")
 
@@ -77,7 +69,7 @@ nsfwinsultfile.close()
 # Instances
 client = discord.Client()
 translator = Translator()
-botlist = dbl.Client(client, bltoken)
+botlist = dbl.Client(client, config["bltoken"])
 
 # Prefix things
 defaultPrefix = ";"
@@ -606,8 +598,8 @@ async def on_message(message):
                         messages.append(msg)
                         number = number+1
                 if(len(messages) < 1):
-                   msg = "Could not find any messages from the specified user."
-                   await message.channel.send(msg)
+                    msg = "Could not find any messages from the specified user."
+                    await message.channel.send(msg)
                 else:
                     await message.channel.delete_messages(messages)
                     msg = "deleted " + str(number) + " messages!".format(message)
@@ -828,4 +820,4 @@ async def on_ready():
         print("Failed to post server count to tbl.")
     
 while True:
-    client.run(token)  # runs the bot.
+    client.run(config["token"])  # runs the bot.

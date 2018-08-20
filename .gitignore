@@ -1,5 +1,6 @@
 *.txt
 *.pyc
+bot.cfg
 test.py
 robotold.py
 .project
