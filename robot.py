@@ -818,6 +818,4 @@ async def on_ready():
         print("Successfully published server count to dbl.")
     except Exception as e:
         print("Failed to post server count to tbl.")
-    
-while True:
     client.run(config["token"])  # runs the bot.
