@@ -339,6 +339,9 @@ async def on_message(message):
         victim = nbusers[randint(0,len(nbusers))]
         await message.channel.send("".join((victim.mention," Has been chosen!")))
         
+    elif message.content.startswith(command("latency", message)):
+        await message.channel.send("".join((map(str,(client.latency * 1000,"ms")))))
+        
     elif message.content.startswith(command("give",message)):
         donorOriginalPoints = int(trivia.getScore(message.author.id))
         modPoints = getRawArgument(command("give",message),message).split(" ")[0]
