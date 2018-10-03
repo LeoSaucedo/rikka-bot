@@ -2,7 +2,7 @@
 Discord Rikka Bot.
 Carlos Saucedo, 2018
 """
-import os, discord, string, dbl, json, urllib.request
+import os, discord, string, dbl, json, urllib.request, time
 import Mods.gizoogle as gizoogle
 from random import randint
 from googletrans import Translator
@@ -15,6 +15,9 @@ import Mods.EightBall as EightBall
 import Mods.economy as econ
 import Mods.beemovie as beemovie
 import Mods.xkcd as xkcd
+
+# Global Variables
+startTime = time.time()
 
 # Directory stuff
 root_dir = os.path.dirname(__file__)
@@ -340,7 +343,11 @@ async def on_message(message):
         await message.channel.send("".join((victim.mention," Has been chosen!")))
         
     elif message.content.startswith(command("latency", message)):
-        await message.channel.send("".join((map(str,(client.latency * 1000,"ms")))))
+        latency = "".join((map(str,(client.latency * 1000,"ms"))))
+        await message.channel.send("Latency: " + latency)
+
+    elif message.content.startswith(command("uptime", message)):
+        await message.channel.send("Uptime: " + str(time.time() - startTime))
         
     elif message.content.startswith(command("give",message)):
         donorOriginalPoints = int(trivia.getScore(message.author.id))
@@ -819,3 +826,4 @@ async def on_ready():
     
 while True:
     client.run(config["token"])  # runs the bot.
+    startTime = time.time()
