@@ -2,13 +2,10 @@
 Discord Rikka Bot.
 Carlos Saucedo, 2018
 """
-import os
-import discord
+import os, discord, string, dbl, json, urllib.request
 import Mods.gizoogle as gizoogle
 from random import randint
-import string
 from googletrans import Translator
-import dbl
 import Mods.CleverApi as CleverApi
 from time import sleep
 import Mods.trivia as trivia
@@ -18,8 +15,6 @@ import Mods.EightBall as EightBall
 import Mods.economy as econ
 import Mods.beemovie as beemovie
 import Mods.xkcd as xkcd
-import urllib.request
-import json
 
 # Directory stuff
 root_dir = os.path.dirname(__file__)
