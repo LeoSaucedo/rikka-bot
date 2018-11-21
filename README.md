@@ -25,7 +25,7 @@ The board functionality allows popular messages to be posted on a special channe
 To use this functionality, you must first run `;board enable`.
 Afterwards, every message with 3 reactions with the "⭐" will get posted to the board.
 
-##### Utility Commands
+#### Utility Commands
 
 - `;help` - Returns a command list.
 - `;info` - Returns information about the bot.
@@ -38,8 +38,9 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;suggest (suggestion)` - Adds a completely anonymous suggestion to better the bot.
 - `;quickvote (vote)` - Creates a message with thumbs up and thumbs down, in a pretty text embed.
 - `;sayd (message)` - Allows you to say an anonymous message by saying what you tell it to, and then deleting your message. Prevents `@everyone`, of course.
+- `;wolfram (query)` - Queries a response to Wolfram Alpha.
 
-##### Fun Commands
+#### Fun Commands
 
 - `;insult (user)` - Sends a random insult to the given user.
 - `;ramsay` - Returns a random Gordon Ramsay quote.
@@ -51,27 +52,27 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;xkcd (number)` - Returns a specific XKCD comic.
 - `;xkcd latest` - Returns the latest XKCD comic.
 
-##### Gif Commands
+#### Gif Commands
 
 - `;hello` - Says hi.
 - `;hugme` - Hugs you.
 - `;hug @user` - Hugs the specified user.
 
-##### Trivia Commands
+#### Trivia Commands
 
 - `;trivia` - Returns the help menu for trivia.
 - `;ask` - Returns a randomly selected question.
 - `;a (attempt)` - Tests the given attempt to see if it is correct. If it is correct, you are granted a point.
 - `;reveal` - Reveals the answer, removing the ability to score for that specific question.
 
-##### Casino Commands
+#### Casino Commands
 
 - `;roll` - Rolls a die.
 - `;flip` - Flips a coin.
 - `;8ball (question)` - Tells you the future.
 - `;raffle` - Select a random (non-bot) user from your server
 
-##### Gelbooru Commands
+#### Gelbooru Commands
 
 *These commands require the channel to be marked as NSFW.*
 
@@ -79,7 +80,7 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;gelbooru latest` - Fetches the latest gelbooru post.
 - `;gelbooru tags (tags, comma separated)` - Fetches a post that matches the specified tags.
 
-##### Admin Commands
+#### Admin Commands
 
 - `;prefix (prefix)` - Changes the prefix to a set custom prefix. *(Must be admin)*
 - `;clear (number)` - Clears a set number of messages from the given channel. *(Must have manage message permission)*
@@ -90,7 +91,7 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;add (points) (user(s))` - Adds a set number of points to mentioned user(s). *(Must be admin)*
 - `;subtract (points) (user(s))` - Subtracts a set number of points from mentioned user(s). *(Must be admin)*
 
-##### Emotes
+#### Emotes
 
 *Note: All emotes are entirely SFW.*
 

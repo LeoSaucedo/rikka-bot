@@ -15,6 +15,7 @@ import Mods.EightBall as EightBall
 import Mods.economy as econ
 import Mods.beemovie as beemovie
 import Mods.xkcd as xkcd
+import Mods.wolfram as wolfram
 
 # Global Variables
 startTime = time.time()
@@ -68,6 +69,7 @@ nsfwinsultfile.close()
 client = discord.Client()
 translator = Translator()
 botlist = dbl.Client(client, config["bltoken"])
+wolframClient = wolfram.Client(config["wolframapi"])
 
 # Prefix things
 defaultPrefix = ";"
@@ -254,7 +256,21 @@ async def on_message(message):
             except Exception as cleverBotException:
                 msg = "cleverbot.io API error. Try again later."
             await message.channel.send(msg)
-        
+    
+    elif message.content.startswith(command("wolfram", message)):
+        # Wolfram support.
+        try:
+            query = getRawArgument(command("wolfram", message), message)
+            response = wolframClient.ask(query)
+        except:
+            # If no responses returned.
+            response = "No results. Try revising your search."
+        # Embed magic
+        answerEmbed = discord.Embed(description=response, color=0xff8920)
+        answerEmbed.set_author(name=query, icon_url="https://pbs.twimg.com/profile_images/804868917990739969/OFknlig__400x400.jpg")
+        answerEmbed.set_footer(text="Wolfram|Alpha, all rights reserved")
+        await message.channel.send(embed=answerEmbed)
+
     elif message.content.startswith(command("info", message)):
         # Returns information about the bot.
         msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: " + getServerPrefix(message.channel.guild) + ". To get help, use " + getServerPrefix(message.channel.guild) + "help.").format(message)
@@ -310,7 +326,7 @@ async def on_message(message):
         
     elif message.content == command("beemovie", message):
         #Bee movie command.
-        # TODO possible embed?
+        # TODO: possible embed?
         quote = beemovie.getQuote()
         msg = quote.format(message)
         await message.channel.send(msg)
