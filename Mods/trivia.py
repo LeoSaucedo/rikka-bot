@@ -114,6 +114,7 @@ class triviaGame:
     
     def addPoints(self, serverID, userID, amount):
         #Adds a set amount of points to the given user's score
+        #FIXME: New users are given incorrect score.s
         leaderboardFile = open("leaderboard.txt", "r")
         self.leaderboardList = leaderboardFile.read().splitlines()
         leaderboardFile.close()

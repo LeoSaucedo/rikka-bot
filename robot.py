@@ -326,7 +326,7 @@ async def on_message(message):
         
     elif message.content == command("beemovie", message):
         #Bee movie command.
-        # TODO: possible embed?
+        #TODO:: possible embed?
         quote = beemovie.getQuote()
         msg = quote.format(message)
         await message.channel.send(msg)
@@ -396,7 +396,7 @@ async def on_message(message):
                 if numberOfPlayers < 2:
                     trivia.subtractPoints(message.guild.id, message.author.id, rewardAmount)
                     authorLoses = True
-            #TODO embed this and make it pretty.
+            #TODO: embed this and make it pretty.
             trivia.addPoints(message.guild.id, victor.id, rewardAmount)
             msg = ("{0.mention} wins! +"+str(rewardAmount)+" points.").format(victor)
             await message.channel.send(msg)
