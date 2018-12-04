@@ -138,7 +138,7 @@ class triviaGame:
         if userInList == False:
             #User is not in the leaderboard.
             leaderboardFile = open("leaderboard.txt", "a+")
-            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + str(self.newPoints))
+            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + str(amount))
             leaderboardFile.close()
             
     def subtractPoints(self, serverID, userID, amount):
