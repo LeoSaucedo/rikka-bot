@@ -114,7 +114,6 @@ class triviaGame:
     
     def addPoints(self, serverID, userID, amount):
         #Adds a set amount of points to the given user's score
-        #FIXME: New users are given incorrect score.s
         leaderboardFile = open("leaderboard.txt", "r")
         self.leaderboardList = leaderboardFile.read().splitlines()
         leaderboardFile.close()
@@ -133,7 +132,7 @@ class triviaGame:
                 leaderboardList = open("leaderboard.txt").read().splitlines()
                 leaderboardList[index] = self.server + " " + self.user + " " + str(self.newPoints)
                 open("leaderboard.txt", "w").write("\n".join(leaderboardList))
-            index = index + 1    
+            index = index + 1
     
         if userInList == False:
             #User is not in the leaderboard.
@@ -159,14 +158,14 @@ class triviaGame:
                 userInList = True # User is in leaderboard.
                 #Replace line in leaderboard file
                 leaderboardList = open("leaderboard.txt").read().splitlines()
-                leaderboardList[index] = self.server + " " + self.user + " " + str(self.newPoints)
+                leaderboardList[index] = self.server + " " + self.user + " " + str(amount)
                 open("leaderboard.txt", "w").write("\n".join(leaderboardList))
-            index = index + 1    
+            index = index + 1
     
         if userInList == False:
             #User is not in the leaderboard.
             leaderboardFile = open("leaderboard.txt", "a+")
-            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + str(self.newPoints*-1))
+            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + str(amount*-1))
             leaderboardFile.close()   
             
     def format(self, attempt):
