@@ -278,7 +278,7 @@ async def on_message(message):
         
     elif (len(message.mentions) > 0) and (message.mentions[0] == client.user) and ("help" in message.content):
         # Returns information about the bot.
-        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: " + getServerPrefix(message.channel.guild) + ". To get help, use " + getServerPrefix(message.channel.guild) + "help.").format(message)
+        msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: `" + getServerPrefix(message.channel.guild) + "`. To get help, use `" + getServerPrefix(message.channel.guild) + "help`.").format(message)
         await message.channel.send(msg)
         
     elif message.content.startswith(command("donate", message)) or message.content.startswith(command("patreon", message)):
