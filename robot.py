@@ -61,6 +61,13 @@ nsfwinsultlist = nsfwinsultfile.read().splitlines()
 nsfwInsultCount = len(nsfwinsultlist)
 nsfwinsultfile.close()
 
+# Cleverbot
+try:
+    statusMsg("Suspending CleverBot for now.", 1)
+    clever = CleverApi.Bot(config["userapi"], config["keyapi"])
+except:
+    statusMsg("Failed to instantiate CleverBot.")
+
 # Instances
 client = discord.Client()
 translator = Translator()
@@ -846,12 +853,6 @@ async def on_ready():
         statusMsg("Successfully published server count to dbl.")
     except:
         statusMsg("Failed to post server count to tbl.")
-    
-    # Cleverbot
-    try:
-        clever = CleverApi.Bot(config["userapi"], config["keyapi"])
-    except:
-        statusMsg("Failed to instantiate CleverBot.")
 
 while True:
     client.run(config["token"])  # runs the bot.
