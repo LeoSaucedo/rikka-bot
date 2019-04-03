@@ -270,7 +270,7 @@ async def on_message(message):
         # Embed magic
         answerEmbed = discord.Embed(description=response, color=0xff8920)
         answerEmbed.set_author(name=query, icon_url="https://pbs.twimg.com/profile_images/804868917990739969/OFknlig__400x400.jpg",
-                                url=("https://www.wolframalpha.com/input/?i=" + quote_plus(query)))
+                                url=("https://m.wolframalpha.com/input/?i=" + quote_plus(query)))
         answerEmbed.set_footer(text="Wolfram|Alpha, all rights reserved")
         await message.channel.send(embed=answerEmbed)
 
