@@ -2,7 +2,7 @@
 Discord Rikka Bot.
 Carlos Saucedo, 2019
 """
-import os, discord, string, dbl, json, urllib.request as urllib, time
+import os, discord, string, dbl, json, urllib.request as urllib, time, datetime
 from urllib.parse import quote_plus
 import Mods.gizoogle as gizoogle
 from random import randint
@@ -31,12 +31,6 @@ with open("json/indicators.json","r") as h:
     indicators = json.load(h)
 
 shardCount = 1  # Keeping it simple with 1 for now.
-# Cleverbot
-try:
-    print("skipping cleverbot")
-    #clever = CleverApi.Bot(config["userapi"], config["keyapi"])
-except:
-    print("Failed to instantiate CleverBot.")
 
 # lists
 hug_relPath = "Lists/hug_gifs.list"
@@ -72,6 +66,7 @@ client = discord.Client()
 translator = Translator()
 botlist = dbl.Client(client, config["bltoken"])
 wolframClient = wolfram.Client(config["wolframapi"])
+clever = 0
 
 # Prefix things
 defaultPrefix = ";"
@@ -122,6 +117,18 @@ def getRawArgument(command, message):
     argument = message.content.replace(command + " ", "")
     return argument
 
+def statusMsg(message, category = 0):
+    timeStamp = datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")
+    if(category == 0):
+        # Info
+        status = "[INFO]"
+    elif(category == 1):
+        status = "[WARN]"
+    elif(category == 2):
+        status = "[ERROR]"
+    print(str(timeStamp) + ": " + str(status) + " " + str(message))
+
+
 def fetchBooruPost(postID):
     try:
         with urllib.urlopen("".join(map(str,("https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&id=",postID)))) as req:
@@ -145,32 +152,32 @@ def fetchBooruPost(postID):
 async def on_guild_join(guild):
     serversConnected = str(len(client.guilds))
     usersConnected = str(len(client.users))
-    print("Joined server " + guild.name + "!")
-    print("Guilds connected: " + serversConnected)  # Returns number of guilds connected to
-    print("Users connected: "+ usersConnected)
+    statusMsg("Joined server " + guild.name + "!")
+    statusMsg("Guilds connected: " + serversConnected)  # Returns number of guilds connected to
+    statusMsg("Users connected: "+ usersConnected)
     game = discord.Game(name='with ' + usersConnected + ' users, on ' + serversConnected + ' servers!')
     await client.change_presence(activity=game)
     try:
         await botlist.post_server_count()
-        print("Successfully published server count to dbl.")
+        statusMsg("Successfully published server count to dbl.")
     except:
-        print("Failed to post server count to tbl.")
+        statusMsg("Failed to post server count to tbl.")
 
     
 @client.event
 async def on_guild_remove(guild):
     serversConnected = str(len(client.guilds))
     usersConnected = str(len(client.users))
-    print("Left server " + guild.name + "!")
-    print("Guilds connected: " + serversConnected)  # Returns number of guilds connected to
-    print("Users connected: "+ usersConnected)
+    statusMsg("Left server " + guild.name + "!")
+    statusMsg("Guilds connected: " + serversConnected)  # Returns number of guilds connected to
+    statusMsg("Users connected: "+ usersConnected)
     game = discord.Game(name='with ' + usersConnected + ' users, on ' + serversConnected + ' servers!')
     await client.change_presence(activity=game)
     try:
         await botlist.post_server_count()
-        print("Successfully published server count to dbl.")
+        statusMsg("Successfully published server count to dbl.")
     except:
-        print("Failed to post server count to tbl.") 
+        statusMsg("Failed to post server count to tbl.") 
 
     
 @client.event
@@ -732,7 +739,7 @@ async def on_message(message):
                     post = data[randint(0,len(data)-1)]["id"]
                     embed = fetchBooruPost(post)
                 except Exception as e:
-                    print("".join(("[Error] ",e)))
+                    statusMsg("".join(("[Error] ",e)))
                     embed = discord.Embed(color=0xff0000,title="Error",description=str(e))
             if args.startswith("id"):
                 id = args.split(" ")[1]
@@ -818,30 +825,34 @@ async def on_message(message):
 """
 Bot login actions
 """
-
-
 @client.event
 async def on_ready():
-    print("Logged in as")
-    print(client.user.name)
-    print(client.user.id)
-    print("-------")
-    print("loaded hugs: " + str(hugCount))
-    print("loaded Ramsay quotes: " + str(ramsayCount))
-    print("Loaded questions: " + str(trivia.getQuestionCount()))
+    statusMsg("Logged in as")
+    statusMsg(client.user.name)
+    statusMsg(client.user.id)
+    statusMsg("-------")
+    statusMsg("loaded hugs: " + str(hugCount))
+    statusMsg("loaded Ramsay quotes: " + str(ramsayCount))
+    statusMsg("Loaded questions: " + str(trivia.getQuestionCount()))
     serversConnected = len(client.guilds)
     usersConnected = len(client.users)
-    print("Guilds connected: " + str(serversConnected))  # Returns number of guilds connected to
-    print("Shards connected: "+ str(shardCount))
-    print("Users connected: " + str(usersConnected))
+    statusMsg("Guilds connected: " + str(serversConnected))  # Returns number of guilds connected to
+    statusMsg("Shards connected: "+ str(shardCount))
+    statusMsg("Users connected: " + str(usersConnected))
     game = discord.Game(name='with ' + str(usersConnected) + ' users, on '+str(serversConnected)+" servers!")
     await client.change_presence(activity=game)
     try:
         await botlist.post_server_count()
-        print("Successfully published server count to dbl.")
+        statusMsg("Successfully published server count to dbl.")
     except:
-        print("Failed to post server count to tbl.")
+        statusMsg("Failed to post server count to tbl.")
     
+    # Cleverbot
+    try:
+        clever = CleverApi.Bot(config["userapi"], config["keyapi"])
+    except:
+        statusMsg("Failed to instantiate CleverBot.")
+
 while True:
     client.run(config["token"])  # runs the bot.
     startTime = time.time()
