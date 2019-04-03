@@ -2,7 +2,6 @@
 Discord Rikka Bot.
 Carlos Saucedo, 2018
 """
-#TODO: Lint
 import os, discord, string, dbl, json, urllib.request as urllib, time
 from urllib.parse import quote_plus
 import Mods.gizoogle as gizoogle
@@ -35,7 +34,7 @@ shardCount = 1  # Keeping it simple with 1 for now.
 # Cleverbot
 try:
     clever = CleverApi.Bot(config["userapi"], config["keyapi"])
-except Exception as e:
+except:
     print("Failed to instantiate CleverBot.")
 
 # lists
@@ -153,7 +152,7 @@ async def on_guild_join(guild):
     try:
         await botlist.post_server_count()
         print("Successfully published server count to dbl.")
-    except Exception as e:
+    except:
         print("Failed to post server count to tbl.")
 
     
@@ -169,7 +168,7 @@ async def on_guild_remove(guild):
     try:
         await botlist.post_server_count()
         print("Successfully published server count to dbl.")
-    except Exception as e:
+    except:
         print("Failed to post server count to tbl.") 
 
     
@@ -202,7 +201,7 @@ async def on_message(message):
     
     elif str(message.channel).startswith("Direct Message"):
         # If message is direct message.
-        msg = "Hi there! Here is my commands list. https://discordbots.org/bot/430482288053059584".format(message)
+        msg = "Hi there! Here is my commands list. https://discordbots.org/bot/430482288053059584"
         await message.channel.send(msg)
     
     elif message.content.startswith(command("help", message)):
@@ -255,7 +254,7 @@ async def on_message(message):
             query = getRawArgument(command("clever", message), message)
             try:
                 msg = clever.ask(query)
-            except Exception as cleverBotException:
+            except:
                 msg = "cleverbot.io API error. Try again later."
             await message.channel.send(msg)
     
@@ -285,11 +284,11 @@ async def on_message(message):
         await message.channel.send(msg)
         
     elif message.content.startswith(command("donate", message)) or message.content.startswith(command("patreon", message)):
-        msg = ("Help my programmer out, become a patron today! https://www.patreon.com/LeoSaucedo").format(message)
+        msg = ("Help my programmer out, become a patron today! https://www.patreon.com/LeoSaucedo")
         await message.channel.send(msg)
         
     elif message.content.startswith(command("vote", message)):
-        msg = "Vote for me to take over the world! https://discordbots.org/bot/430482288053059584/vote".format(message)
+        msg = "Vote for me to take over the world! https://discordbots.org/bot/430482288053059584/vote"
         await message.channel.send(msg)
 
     elif message.content.startswith(command("insult ", message)):
@@ -581,7 +580,7 @@ async def on_message(message):
                 await message.guild.kick(user)
                 msg = "Kicked " + user.name + "!"
                 await message.channel.send(msg)
-            except exception as e:
+            except:
                 msg = "Failed to kick user."
                 await message.channel.send(msg)
         else:
@@ -626,7 +625,7 @@ async def on_message(message):
                     await message.channel.send(msg)
                 else:
                     await message.channel.delete_messages(messages)
-                    msg = "deleted " + str(number) + " messages!".format(message)
+                    msg = "deleted " + str(number) + " messages!"
                     deletemsg = await message.channel.send(msg)
                     sleep(5)
                     await deletemsg.delete()
@@ -634,7 +633,7 @@ async def on_message(message):
             else:
                 number = int(getArgument(command("clear", message), message))
                 await message.channel.purge(limit=(number + 1), bulk=True)
-                msg = "deleted " + str(number) + " messages!".format(string)
+                msg = "deleted " + str(number) + " messages!"
                 deletemsg = await message.channel.send(msg)
                 sleep(5)
                 await deletemsg.delete()
@@ -732,7 +731,7 @@ async def on_message(message):
                         data = json.load(req)
                     post = data[randint(0,len(data)-1)]["id"]
                     embed = fetchBooruPost(post)
-                except e as exception:
+                except Exception as e:
                     print("".join(("[Error] ",e)))
                     embed = discord.Embed(color=0xff0000,title="Error",description=str(e))
             if args.startswith("id"):
@@ -840,7 +839,7 @@ async def on_ready():
     try:
         await botlist.post_server_count()
         print("Successfully published server count to dbl.")
-    except Exception as e:
+    except:
         print("Failed to post server count to tbl.")
     
 while True:
