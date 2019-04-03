@@ -33,7 +33,8 @@ with open("json/indicators.json","r") as h:
 shardCount = 1  # Keeping it simple with 1 for now.
 # Cleverbot
 try:
-    clever = CleverApi.Bot(config["userapi"], config["keyapi"])
+    print("skipping cleverbot")
+    #clever = CleverApi.Bot(config["userapi"], config["keyapi"])
 except:
     print("Failed to instantiate CleverBot.")
 
@@ -361,7 +362,7 @@ async def on_message(message):
         await message.channel.send("".join((victim.mention," Has been chosen!")))
         
     elif message.content.startswith(command("latency", message)):
-        await message.channel.send("Latency: " + int(client.latency * 1000) + "ms")
+        await message.channel.send("Latency: " + str(int(client.latency * 1000)) + "ms")
 
     elif message.content.startswith(command("uptime", message)):
         await message.channel.send("Uptime: " + str(time.time() - startTime))
