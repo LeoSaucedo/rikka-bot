@@ -4,6 +4,7 @@ Carlos Saucedo, 2018
 """
 #TODO: Lint
 import os, discord, string, dbl, json, urllib.request as urllib, time
+from urllib.parse import quote_plus
 import Mods.gizoogle as gizoogle
 from random import randint
 from googletrans import Translator
@@ -268,7 +269,8 @@ async def on_message(message):
             response = "No results. Try revising your search."
         # Embed magic
         answerEmbed = discord.Embed(description=response, color=0xff8920)
-        answerEmbed.set_author(name=query, icon_url="https://pbs.twimg.com/profile_images/804868917990739969/OFknlig__400x400.jpg")
+        answerEmbed.set_author(name=query, icon_url="https://pbs.twimg.com/profile_images/804868917990739969/OFknlig__400x400.jpg",
+                                url=("https://www.wolframalpha.com/input/?i=" + quote_plus(query)))
         answerEmbed.set_footer(text="Wolfram|Alpha, all rights reserved")
         await message.channel.send(embed=answerEmbed)
 
