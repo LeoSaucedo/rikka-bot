@@ -1,6 +1,6 @@
 """
 Discord Rikka Bot.
-Carlos Saucedo, 2018
+Carlos Saucedo, 2019
 """
 import os, discord, string, dbl, json, urllib.request as urllib, time
 from urllib.parse import quote_plus
