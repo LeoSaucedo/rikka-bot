@@ -18,6 +18,20 @@ import Mods.beemovie as beemovie
 import Mods.xkcd as xkcd
 import Mods.wolfram as wolfram
 
+"""
+Status message printing
+"""
+def statusMsg(message, category = 0):
+    timeStamp = datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")
+    if(category == 0):
+        # Info
+        status = "[INFO]"
+    elif(category == 1):
+        status = "[WARN]"
+    elif(category == 2):
+        status = "[ERROR]"
+    print(str(timeStamp) + ": " + str(status) + " " + str(message))
+
 # Global Variables
 startTime = time.time()
 
@@ -123,18 +137,6 @@ def getRawArgument(command, message):
     # Gets the raw argument, without being formatted.
     argument = message.content.replace(command + " ", "")
     return argument
-
-def statusMsg(message, category = 0):
-    timeStamp = datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")
-    if(category == 0):
-        # Info
-        status = "[INFO]"
-    elif(category == 1):
-        status = "[WARN]"
-    elif(category == 2):
-        status = "[ERROR]"
-    print(str(timeStamp) + ": " + str(status) + " " + str(message))
-
 
 def fetchBooruPost(postID):
     try:
