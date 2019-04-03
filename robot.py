@@ -361,8 +361,8 @@ async def on_message(message):
         await message.channel.send("".join((victim.mention," Has been chosen!")))
         
     elif message.content.startswith(command("latency", message)):
-        latency = "".join((map(str,(client.latency * 1000,"ms"))))
-        await message.channel.send("Latency: " + int(latency))
+        latency = "".join((map(str,(client.latency * 1000))))
+        await message.channel.send("Latency: " + int(latency) + "ms")
 
     elif message.content.startswith(command("uptime", message)):
         await message.channel.send("Uptime: " + str(time.time() - startTime))
