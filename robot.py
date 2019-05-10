@@ -124,7 +124,7 @@ def getServerPrefix(guild):
 def command(string, message):
     # Builds a command out of the given string.
     serverPrefix = getServerPrefix(message.channel.guild)
-    return lower(serverPrefix + string)
+    return (serverPrefix + string).lower()
 
 
 def getArgument(command, message):
@@ -203,7 +203,7 @@ async def on_message(message):
         # Makes sure bot does not reply to another bot.
         return
     
-    elif lower(message.content).startswith(command("sayd", message)):
+    elif message.content.lower().startswith(command("sayd", message)):
         # Anonymous comment.
         arg = getRawArgument(command("sayd", message), message)
         arglist= arg.split()
@@ -222,51 +222,51 @@ async def on_message(message):
         msg = "Hi there! Here is my commands list. https://discordbots.org/bot/430482288053059584"
         await message.channel.send(msg)
     
-    elif lower(message.content).startswith(command("help", message)):
+    elif message.content.lower().startswith(command("help", message)):
         # Returns the README on the GitHub.
         msg = "{0.author.mention} https://discordbots.org/bot/430482288053059584".format(message)
         await message.channel.send(msg)
     
-    elif lower(message.content) == command("hi", message) or lower(message.content) == command("hello", message):
+    elif message.content.lower() == command("hi", message) or message.content.lower() == command("hello", message):
         # Says hi and embeds a gif, mentioning the author of the message.
         msg = "h-hello {0.author.mention}-chan! ".format(message) + 'https://cdn.discordapp.com/attachments/402744318013603840/430592483282386974/image.gif'
         await message.channel.send(msg)
     
-    elif lower(message.content).startswith(command("gizoogle", message)):
+    elif message.content.lower().startswith(command("gizoogle", message)):
         # Gizoogles the given string and returns it.
         translatedMessage = gizoogle.text(getArgument(command("gizoogle", message), message))
         msg = "{0.author.mention} says: ".format(message) + translatedMessage.format(message)
         await message.channel.send(msg)
         await message.delete()
     
-    elif lower(message.content).startswith(command("hugme", message)) or lower(message.content) == command("hug", message):
+    elif message.content.lower().startswith(command("hugme", message)) or message.content.lower() == command("hug", message):
         # Hugs the author of the message.
         msg = "{0.author.mention}: ".format(message) + huglist[randint(0, hugCount - 1)] 
         await message.channel.send(msg)
     
-    elif lower(message.content).startswith(command("hug ", message)):
+    elif message.content.lower().startswith(command("hug ", message)):
         # Hugs the first user mentioned by the author.
         msg = "{0.author.mention} hugs {0.mentions[0].mention}! ".format(message) + huglist[randint(0, hugCount - 1)]
         await message.channel.send(msg)
         await message.delete()
         
-    elif lower(message.content).startswith(command("ramsay", message)):
+    elif message.content.lower().startswith(command("ramsay", message)):
         # Replies with a random Gordon Ramsay quote.
         msg = ramsaylist[randint(0, ramsayCount - 1)]
         await message.channel.send(msg)
     
-    elif lower(message.content).startswith(command("gay", message)):
+    elif message.content.lower().startswith(command("gay", message)):
         # no u
         msg = "no u {0.author.mention}".format(message)
         await message.channel.send(msg)
 
-    elif lower(message.content).startswith(command("translate", message)):
+    elif message.content.lower().startswith(command("translate", message)):
         # Translates the given text into english.
         translatedMessage = translator.translate(getRawArgument(command("translate", message), message)).text
         msg = ("{0.author.mention}: translated text - " + translatedMessage).format(message)
         await message.channel.send(msg)
         
-    elif lower(message.content).startswith(command("clever", message)):
+    elif message.content.lower().startswith(command("clever", message)):
         # Returns CleverBot's response.
         async with message.channel.typing():
             query = getRawArgument(command("clever", message), message)
@@ -276,7 +276,7 @@ async def on_message(message):
                 msg = "cleverbot.io API error. Try again later."
             await message.channel.send(msg)
     
-    elif lower(message.content).startswith(command("wolfram", message)):
+    elif message.content.lower().startswith(command("wolfram", message)):
         # Wolfram support.
         try:
             query = getRawArgument(command("wolfram", message), message)
@@ -291,7 +291,7 @@ async def on_message(message):
         answerEmbed.set_footer(text="Wolfram|Alpha, all rights reserved")
         await message.channel.send(embed=answerEmbed)
 
-    elif lower(message.content).startswith(command("info", message)):
+    elif message.content.lower().startswith(command("info", message)):
         # Returns information about the bot.
         msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: `" + getServerPrefix(message.channel.guild) + "`. To get help, use `" + getServerPrefix(message.channel.guild) + "help`.").format(message)
         await message.channel.send(msg)
@@ -301,15 +301,15 @@ async def on_message(message):
         msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: `" + getServerPrefix(message.channel.guild) + "`. To get help, use `" + getServerPrefix(message.channel.guild) + "help`.").format(message)
         await message.channel.send(msg)
         
-    elif lower(message.content).startswith(command("donate", message)) or message.content.startswith(command("patreon", message)):
+    elif message.content.lower().startswith(command("donate", message)) or message.content.startswith(command("patreon", message)):
         msg = ("Help my programmer out, become a patron today! https://www.patreon.com/LeoSaucedo")
         await message.channel.send(msg)
         
-    elif lower(message.content).startswith(command("vote", message)):
+    elif message.content.lower().startswith(command("vote", message)):
         msg = "Vote for me to take over the world! https://discordbots.org/bot/430482288053059584/vote"
         await message.channel.send(msg)
 
-    elif lower(message.content).startswith(command("insult ", message)):
+    elif message.content.lower().startswith(command("insult ", message)):
         # Says a random insult using an insult generator
         if message.channel.is_nsfw():
             # If the channel is isfw.
@@ -319,7 +319,7 @@ async def on_message(message):
         await message.channel.send(msg)
         await message.delete()
         
-    elif lower(message.content).startswith(command("quickvote", message)):
+    elif message.content.lower().startswith(command("quickvote", message)):
         # Makes a new vote, and adds a yes and a no reaction option.
         voteText = getRawArgument(command("quickvote", message), message)
         voteEmbed = discord.Embed(color=0x0080c0, description=voteText)
@@ -329,14 +329,14 @@ async def on_message(message):
         await voteMsg.add_reaction("👎")
         await message.delete()
         
-    elif lower(message.content).startswith(command("rate", message)):
+    elif message.content.lower().startswith(command("rate", message)):
         # Rates a certain user or thing.
         thingToRate = getRawArgument(command("rate", message), message)
         rateScore = randint(0, 10)
         msg = ("I rate " + thingToRate + " a **" + str(rateScore) + "/10**.").format(message)
         await message.channel.send(msg)
         
-    elif lower(message.content).startswith(command("suggest ", message)) or message.content.startswith(command("suggestion ", message)):
+    elif message.content.lower().startswith(command("suggest ", message)) or message.content.startswith(command("suggestion ", message)):
         # Adds ability to suggest new features.
         suggestion = getRawArgument(command("suggest", message), message)
         suggestionsFile = open("suggestions.txt", "a+")
@@ -344,21 +344,21 @@ async def on_message(message):
         msg = "{0.author.mention} Added your suggestion! It will be processed and may be added soon! Thanks for the help!".format(message)
         await message.channel.send(msg)
         
-    elif lower(message.content) == command("beemovie", message):
+    elif message.content.lower() == command("beemovie", message):
         #Bee movie command.
         #TODO:: possible embed?
         quote = beemovie.getQuote()
         msg = quote.format(message)
         await message.channel.send(msg)
         
-    elif lower(message.content).startswith(command("xkcd", message)):
+    elif message.content.lower().startswith(command("xkcd", message)):
         """
         XKCD Command.
         """
-        if (lower(message.content) == command("xkcd random", message)) or (lower(message.content) == command("xkcd", message)) :
+        if (message.content.lower() == command("xkcd random", message)) or (message.content.lower() == command("xkcd", message)) :
             await message.channel.send(embed=xkcd.getRandomComic())
             
-        elif lower(message.content) == command("xkcd latest", message):
+        elif message.content.lower() == command("xkcd latest", message):
             await message.channel.send(embed=xkcd.getLatestComic())
             
         else:
@@ -370,7 +370,7 @@ async def on_message(message):
             else:
                 await message.channel.send(embed=image)
             
-    elif lower(message.content).startswith(command("raffle", message)):
+    elif message.content.lower().startswith(command("raffle", message)):
         nbusers = []
         for user in message.channel.guild.members:
             if not user.bot:
@@ -378,13 +378,13 @@ async def on_message(message):
         victim = nbusers[randint(0,len(nbusers))]
         await message.channel.send("".join((victim.mention," Has been chosen!")))
         
-    elif lower(message.content).startswith(command("latency", message)):
+    elif message.content.lower().startswith(command("latency", message)):
         await message.channel.send("Latency: " + str(int(client.latency * 1000)) + "ms")
 
-    elif lower(message.content).startswith(command("uptime", message)):
+    elif message.content.lower().startswith(command("uptime", message)):
         await message.channel.send("Uptime: " + str(time.time() - startTime))
         
-    elif lower(message.content).startswith(command("give",message)):
+    elif message.content.lower().startswith(command("give",message)):
         donorOriginalPoints = int(trivia.getScore(message.author.id))
         modPoints = getRawArgument(command("give",message),message).split(" ")[0]
         if (modPoints.isnumeric()):
@@ -399,7 +399,7 @@ async def on_message(message):
         else:
             await message.channel.send("".join((message.author.mention,", \"",modPoints,"\" is not a valid number.")))
         
-    elif lower(message.content).startswith(command("fight ", message)):
+    elif message.content.lower().startswith(command("fight ", message)):
         numberOfPlayers = len(message.mentions)
         victorNumber = randint(0, numberOfPlayers)
         rewardAmount = randint(1,5)
@@ -424,7 +424,7 @@ async def on_message(message):
                 await message.channel.send(msg)
             
         
-    elif lower(message.content) == command("flip", message):
+    elif message.content.lower() == command("flip", message):
         """
         "Casino" Commands
         """
@@ -436,13 +436,13 @@ async def on_message(message):
             msg = "{0.author.mention} flips a coin. It lands on tails.".format(message)
         await message.channel.send(msg)
         
-    elif lower(message.content) == command("roll", message):
+    elif message.content.lower() == command("roll", message):
         # User rolls a die.
         diceResult = randint(1, 6)
         msg = ("{0.author.mention} rolls a die. It lands on " + str(diceResult) + ".").format(message)
         await message.channel.send(msg)
     
-    elif lower(message.content).startswith(command("8ball", message)):
+    elif message.content.lower().startswith(command("8ball", message)):
         result = eight.getAnswer()
         ballText = ("{0.author.mention}, " + result).format(message)
         ballEmbed = discord.Embed(color=0x8000ff)
@@ -450,7 +450,7 @@ async def on_message(message):
         ballEmbed.add_field(name="Prediction:", value=ballText, inline=False)
         await message.channel.send(embed=ballEmbed)
             
-    elif lower(message.content) == command("collect daily", message):
+    elif message.content.lower() == command("collect daily", message):
         """
         Economy commands.
         """
@@ -466,7 +466,7 @@ async def on_message(message):
             msg = "".join(map(str,(message.author.mention,", you have gained ",pointsToAdd," points! Your total points are now ",trivia.getScore(message.author.id),"!")))
             await message.channel.send(msg)
             
-    elif lower(message.content) == command("leaderboard global", message):
+    elif message.content.lower() == command("leaderboard global", message):
         scoreList = ""
         globalScores = trivia.getGlobalLeaderboard()
         if len(globalScores) < 10:
@@ -491,7 +491,7 @@ async def on_message(message):
         scoreEmbed = discord.Embed(title= "Global Leaderboard", color=0x107c02, description=scoreList)
         await message.channel.send(embed=scoreEmbed)
         
-    elif lower(message.content) == command("leaderboard local", message):
+    elif message.content.lower() == command("leaderboard local", message):
         scoreList = ""
         localScores = trivia.getLocalLeaderboard(message.guild.id)
         if len(localScores) < 10:
@@ -515,7 +515,7 @@ async def on_message(message):
         scoreEmbed = discord.Embed(title= "Local Leaderboard", color=0x107c02, description=scoreList)
         await message.channel.send(embed=scoreEmbed)
     
-    elif lower(message.content) == command("trivia", message):
+    elif message.content.lower() == command("trivia", message):
         """
         Trivia commands.
         """
@@ -527,14 +527,14 @@ async def on_message(message):
         msg = "To check your score, type " + prefix + "score. Good luck!"
         await message.channel.send(msg)
         
-    elif lower(message.content).startswith(command("ask", message)):
+    elif message.content.lower().startswith(command("ask", message)):
         # Returns a randomly generated question.
         msg = trivia.getQuestion(message.guild.id)
         await message.channel.send(msg)
         global isSent
         trivia.setSent(message.guild.id, True)
         
-    elif lower(message.content).startswith(command("reveal", message)):
+    elif message.content.lower().startswith(command("reveal", message)):
         if trivia.getSent(message.guild.id) == True:
             msg = trivia.getAnswer(message.guild.id)
             await message.channel.send(msg)
@@ -543,20 +543,20 @@ async def on_message(message):
             msg = "You haven't asked a question yet!"
             await message.channel.send(msg)
             
-    elif lower(message.content).startswith(command("flag", message)):
+    elif message.content.lower().startswith(command("flag", message)):
         trivia.flag()
         msg = "Flagged the question! Sorry about that."
         await message.channel.send(msg)
         
-    elif lower(message.content) == (command("score", message)):
+    elif message.content.lower() == (command("score", message)):
         msg = ("{0.author.mention}, your score is " + str(trivia.getScore(message.author.id))).format(message)
         await message.channel.send(msg)
         
-    elif lower(message.content).startswith(command("score", message)) and len(message.mentions) > 0:
+    elif message.content.lower().startswith(command("score", message)) and len(message.mentions) > 0:
         msg = ("{0.mentions[0].mention}'s score is " + str(trivia.getScore(message.mentions[0].id))).format(message)
         await message.channel.send(msg)
         
-    elif lower(message.content).startswith(command("a", message) + " "):
+    elif message.content.lower().startswith(command("a", message) + " "):
         # The user is attempting to answer the question.
         attempt = getRawArgument(command("a", message), message)
         if trivia.getSent(message.guild.id) == True:
@@ -573,7 +573,7 @@ async def on_message(message):
             await message.channel.send(msg)
             
             
-    elif lower(message.content).startswith(command("board", message)):
+    elif message.content.lower().startswith(command("board", message)):
         """
         Board enable command.
         """
@@ -587,7 +587,7 @@ async def on_message(message):
                     msg = "Insufficient permissions."
                     await message.channel.send(msg)
                 
-    elif lower(message.content).startswith(command("kick", message)):
+    elif message.content.lower().startswith(command("kick", message)):
         """
         Kick command.
         """
@@ -604,7 +604,7 @@ async def on_message(message):
             msg = "Insufficient permissions."
             await message.channel.send(msg)
 
-    elif lower(message.content).startswith(command("ban", message)):
+    elif message.content.lower().startswith(command("ban", message)):
         """
         Ban command.
         """
@@ -626,7 +626,7 @@ async def on_message(message):
         """
         Moderator commands.
         """
-        if lower(message.content).startswith(command("clear", message)):
+        if message.content.lower().startswith(command("clear", message)):
             # Clears a specified number of messages.
             
             if(len(message.mentions) > 0):
@@ -655,7 +655,7 @@ async def on_message(message):
                 sleep(5)
                 await deletemsg.delete()
             
-        elif lower(message.content).startswith(command("mute", message)):
+        elif message.content.lower().startswith(command("mute", message)):
             if len(message.mentions) > 0:
                 sinner = message.mentions[0]
                 await message.channel.set_permissions(sinner, send_messages=False)
@@ -665,7 +665,7 @@ async def on_message(message):
                 msg = "You must specify a user."
                 await message.channel.send(msg)
             
-        elif lower(message.content).startswith(command("unmute", message)):
+        elif message.content.lower().startswith(command("unmute", message)):
             if len(message.mentions) > 0:
                 sinner = message.mentions[0]
                 await message.channel.set_permissions(sinner, send_messages=True)
@@ -679,7 +679,7 @@ async def on_message(message):
         """
         Administrator Commands.
         """
-        if lower(message.content).startswith(command("prefix", message)):
+        if message.content.lower().startswith(command("prefix", message)):
             # Changes the prefix to the specified string.
             prefixFile = open("server_prefixes.txt")
             prefixList = prefixFile.read().splitlines()
@@ -707,7 +707,7 @@ async def on_message(message):
                 msg = ("Set server prefix to " + newPrefix + " !").format(message)
                 await message.channel.send(msg)
         if (message.author.id != 400360503622369291) and (message.channel.guild.id == 401480405561114624):
-            if lower(message.content).startswith(command("add", message)):
+            if message.content.lower().startswith(command("add", message)):
                 points = getRawArgument(command("add",message),message).split(" ")[0]
                 victors = message.mentions
                 mentions = []
@@ -716,7 +716,7 @@ async def on_message(message):
                     mentions.append(victor.mention)
                 await message.channel.send("".join(("Added ",points," points to ",(", ".join(mentions)),"!")))
 
-            elif lower(message.content).startswith(command("subtract", message)):
+            elif message.content.lower().startswith(command("subtract", message)):
                 points = getRawArgument(command("subtract",message),message).split(" ")[0]
                 victims = message.mentions
                 mentions = []
@@ -728,7 +728,7 @@ async def on_message(message):
         """
         the lewd
         """
-    if lower(message.content).startswith(command("gelbooru",message)):
+    if message.content.lower().startswith(command("gelbooru",message)):
         if message.channel.is_nsfw() == True:
             cmd = message.content.lstrip(command("gelbooru",message))
             args = cmd.lstrip(cmd.split(" ")[0]).lstrip(" ")
@@ -764,70 +764,70 @@ async def on_message(message):
     """
     Misc gif commands.
     """
-    if lower(message.content) == command("shocked", message):
+    if message.content.lower() == command("shocked", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430591612637413389/image.gif"
         await message.channel.send(msg)
-    elif lower(message.content) == command("smile", message):
+    elif message.content.lower() == command("smile", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430591877834735617/image.gif"
         await message.channel.send(msg)
-    elif lower(message.content) == command("hentai", message):
+    elif message.content.lower() == command("hentai", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430593080215994370/image.gif"
         await message.channel.send(msg)
-    elif lower(message.content) == command("blush", message):
+    elif message.content.lower() == command("blush", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430593551554969600/image.gif"
         await message.channel.send(msg)
-    elif lower(message.content) == command("bdsm", message):
+    elif message.content.lower() == command("bdsm", message):
         msg = "http://i.imgur.com/dI4zJwk.gif"
         await message.channel.send(msg)
-    elif lower(message.content) == command("rekt", message):
+    elif message.content.lower() == command("rekt", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430594037427470336/image.gif"
         await message.channel.send(msg)
-    elif lower(message.content) == command("boop", message):
+    elif message.content.lower() == command("boop", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430594711602987008/image.gif"
         await message.channel.send(msg)
-    elif lower(message.content) == command("fuckoff", message):
+    elif message.content.lower() == command("fuckoff", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430594846022041601/image.gif"
         await message.channel.send(msg)
-    elif lower(message.content) == command("sanic", message):
+    elif message.content.lower() == command("sanic", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430595068156575756/image.gif"
         await message.channel.send(msg)
-    elif lower(message.content) == command("dreamy", message):
+    elif message.content.lower() == command("dreamy", message):
         msg = "https://cdn.discordapp.com/attachments/402744318013603840/430595392669745153/image.gif"
         await message.channel.send(msg)
-    elif lower(message.content) == command("waifu", message):
+    elif message.content.lower() == command("waifu", message):
         msg = "https://i.pinimg.com/originals/bd/9a/a4/bd9aa46572e180ec6df08119429a1e81.jpg"
         await message.channel.send(msg)
-    elif lower(message.content) == command("trash", message):
+    elif message.content.lower() == command("trash", message):
         msg = "https://media1.tenor.com/images/29307201260fb755e7ff9fec21f22c95/tenor.gif?itemid=8811727"
         await message.channel.send(msg)
-    elif lower(message.content) == command("kys", message):
+    elif message.content.lower() == command("kys", message):
         msg = "https://imgur.com/YfYwzcN"
         await message.channel.send(msg)
-    elif lower(message.content) == command("ping", message):
+    elif message.content.lower() == command("ping", message):
         msg = "Why did you feel the need to ping everyone? What could possibly be so important that you decided to alert everyone on this god-forsaken server to what you had to say? Did you get a girlfriend? Lose your virginity? Did you become president of the goddamn world? Is that why you had to ping us? I bet you're so proud of yourself, snickering to yourself as you watch the chaos unfold after your ping. You think you're so funny, interrupting everyone's day with your asinine messages. But guess what, you're pathetic. The only way you were able to get someone's attention is by shoving down your sad excuse of a thought down everyone's throat, shattering their focus with that loud PING! I wonder how many people you've killed by doing this. Maybe someone was driving and the ping caused them to lose control and crash. Maybe a surgeon was performing open heart surgery and was jolted by the obnoxious pinging noise of a new notification. Can you live with yourself knowing how many lives you've cost by thinking you had something important to say? I hope you're happy with yourself."
         await message.channel.send(msg)
 
     # SyCW Commands - By special request.
     elif message.channel.guild.id == 329383300848418816:
-        if lower(message.content) == command("assad", message):
+        if message.content.lower() == command("assad", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430787413888073728/image.jpg"
             await message.channel.send(msg)
-        elif lower(message.content) == command("turkey", message):
+        elif message.content.lower() == command("turkey", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430787599343550494/image.jpg"
             await message.channel.send(msg)
-        elif lower(message.content) == command("bomb", message):
+        elif message.content.lower() == command("bomb", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430787955880230912/image.jpg"
             await message.channel.send(msg)
-        elif lower(message.content) == command("isis", message):
+        elif message.content.lower() == command("isis", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430788102399983617/image.png"
             await message.channel.send(msg)
-        elif lower(message.content) == command("barrel", message):
+        elif message.content.lower() == command("barrel", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430788296663367680/image.jpg"
             await message.channel.send(msg)
-        elif lower(message.content) == command("kurd", message):
+        elif message.content.lower() == command("kurd", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430789263945105412/image.jpg"
             await message.channel.send(msg)
-        elif lower(message.content) == command("abuhajaar", message):
+        elif message.content.lower() == command("abuhajaar", message):
             msg = "https://cdn.discordapp.com/attachments/422581776247029761/430804463016476672/image.png"
             await message.channel.send(msg)
 
