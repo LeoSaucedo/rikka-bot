@@ -3,6 +3,7 @@
 A Discord bot that performs various functions.
 
 ![Python 3.5, 3.6](https://img.shields.io/badge/python-3.5%2C%203.6-blue.svg) [![Discord Bots](https://discordbots.org/api/widget/status/430482288053059584.svg)](https://discordbots.org/bot/430482288053059584) [![Discord Bots](https://discordbots.org/api/widget/servers/430482288053059584.svg)](https://discordbots.org/bot/430482288053059584)
+
 [![Support me on Patreon!](https://cdn.discordapp.com/attachments/437991897269665792/446474035149144074/unknown.png)](https://www.patreon.com/LeoSaucedo)
 
 ## Commands
@@ -20,7 +21,9 @@ Rikka's economy system consists of a global leaderboard. Currently, you can get 
 - `;give (points) (user)` - donate points to another user.
 
 ### Board Functionality
+
 *This feature is currently not functional. Sorry!*
+
 The board functionality allows popular messages to be posted on a special channel, titled `board`.
 To use this functionality, you must first run `;board enable`.
 Afterwards, every message with 3 reactions with the "⭐" will get posted to the board.
