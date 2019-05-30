@@ -23,6 +23,7 @@ def hasCollectedToday(userID):
     else:
         conn.close()
         return False
+    conn.close()
             
 def setCollectionDate(userID):
     conn = sqlite3.connect("db/database.db")

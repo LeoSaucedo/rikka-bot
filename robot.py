@@ -480,7 +480,7 @@ async def on_message(message):
         else:
             i = 0
             place = 1
-            while place <= 10:
+            while (place <= 10  and i < len(globalScores)):
                 user = client.get_user(int(globalScores[i][1]))
                 if user != None:
                     score = globalScores[i][2]
@@ -505,7 +505,7 @@ async def on_message(message):
         else:
             i = 0
             place = 1
-            while place <= 10:
+            while (place <= 10 and i < len(localScores)):
                 user = client.get_user(int(localScores[i][1]))
                 if user != None:
                     score = localScores[i][2]
