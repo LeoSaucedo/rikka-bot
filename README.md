@@ -20,7 +20,7 @@ Rikka's economy system consists of a global leaderboard. Currently, you can get 
 - `;give (points) (user)` - donate points to another user.
 
 ### Board Functionality
-
+*This feature is currently not functional. Sorry!*
 The board functionality allows popular messages to be posted on a special channel, titled `board`.
 To use this functionality, you must first run `;board enable`.
 Afterwards, every message with 3 reactions with the "⭐" will get posted to the board.
