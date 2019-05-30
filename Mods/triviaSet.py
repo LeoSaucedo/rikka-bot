@@ -1,7 +1,7 @@
 """
 Dataset for storing trivia instances.
 Stores serverID, question, and answer.
-Carlos Saucedo, 2018
+Carlos Saucedo, 2019
 """
 
 class triviaSet:

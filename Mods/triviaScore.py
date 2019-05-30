@@ -1,6 +1,6 @@
 """
 Dataset for storing a user's score, server, and userID.
-Carlos Saucedo, 2018
+Carlos Saucedo, 2019
 """
 
 class triviaScore:

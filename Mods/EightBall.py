@@ -1,6 +1,6 @@
 """
 Eight Ball module for Rikka.
-Carlos Saucedo, 2018
+Carlos Saucedo, 2019
 """
 
 from random import randint
