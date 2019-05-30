@@ -1,6 +1,6 @@
 """
 Economy module for Rikka.
-Carlos Saucedo, 2018
+Carlos Saucedo, 2019
 """
 
 import datetime, sqlite3

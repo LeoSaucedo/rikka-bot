@@ -1,7 +1,7 @@
 """
 Wolfram API implementation for Python.
 Returns queries as a text file.
-Carlos Saucedo, 2018
+Carlos Saucedo, 2019
 """
 import wolframalpha
 

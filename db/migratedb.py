@@ -1,3 +1,8 @@
+"""
+Migration program for Rikka
+Carlos Saucedo, 2019
+"""
+
 import sqlite3
 import datetime
 

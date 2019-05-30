@@ -2,7 +2,7 @@
 Trivia game module for rikka.
 The format for the leaderbaord is as follows:
     ServerID, UserID, Score
-Carlos Saucedo, 2018
+Carlos Saucedo, 2019
 """
 from random import randint
 from Mods.triviaSet import triviaSet
