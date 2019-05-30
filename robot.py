@@ -91,7 +91,7 @@ botlist = dbl.Client(client, config["bltoken"])
 wolframClient = wolfram.Client(config["wolframapi"])
 
 # Prefix things
-defaultPrefix = ";"
+defaultPrefix = "'"
 
 # Trivia instantiation
 question_relPath = "Lists/trivia_questions.list"
@@ -104,37 +104,19 @@ isSent = False
 # Eight ball instantiation
 eight = EightBall.eightBallGenerator()
 
-# def getServerPrefix(guild):
-#     # Returns the server prefix.
-#     # If there is no server prefix set, it returns the defaultPrefix.
-#     guildID = str(guild.id)
-#     conn = sqlite3.connect("db/database.db")
-#     c = conn.cursor()
-
-#     c.execute("SELECT prefix FROM prefixes WHERE server=" + guildID)
-#     if(len(c.fetchall()) == 0):
-#         conn.close()
-#         return defaultPrefix
-#     else:
-#         c.execute("SELECT prefix FROM prefixes WHERE server=" + guildID)
-#         conn.close()
-#         return(c.fetchone()[0])
-
 def getServerPrefix(guild):
     # Returns the server prefix.
     # If there is no server prefix set, it returns the defaultPrefix.
-    prefixFile = open("server_prefixes.txt", "r+")
-    prefixList = prefixFile.read().splitlines()
-    prefixFile.close()
-    serverInList = False
-    for line in prefixList:
-        splitLine = line.split()
-        if guild.id == int(splitLine[0]):
-            serverInList = True
-            return splitLine[1]
-    if serverInList == False:
-        # If server does not have default prefix set
+    guildID = str(guild.id)
+    conn = sqlite3.connect("db/database.db")
+    c = conn.cursor()
+
+    c.execute("SELECT prefix FROM prefixes WHERE server=" + guildID)
+    if(len(c.fetchall()) == 0):
         return defaultPrefix
+    else:
+        c.execute("SELECT prefix FROM prefixes WHERE server=" + guildID)
+        return(c.fetchone()[0])
 
 
 def command(string, message):
@@ -694,34 +676,37 @@ async def on_message(message):
     if message.channel.permissions_for(message.author).administrator == True:
         """
         Administrator Commands.
-        """
+        """        
         if message.content.lower().startswith(command("prefix", message)):
-            # Changes the prefix to the specified string.
-            prefixFile = open("server_prefixes.txt")
-            prefixList = prefixFile.read().splitlines()
-            prefixFile.close()
-            serverInList = False  # Gotta initialize the variable
             newPrefix = getRawArgument(command("prefix", message), message)
-            index = 0
-            for line in prefixList:
-                splitLine = line.split()
-                if(message.channel.guild.id == int(splitLine[0])):
-                    # If the server already has a custom prefix set
-                    serverInList = True
-                    prefixFile = open("server_prefixes.txt", "w+")
-                    prefixList[index] = (str(message.channel.guild.id) + " " + newPrefix)
-                    prefixFile.write("\n".join(prefixList))
-                    prefixFile.close()
-                    msg = ("Changed server prefix to " + newPrefix + " !").format(message)
-                    await message.channel.send(msg)
-                index = index + 1
-            if serverInList == False:
-                # If the server does not already have a custom prefix set
-                prefixFile = open("server_prefixes.txt", "a+")
-                prefixFile.write("\n" + str(message.channel.guild.id) + " " + newPrefix)  # Adds line to prefixlist
-                prefixFile.close()
-                msg = ("Set server prefix to " + newPrefix + " !").format(message)
+            oldPrefix = getServerPrefix(message.channel.guild)
+            if(newPrefix ==  oldPrefix + "prefix"):
+                msg1 = "Invalid prefix. Try again."
+                msg2 = "Usage: `" + oldPrefix + "prefix (prefix)`"
+                await message.channel.send(msg1)
+                await message.channel.send(msg2)
+            else:
+                conn = sqlite3.connect("db/database.db")
+                c = conn.cursor()
+                c.execute("SELECT * FROM prefixes WHERE server='" + str(message.channel.guild.id) + "';")
+                msg = ""
+                if(len(c.fetchall()) == 0):
+                    # If the entry does not exist
+                    t = (str(message.channel.guild.id), str(newPrefix))
+                    c.execute('INSERT INTO prefixes VALUES (?, ?);',t)
+                    msg = ("Set server prefix to `" + newPrefix + "` !").format(message)
+                else:
+                    t = (str(newPrefix), str(message.channel.guild.id))
+                    c.execute('''
+                    UPDATE prefixes
+                    SET prefix=?
+                    WHERE server=?;
+                    ''',t)
+                    msg = ("Changed server prefix to `" + newPrefix + "` !").format(message)
+                conn.commit()
+                conn.close()
                 await message.channel.send(msg)
+
         if (message.author.id != 400360503622369291) and (message.channel.guild.id == 401480405561114624):
             if message.content.lower().startswith(command("add", message)):
                 points = getRawArgument(command("add",message),message).split(" ")[0]
