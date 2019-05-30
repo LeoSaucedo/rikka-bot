@@ -3,7 +3,7 @@ Discord Rikka Bot.
 Carlos Saucedo, 2019
 """
 import os, discord, string, dbl, json, urllib.request as urllib, time, datetime
-import asyncio
+import asyncio, sqlite3
 from urllib.parse import quote_plus
 import Mods.gizoogle as gizoogle
 from random import randint
@@ -107,18 +107,32 @@ eight = EightBall.eightBallGenerator()
 def getServerPrefix(guild):
     # Returns the server prefix.
     # If there is no server prefix set, it returns the defaultPrefix.
-    prefixFile = open("server_prefixes.txt", "r+")
-    prefixList = prefixFile.read().splitlines()
-    prefixFile.close()
-    serverInList = False
-    for line in prefixList:
-        splitLine = line.split()
-        if guild.id == int(splitLine[0]):
-            serverInList = True
-            return splitLine[1]
-    if serverInList == False:
-        # If server does not have default prefix set
+    guildID = str(guild.id)
+    conn = sqlite3.connect("db/database.db")
+    c = conn.cursor()
+
+    c.execute("SELECT prefix FROM prefixes WHERE server=" + guildID)
+    if(len(c.fetchall()) == 0):
         return defaultPrefix
+    else:
+        c.execute("SELECT prefix FROM prefixes WHERE server=" + guildID)
+        return(c.fetchone()[0])
+
+# def getServerPrefix(guild):
+#     # Returns the server prefix.
+#     # If there is no server prefix set, it returns the defaultPrefix.
+#     prefixFile = open("server_prefixes.txt", "r+")
+#     prefixList = prefixFile.read().splitlines()
+#     prefixFile.close()
+#     serverInList = False
+#     for line in prefixList:
+#         splitLine = line.split()
+#         if guild.id == int(splitLine[0]):
+#             serverInList = True
+#             return splitLine[1]
+#     if serverInList == False:
+#         # If server does not have default prefix set
+#         return defaultPrefix
 
 
 def command(string, message):
@@ -472,19 +486,19 @@ async def on_message(message):
         if len(globalScores) < 10:
             place = 1
             for score in globalScores:
-                user = client.get_user(int(score.getUser()))
+                user = client.get_user(int(score[1]))
                 if user != None:
-                    score = score.getScore()
-                    scoreList = scoreList + (str(place) + ": "+ user.name + " with "+score + " points!\n")
+                    score = score[2]
+                    scoreList = scoreList + (str(place) + ": "+ user.name + " with "+str(score) + " points!\n")
                     place = place + 1
         else:
             i = 0
             place = 1
-            while place <= 10:
-                user = client.get_user(int(globalScores[i].getUser()))
+            while (place <= 10  and i < len(globalScores)):
+                user = client.get_user(int(globalScores[i][1]))
                 if user != None:
-                    score = globalScores[i].getScore()
-                    scoreList = scoreList + (str(place) + ": "+ user.name + " with "+score + " points!\n")
+                    score = globalScores[i][2]
+                    scoreList = scoreList + (str(place) + ": "+ user.name + " with "+str(score) + " points!\n")
                     place = place + 1
                 i = i + 1
             
@@ -497,19 +511,19 @@ async def on_message(message):
         if len(localScores) < 10:
             place = 1
             for score in localScores:
-                user = client.get_user(int(score.getUser()))
+                user = client.get_user(int(score[1]))
                 if user != None:
-                    score = score.getScore()
-                    scoreList = scoreList + ("".join((str(place),": ",user.name," with ",score," points!\n")))
+                    score = score[2]
+                    scoreList = scoreList + ("".join((str(place),": ",user.name," with ",str(score)," points!\n")))
                     place = place + 1
         else:
             i = 0
             place = 1
-            while place <= 10:
-                user = client.get_user(int(localScores[i].getUser()))
+            while (place <= 10 and i < len(localScores)):
+                user = client.get_user(int(localScores[i][1]))
                 if user != None:
-                    score = localScores[i].getScore()
-                    scoreList = scoreList + ("".join((str(place),": ",user.name," with ",score," points!\n")))
+                    score = localScores[i][2]
+                    scoreList = scoreList + ("".join((str(place),": ",user.name," with ",str(score)," points!\n")))
                     place = place + 1
                 i = i + 1
         scoreEmbed = discord.Embed(title= "Local Leaderboard", color=0x107c02, description=scoreList)
