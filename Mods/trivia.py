@@ -2,12 +2,12 @@
 Trivia game module for rikka.
 The format for the leaderbaord is as follows:
     ServerID, UserID, Score
-Carlos Saucedo, 2018
+Carlos Saucedo, 2019
 """
 from random import randint
 from Mods.triviaSet import triviaSet
 from Mods.triviaScore import triviaScore
-import re
+import re, sqlite3, datetime
 from array import array
 class triviaGame:
     def __init__(self, questionPath, answerPath):
@@ -62,19 +62,14 @@ class triviaGame:
                 return x.getAnswer()
     
     def getScore(self, userID):
-        #Returns the score for the author of the message.
-        leaderboardFile = open("leaderboard.txt", "r")
-        self.leaderboardList = leaderboardFile.read().splitlines()
-        leaderboardFile.close()
-        self.user = str(userID)
-        userInList = False
-        for line in self.leaderboardList:
-            splitLine = line.split()
-            if splitLine[1] == self.user:
-                userInList = True
-                return splitLine [2]
-        if userInList == False:
-            return 0
+        conn = sqlite3.connect("db/database.db")
+        c = conn.cursor()
+
+        c.execute("SELECT score FROM leaderboard\n"
+            + "WHERE user='" + str(userID) + "';")
+        score = c.fetchone()[0]
+        c.close()
+        return score
         
     def getSent(self, serverID):
         inList = False
@@ -89,84 +84,37 @@ class triviaGame:
         for x in self.setList:
             if x.getServer() == serverID:
                 x.setSent(state)
-        
-    def addPoint(self, serverID, userID):
-        #Adds a point to the given user's score.
-        leaderboardFile = open("leaderboard.txt", "r")
-        self.leaderboardList = leaderboardFile.read().splitlines()
-        leaderboardFile.close()
-        userInList = False
-        index = 0
-        self.user = str(userID)
-        self.server = str(serverID)
-        for line in self.leaderboardList:
-            splitLine = line.split()
-            if splitLine[1] == self.user:
-                self.server = splitLine[0]
-                currentPoints = int(splitLine[2])
-                self.newPoints = currentPoints + 1
-                userInList = True # User is in leaderboard.
-                #Replace line in leaderboard file
-                leaderboardList = open("leaderboard.txt").read().splitlines()
-                leaderboardList[index] = self.server + " " + self.user + " " + str(self.newPoints)
-                open("leaderboard.txt", "w").write("\n".join(leaderboardList))
-            index = index + 1
-    
+
     def addPoints(self, serverID, userID, amount):
-        #Adds a set amount of points to the given user's score
-        leaderboardFile = open("leaderboard.txt", "r")
-        self.leaderboardList = leaderboardFile.read().splitlines()
-        leaderboardFile.close()
-        userInList = False
-        index = 0
-        self.user = str(userID)
-        self.server = str(serverID)
-        for line in self.leaderboardList:
-            splitLine = line.split()
-            if splitLine[1] == self.user:
-                self.server = splitLine[0]
-                currentPoints = int(splitLine[2])
-                self.newPoints = currentPoints + amount
-                userInList = True # User is in leaderboard.
-                #Replace line in leaderboard file
-                leaderboardList = open("leaderboard.txt").read().splitlines()
-                leaderboardList[index] = self.server + " " + self.user + " " + str(self.newPoints)
-                open("leaderboard.txt", "w").write("\n".join(leaderboardList))
-            index = index + 1
-    
-        if userInList == False:
-            #User is not in the leaderboard.
-            leaderboardFile = open("leaderboard.txt", "a+")
-            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + str(amount))
-            leaderboardFile.close()
+        # Instantiate the sqlite variable
+        conn = sqlite3.connect("db/database.db")
+        c = conn.cursor()
+
+        # Search for the entries
+        #TODO: More efficient?
+        c.execute("SELECT * FROM leaderboard WHERE user='"+str(userID)+"';")
+        if(len(c.fetchall()) == 0):
+            # If the entry does not exist
+            c.execute('''
+            INSERT INTO leaderboard
+            VALUES (''' + "'"  + str(serverID) + "', '" + str(userID) + "', '" + str(amount) + "', '"
+            + str(datetime.datetime.now().isoformat()) + "');")
+        else:
+            c.execute("SELECT * FROM leaderboard WHERE user='"+str(userID)+"';")
+            currentScore = c.fetchone()[2]
+            c.execute("UPDATE leaderboard\n"+
+                "SET score="+ str(currentScore+amount) + "\n"+
+                "WHERE user='" + str(userID) + "';")
+        # End the connection 
+        conn.commit()   
+        conn.close()
+
+    #TODO: Do we even need this?
+    def addPoint(self, serverID, userID):
+        self.addPoints(serverID, userID, 1)
             
     def subtractPoints(self, serverID, userID, amount):
-        #Adds a set amount of points to the given user's score
-        leaderboardFile = open("leaderboard.txt", "r")
-        self.leaderboardList = leaderboardFile.read().splitlines()
-        leaderboardFile.close()
-        userInList = False
-        index = 0
-        self.user = str(userID)
-        self.server = str(serverID)
-        for line in self.leaderboardList:
-            splitLine = line.split()
-            if splitLine[1] == self.user:
-                self.server = splitLine[0]
-                currentPoints = int(splitLine[2])
-                self.newPoints = currentPoints - amount
-                userInList = True # User is in leaderboard.
-                #Replace line in leaderboard file
-                leaderboardList = open("leaderboard.txt").read().splitlines()
-                leaderboardList[index] = self.server + " " + self.user + " " + str(amount)
-                open("leaderboard.txt", "w").write("\n".join(leaderboardList))
-            index = index + 1
-    
-        if userInList == False:
-            #User is not in the leaderboard.
-            leaderboardFile = open("leaderboard.txt", "a+")
-            leaderboardFile.write("\n" + str(serverID) + " " + str(userID) + " " + str(amount*-1))
-            leaderboardFile.close()   
+        self.addPoints(serverID, userID, (amount * -1))
             
     def format(self, attempt):
         #Formats an attempt to make it easier to guess.
@@ -186,47 +134,23 @@ class triviaGame:
         flaggedFile = open("flagged_questions.list", "a+")
         flaggedFile.write(str(self.questionNumber))
         flaggedFile.close()
-        
+
     def getGlobalLeaderboard(self):
-        leaderboardFile = open("leaderboard.txt", "r")
-        self.leaderboardList = leaderboardFile.read().splitlines()
-        leaderboardFile.close()
-        globalScores = []
-        
-        #Adding all of the scores into the unsorted array.
-        i = 1
-        while i < len(self.leaderboardList):
-            splitLine = self.leaderboardList[i].split()
-            newSet = triviaScore(splitLine[0], splitLine[1], splitLine[2])
-            globalScores.append(newSet)
-            i += 1
-        #Sorting elements in previously created array.
-        n = len(globalScores)
-        for i in range(n):
-            for j in range(0, n-i-1):
-                if int(globalScores[j].getScore()) < int(globalScores[j+1].getScore()):
-                    globalScores[j], globalScores[j+1] = globalScores[j+1], globalScores[j]
+        conn = sqlite3.connect("db/database.db")
+        c = conn.cursor()
+
+        c.execute("SELECT * FROM leaderboard ORDER BY score DESC;")
+        globalScores = c.fetchall()
+        c.close()
+
         return globalScores
-    
+
     def getLocalLeaderboard(self, serverID):
-        leaderboardFile = open("leaderboard.txt", "r")
-        self.leaderboardList = leaderboardFile.read().splitlines()
-        leaderboardFile.close()
-        localScores = []
-        server = str(serverID)
-        i = 1
-        while i < len(self.leaderboardList):
-            splitline = self.leaderboardList[i].split()
-            if splitline[0] == server:
-                newSet = triviaScore(splitline[0], splitline[1], splitline[2])
-                localScores.append(newSet)
-            i += 1
+        conn = sqlite3.connect("db/database.db")
+        c = conn.cursor()
         
-        #Sorting elements in previously created array.
-        n = len(localScores)
-        for i in range(n):
-            for j in range(0, n-i-1):
-                if int(localScores[j].getScore()) < int(localScores[j+1].getScore()):
-                    localScores[j], localScores[j+1] = localScores[j+1], localScores[j]
-        return localScores            
+        c.execute("SELECT * FROM leaderboard WHERE server='" + str(serverID) + "' ORDER BY score DESC;")
+        localScores = c.fetchall()
+        c.close()
         
+        return localScores

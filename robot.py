@@ -472,19 +472,19 @@ async def on_message(message):
         if len(globalScores) < 10:
             place = 1
             for score in globalScores:
-                user = client.get_user(int(score.getUser()))
+                user = client.get_user(int(score[1]))
                 if user != None:
-                    score = score.getScore()
-                    scoreList = scoreList + (str(place) + ": "+ user.name + " with "+score + " points!\n")
+                    score = score[2]
+                    scoreList = scoreList + (str(place) + ": "+ user.name + " with "+str(score) + " points!\n")
                     place = place + 1
         else:
             i = 0
             place = 1
-            while place <= 10:
-                user = client.get_user(int(globalScores[i].getUser()))
+            while (place <= 10  and i < len(globalScores)):
+                user = client.get_user(int(globalScores[i][1]))
                 if user != None:
-                    score = globalScores[i].getScore()
-                    scoreList = scoreList + (str(place) + ": "+ user.name + " with "+score + " points!\n")
+                    score = globalScores[i][2]
+                    scoreList = scoreList + (str(place) + ": "+ user.name + " with "+str(score) + " points!\n")
                     place = place + 1
                 i = i + 1
             
@@ -497,19 +497,19 @@ async def on_message(message):
         if len(localScores) < 10:
             place = 1
             for score in localScores:
-                user = client.get_user(int(score.getUser()))
+                user = client.get_user(int(score[1]))
                 if user != None:
-                    score = score.getScore()
-                    scoreList = scoreList + ("".join((str(place),": ",user.name," with ",score," points!\n")))
+                    score = score[2]
+                    scoreList = scoreList + ("".join((str(place),": ",user.name," with ",str(score)," points!\n")))
                     place = place + 1
         else:
             i = 0
             place = 1
-            while place <= 10:
-                user = client.get_user(int(localScores[i].getUser()))
+            while (place <= 10 and i < len(localScores)):
+                user = client.get_user(int(localScores[i][1]))
                 if user != None:
-                    score = localScores[i].getScore()
-                    scoreList = scoreList + ("".join((str(place),": ",user.name," with ",score," points!\n")))
+                    score = localScores[i][2]
+                    scoreList = scoreList + ("".join((str(place),": ",user.name," with ",str(score)," points!\n")))
                     place = place + 1
                 i = i + 1
         scoreEmbed = discord.Embed(title= "Local Leaderboard", color=0x107c02, description=scoreList)
