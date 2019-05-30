@@ -104,35 +104,37 @@ isSent = False
 # Eight ball instantiation
 eight = EightBall.eightBallGenerator()
 
-def getServerPrefix(guild):
-    # Returns the server prefix.
-    # If there is no server prefix set, it returns the defaultPrefix.
-    guildID = str(guild.id)
-    conn = sqlite3.connect("db/database.db")
-    c = conn.cursor()
-
-    c.execute("SELECT prefix FROM prefixes WHERE server=" + guildID)
-    if(len(c.fetchall()) == 0):
-        return defaultPrefix
-    else:
-        c.execute("SELECT prefix FROM prefixes WHERE server=" + guildID)
-        return(c.fetchone()[0])
-
 # def getServerPrefix(guild):
 #     # Returns the server prefix.
 #     # If there is no server prefix set, it returns the defaultPrefix.
-#     prefixFile = open("server_prefixes.txt", "r+")
-#     prefixList = prefixFile.read().splitlines()
-#     prefixFile.close()
-#     serverInList = False
-#     for line in prefixList:
-#         splitLine = line.split()
-#         if guild.id == int(splitLine[0]):
-#             serverInList = True
-#             return splitLine[1]
-#     if serverInList == False:
-#         # If server does not have default prefix set
+#     guildID = str(guild.id)
+#     conn = sqlite3.connect("db/database.db")
+#     c = conn.cursor()
+
+#     c.execute("SELECT prefix FROM prefixes WHERE server=" + guildID)
+#     if(len(c.fetchall()) == 0):
+#         conn.close()
 #         return defaultPrefix
+#     else:
+#         c.execute("SELECT prefix FROM prefixes WHERE server=" + guildID)
+#         conn.close()
+#         return(c.fetchone()[0])
+
+def getServerPrefix(guild):
+    # Returns the server prefix.
+    # If there is no server prefix set, it returns the defaultPrefix.
+    prefixFile = open("server_prefixes.txt", "r+")
+    prefixList = prefixFile.read().splitlines()
+    prefixFile.close()
+    serverInList = False
+    for line in prefixList:
+        splitLine = line.split()
+        if guild.id == int(splitLine[0]):
+            serverInList = True
+            return splitLine[1]
+    if serverInList == False:
+        # If server does not have default prefix set
+        return defaultPrefix
 
 
 def command(string, message):

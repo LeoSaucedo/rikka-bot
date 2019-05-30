@@ -11,10 +11,6 @@ import re, sqlite3, datetime
 from array import array
 class triviaGame:
     def __init__(self, questionPath, answerPath):
-        leaderboardFile = open("leaderboard.txt", "r")
-        self.leaderboardList = leaderboardFile.read().splitlines()
-        leaderboardFile.close()
-        
         questionFile = open(questionPath, "r", encoding="utf8")
         self.questionList = questionFile.read().encode("ascii", "ignore").splitlines()
         self.questionCount = len(self.questionList)
