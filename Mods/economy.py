@@ -3,7 +3,7 @@ Economy module for Rikka.
 Carlos Saucedo, 2018
 """
 
-import datetime
+import datetime, sqlite3
 from random import randint
 import Mods.trivia as trivia
 
@@ -12,41 +12,24 @@ def getCurrentDay():
     return(str(now.day))
 
 def hasCollectedToday(userID):
-    collectionFile = open("collectiondates.txt", "r")
-    collectionList = collectionFile.read().splitlines()
-    collectionFile.close()
-    
-    userInList = False
-    user = str(userID)
-    for line in collectionList:
-        splitLine = line.split()
-        if splitLine[0] == user:
-            userInList = True
-            if splitLine[1] == getCurrentDay():
-                return True
-            else: 
-                return False
-    if userInList == False:
+    conn = sqlite3.connect("db/database.db")
+    c = conn.cursor()
+
+    c.execute("SELECT collectionDate FROM leaderboard WHERE user='" + str(userID) + "';")
+    lastCollected = datetime.datetime.strptime(c.fetchone()[0], "%Y-%m-%dT%H:%M:%S.%f")
+    if(datetime.datetime.date(lastCollected) == datetime.datetime.date(datetime.datetime.today())):
+        conn.close()
+        return True
+    else:
+        conn.close()
         return False
             
 def setCollectionDate(userID):
-    collectionFile = open("collectiondates.txt", "r")
-    collectionList = collectionFile.read().splitlines()
-    collectionFile.close()
-    
-    userInList = False
-    index = 0
-    user = str(userID)
-    for line in collectionList:
-        splitline = line.split()
-        if splitline[0] == user:
-            userInList = True
-            collectionList = open("collectiondates.txt").read().splitlines()
-            collectionList[index] = user + " " + getCurrentDay()
-            open("collectiondates.txt", "w").write("\n".join(collectionList))
-            
-        index = index + 1
-    if userInList == False:
-        collectionFile = open("collectiondates.txt", "a+")
-        collectionFile.write(user + " " + getCurrentDay() + "\n")
-        collectionFile.close()
+    conn = sqlite3.connect("db/database.db")
+    c = conn.cursor()
+
+    c.execute("UPDATE leaderboard\n"+
+        "SET collectionDate = " + str(datetime.datetime.now().isoformat()) + "\n" +
+        "WHERE user='" + str(userID) + "';")
+    conn.commit()
+    conn.close()
