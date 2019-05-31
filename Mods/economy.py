@@ -19,6 +19,7 @@ def hasCollectedToday(userID):
     if(c.fetchone() == None):
         return False
     else:
+        c.execute("SELECT collectionDate FROM leaderboard WHERE user='" + str(userID) + "';")
         lastCollected = datetime.datetime.strptime(c.fetchone()[0], "%Y-%m-%dT%H:%M:%S.%f")
         if(datetime.datetime.date(lastCollected) == datetime.datetime.date(datetime.datetime.today())):
             conn.close()
@@ -31,10 +32,6 @@ def hasCollectedToday(userID):
 def setCollectionDate(userID):
     conn = sqlite3.connect("db/database.db")
     c = conn.cursor()
-    # print(datetime.date.now().isoformat())
-    # c.execute("UPDATE leaderboard\n"+
-    #     "SET collectionDate = '" + str(datetime.datetime.now().isoformat()) + "'\n" +
-    #     "WHERE user='" + str(userID) + "';")
     c.execute('''
     UPDATE LEADERBOARD
     SET collectionDate=?
