@@ -6,33 +6,36 @@ A Discord bot that performs various functions.
 
 [![Support me on Patreon!](https://cdn.discordapp.com/attachments/437991897269665792/446474035149144074/unknown.png)](https://www.patreon.com/LeoSaucedo)
 
+## Table of Contents
+1. [Commands](#commands)
+    - [Main Commands](#main-commands)
+        - [Utility Commands](#utility-commands)
+        - [Admin Commands](#admin-commands)
+    - [Color Role System](#color-role-system)
+        - [Setup](#setup)
+        - [Usage](#usage)
+    - [Economy System](#economy-system)
+    - [Fun Commands](#fun-commands)
+        - [XKCD Commands](#xkcd-commands)
+        - [GIF Commands](#gif-commands)
+        - [Gelbooru Commands](#gelbooru-commands)
+        - [Emotes](#emotes)
+    - [Game Commands](#game-commands)
+        - [Trivia Commands](#trivia-commands)
+        - [Casino Commands](#casino-commands)
+2. [In The Works](#in-the-works)
+3. [Special Thanks](#special-thanks)
+
 ## Commands
 
 *Right now, this bot's prefix is* `;`*.*
 
-### Economy System
-
-Rikka's economy system consists of a global leaderboard. Currently, you can get points in two ways: Getting questions right with the `;trivia` command, and upvoting the bot.
-
-- `;score` - Displays your score, or another user's score, globally.
-- `;collect daily` - Gets your daily collections.
-- `;leaderboard global` - View the global leaderboard across all of rikka's servers.
-- `;leaderboard local` - View the local leaderboard across all of the users on the current server.
-- `;give (points) (user)` - donate points to another user.
-
-### Board Functionality
-
-*This feature is currently not functional. Sorry!*
-
-The board functionality allows popular messages to be posted on a special channel, titled `board`.
-To use this functionality, you must first run `;board enable`.
-Afterwards, every message with 3 reactions with the "⭐" will get posted to the board.
-
+### Main Commands
 #### Utility Commands
 
+- `@mention help` - Returns a command list, along with your server's prefix.
 - `;help` - Returns a command list.
 - `;info` - Returns information about the bot.
-- `@mention help` - Returns a command list.
 - `;paypal` - Returns donation link to contribute to server hosting.
 - `;vote` - Returns this server's vote link on [discordbots.org](https://discordbots.org/).
 - `;clever (text)` - Returns the cleverbot response to the given text.
@@ -43,7 +46,45 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;sayd (message)` - Allows you to say an anonymous message by saying what you tell it to, and then deleting your message. Prevents `@everyone`, of course.
 - `;wolfram (query)` - Queries a response to Wolfram Alpha.
 
-#### Fun Commands
+#### Admin Commands
+
+- `;prefix (prefix)` - Changes the prefix to a set custom prefix. *(Must be admin)*
+- `;clear (number)` - Clears a set number of messages from the given channel. *(Must have manage message permission)*
+- `;clear (user)` - Clears any messages authored by the specified user in the channel. *(Must have manage message permission)*
+- `;mute / ;unmute (user)` - Mutes/unmutes specified user. *(Must have manage message permission)*
+- `;kick (user)` - Kicks the specified user. *(Must have kick permission)*
+- `;ban (user)` - Bans the specified user. *(Must have ban permission)*
+- `;add (points) (user(s))` - Adds a set number of points to mentioned user(s). *(Must be admin)*
+- `;subtract (points) (user(s))` - Subtracts a set number of points from mentioned user(s). *(Must be admin)*
+
+### Color Role System
+
+```
+NOTE: In order to do this, Rikka must be placed above the roles whose colors you would like to override. Failure to do so will just create and assign the role without any effect.
+```
+Rikka has a color role system. If it is enabled for your server, you can set your own color from the image below.
+
+![Color Chart](/json/css-color-names.png)
+
+#### Setup
+*Setup requires manage roles permission.*
+- `;colors (enable/disable)` - enables or disables the color role mode for your server.
+
+#### Usage
+- `;color (color)` - Sets your color to the specified color.
+- `;color reset` - Removes all of your color roles, resetting you to your original color.
+
+### Economy System
+
+Rikka's economy system consists of a global leaderboard. Currently, you can get points in two ways: Getting questions right with the `;trivia` command, and collecting points daily.
+
+- `;score` - Displays your score, or another user's score, globally.
+- `;collect daily` - Gets your daily collections.
+- `;leaderboard global` - View the global leaderboard across all of rikka's servers.
+- `;leaderboard local` - View the local leaderboard across all of the users on the current server.
+- `;give (points) (user)` - donate points to another user.
+
+### Fun Commands
 
 - `;insult (user)` - Sends a random insult to the given user.
 - `;ramsay` - Returns a random Gordon Ramsay quote.
@@ -51,6 +92,9 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;rate (thing to rate)` - Rates whatever you tell it to rate on a scale of 1-10.
 - `;ping` - For that annoying person who keeps `@everyone`ing.
 - `;beemovie` - Returns a random bee movie quote.
+
+#### XKCD Commands
+
 - `;xkcd` - Returns a random XKCD comic.
 - `;xkcd (number)` - Returns a specific XKCD comic.
 - `;xkcd latest` - Returns the latest XKCD comic.
@@ -60,6 +104,22 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;hello` - Says hi.
 - `;hugme` - Hugs you.
 - `;hug @user` - Hugs the specified user.
+
+#### Emotes
+
+*Note: All emotes are entirely SFW.*
+
+- `shocked, smile, hentai, blush, bdsm, rekt, boop, fuckoff, sanic, dreamy, kys`
+
+#### Gelbooru Commands
+
+*These commands require the channel to be marked as NSFW.*
+
+- `;gelbooru random` - Fetches a random gelbooru post.
+- `;gelbooru latest` - Fetches the latest gelbooru post.
+- `;gelbooru tags (tags, comma separated)` - Fetches a post that matches the specified tags.
+
+### Game Commands
 
 #### Trivia Commands
 
@@ -75,30 +135,13 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - `;8ball (question)` - Tells you the future.
 - `;raffle` - Select a random (non-bot) user from your server
 
-#### Gelbooru Commands
+### Board Functionality
 
-*These commands require the channel to be marked as NSFW.*
+*This feature is currently not functional. Sorry!*
 
-- `;gelbooru random` - Fetches a random gelbooru post.
-- `;gelbooru latest` - Fetches the latest gelbooru post.
-- `;gelbooru tags (tags, comma separated)` - Fetches a post that matches the specified tags.
-
-#### Admin Commands
-
-- `;prefix (prefix)` - Changes the prefix to a set custom prefix. *(Must be admin)*
-- `;clear (number)` - Clears a set number of messages from the given channel. *(Must have manage message permission)*
-- `;clear (user)` - Clears any messages authored by the specified user in the channel. *(Must have manage message permission)*
-- `;mute / ;unmute (user)` - Mutes/unmutes specified user. *(Must have manage message permission)*
-- `;kick (user)` - Kicks the specified user. *(Must have kick permission)*
-- `;ban (user)` - Bans the specified user. *(Must have ban permission)*
-- `;add (points) (user(s))` - Adds a set number of points to mentioned user(s). *(Must be admin)*
-- `;subtract (points) (user(s))` - Subtracts a set number of points from mentioned user(s). *(Must be admin)*
-
-#### Emotes
-
-*Note: All emotes are entirely SFW.*
-
-- `shocked, smile, hentai, blush, bdsm, rekt, boop, fuckoff, sanic, dreamy, kys`
+The board functionality allows popular messages to be posted on a special channel, titled `board`.
+To use this functionality, you must first run `;board enable`.
+Afterwards, every message with 3 reactions with the "⭐" will get posted to the board.
 
 #### In the works
 
