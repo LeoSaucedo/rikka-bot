@@ -826,10 +826,11 @@ async def on_message(message):
         for role in message.author.roles:
             if(role.name.startswith("Color - ")):
                 await message.author.remove_roles(role)
-                msg = "{0.author.mention}, removed your color roles!".format(message)
+                msg = "{0.author.mention}, removed your color roles!".format(
+                    message)
                 await message.channel.send(msg)
     elif (message.content.lower().startswith(command("color ", message))
-          and colors.getColorMode(message.channel.guild.id)):
+            and colors.getColorMode(message.channel.guild.id)):
         # If colors are enabled
         colorName = getRawArgument(command("color", message), message)
         # e.g. "blue"
@@ -849,22 +850,30 @@ async def on_message(message):
             for role in message.channel.guild.roles:
                 if(role.name == ("Color - " + colorName)):
                     roleCreated = True
+                    await role.edit(position=(message.channel.guild.me.top_role.position-1))
                     await message.author.add_roles(role)
+                    msg = ("{0.author.mention}, changed your color to " +
+                            colorName + "!").format(message)
+            await message.channel.send(msg)
             if(not roleCreated):
                 # If the role has not yet been created.
                 # Remove the previously existing role - if applicable.
                 # Create a new role with the specified color.
                 await message.channel.guild.create_role(color=color, name=("Color - " + colorName))
                 newRole = None
-                while newRole == None:
-                    # Keeps searching until the role is found, since it was created.
-                    statusMsg("Searching for role " "'Color - " + colorName + "'." , 1)
-                    newRole = discord.utils.get(message.guild.roles, name=("Color - " + colorName))
-                # Place the role directly under the bot's top role position.
-                await newRole.edit(position=(message.channel.guild.me.top_role.position-1))
-                await message.author.add_roles(newRole)
+                newRole = discord.utils.get(
+                    message.guild.roles, name=("Color - " + colorName))
+                if(newRole == None):
+                    statusMsg
+                    msg = "{0.author.mention}, an unknown error ocurred, please try again.".format(
+                        msg)
+                    await message.author.send(msg)
+                else:
+                    # Place the role directly under the bot's top role position.
+                    await newRole.edit(position=(message.channel.guild.me.top_role.position-1))
+                    await message.author.add_roles(newRole)
             msg = ("{0.author.mention}, changed your color to " +
-                   colorName + "!").format(message)
+                    colorName + "!").format(message)
             await message.channel.send(msg)
 
     """
@@ -877,7 +886,7 @@ async def on_message(message):
             with urllib.urlopen("https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1") as req:
                 data = json.load(req)
             embed = discord.Embed(color=0xff0000, title="Error",
-                                  description="baaka, you need to specify a subcommand. desu.")
+                                    description="baaka, you need to specify a subcommand. desu.")
             if args == "random":
                 post = data[randint(0, len(data)-1)]["id"]
                 embed = fetchBooruPost(post)
