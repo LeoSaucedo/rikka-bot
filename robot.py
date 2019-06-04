@@ -855,8 +855,10 @@ async def on_message(message):
                 # Remove the previously existing role - if applicable.
                 # Create a new role with the specified color.
                 await message.channel.guild.create_role(color=color, name=("Color - " + colorName))
-                newRole = discord.utils.get(
-                    message.guild.roles, name=("Color - " + colorName))
+                newRole = None
+                for role in message.guild.roles:
+                    if(role.name == ("Color - " + colorName)):
+                        newRole = role
                 # Place the role directly under the bot's top role position.
                 await newRole.edit(position=(message.channel.guild.me.top_role.position-1))
                 await message.author.add_roles(newRole)
