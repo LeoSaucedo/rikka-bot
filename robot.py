@@ -862,6 +862,7 @@ async def on_message(message):
                         newRole = role
                 # Place the role directly under the bot's top role position.
                 await newRole.edit(position=(message.channel.guild.me.top_role.position-1))
+                statusMsg(message.channel.guild.roles)
                 await message.author.add_roles(newRole)
             msg = ("{0.author.mention}, changed your color to " +
                    colorName + "!").format(message)
