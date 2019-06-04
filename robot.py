@@ -856,14 +856,12 @@ async def on_message(message):
                 # Create a new role with the specified color.
                 await message.channel.guild.create_role(color=color, name=("Color - " + colorName))
                 newRole = None
-                statusMsg(message.channel.guild.roles)
                 while newRole == None:
                     # Keeps searching until the role is found, since it was created.
-                    statusMsg("Searching for role " "Color - " + colorName + "." , 1)
+                    statusMsg("Searching for role " "'Color - " + colorName + "'." , 1)
                     newRole = discord.utils.get(message.guild.roles, name=("Color - " + colorName))
                 # Place the role directly under the bot's top role position.
                 await newRole.edit(position=(message.channel.guild.me.top_role.position-1))
-                statusMsg(message.channel.guild.roles)
                 await message.author.add_roles(newRole)
             msg = ("{0.author.mention}, changed your color to " +
                    colorName + "!").format(message)
