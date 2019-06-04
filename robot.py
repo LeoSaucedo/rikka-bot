@@ -32,6 +32,10 @@ import Mods.colors as colors
 Status message printing
 """
 
+# Final variables
+INFO = 0
+WARN = 1
+ERROR = 2
 
 def statusMsg(message, category=0):
     timeStamp = datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")
@@ -899,7 +903,7 @@ async def on_message(message):
                     post = data[randint(0, len(data)-1)]["id"]
                     embed = fetchBooruPost(post)
                 except Exception as e:
-                    statusMsg("".join(("[Error] ", e)))
+                    statusMsg(e, 2)
                     embed = discord.Embed(
                         color=0xff0000, title="Error", description=str(e))
             if args.startswith("id"):
