@@ -861,7 +861,7 @@ async def on_message(message):
                 newRole = discord.utils.get(
                     message.guild.roles, name=("Color - " + colorName))
                 if(newRole == None):
-                    statusMsg("Error fetghing role " + colorName + ".", 3)
+                    statusMsg("Error fetching role " + colorName + ".", 3)
                     msg = "{0.author.mention}, an unknown error ocurred, please try again.".format(
                         msg)
                     await message.author.send(msg)
@@ -869,7 +869,7 @@ async def on_message(message):
                     # Place the role directly under the bot's top role position.
                     await newRole.edit(position=(message.channel.guild.me.top_role.position-1))
                     await message.author.add_roles(newRole)
-                    
+
             msg = ("{0.author.mention}, changed your color to " +
                     colorName + "!").format(message)
             await message.channel.send(msg)
