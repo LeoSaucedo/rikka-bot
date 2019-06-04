@@ -865,7 +865,7 @@ async def on_message(message):
                 newRole = discord.utils.get(
                     message.guild.roles, name=("Color - " + colorName))
                 if(newRole == None):
-                    statusMsg("Error fetching role " + colorName + ".", 3)
+                    statusMsg("Error fetching role " + colorName + ".", ERROR)
                     msg = "{0.author.mention}, an unknown error ocurred, please try again.".format(
                         msg)
                     await message.author.send(msg)
