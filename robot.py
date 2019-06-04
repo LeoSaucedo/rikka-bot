@@ -854,7 +854,7 @@ async def on_message(message):
                     await message.author.add_roles(role)
                     msg = ("{0.author.mention}, changed your color to " +
                             colorName + "!").format(message)
-            await message.channel.send(msg)
+                    await message.channel.send(msg)
             if(not roleCreated):
                 # If the role has not yet been created.
                 # Remove the previously existing role - if applicable.
