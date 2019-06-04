@@ -46,5 +46,9 @@ def getColorMode(serverID):
 def getColor(name):
     with open("json/css-color-names.json", "r") as h:
         colors = json.load(h)
-    colorHex =  colors.get(name).lstrip('#')
-    return discord.Color(int(colorHex, 16))
+    colorHex = colors.get(name)
+    if(colorHex == None):
+        return None
+    else:
+        colorHex = colorHex.lstrip('#')
+        return discord.Color(int(colorHex, 16))

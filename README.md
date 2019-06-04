@@ -59,9 +59,9 @@ A Discord bot that performs various functions.
 
 ### Color Role System
 
-```
-NOTE: In order to do this, Rikka must be placed above the roles whose colors you would like to override. Failure to do so will just create and assign the role without any effect.
-```
+
+*NOTE: In order to do this, Rikka must be placed above the roles whose colors you would like to override. Failure to do so will just create and assign the role without any effect.*
+
 Rikka has a color role system. If it is enabled for your server, you can set your own color from the image below.
 
 ![Color Chart](/json/css-color-names.png)
