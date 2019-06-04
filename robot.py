@@ -821,11 +821,13 @@ async def on_message(message):
             msg = "{0.author.mention}, please enter a valid command.".format(
                 message)
             await message.channel.send(msg)
-    elif (message.content.lower() == command("color", message) + "reset"):
+    elif (message.content.lower() == command("color ", message) + "reset"):
         # Resets all color roles.
         for role in message.author.roles:
             if(role.name.startswith("Color - ")):
                 await message.author.remove_roles(role)
+                msg = "{0.author.mention}, removed your color roles!".format(message)
+                await message.channel.send(msg)
     elif (message.content.lower().startswith(command("color ", message))
           and colors.getColorMode(message.channel.guild.id)):
         # If colors are enabled
@@ -845,7 +847,7 @@ async def on_message(message):
                     await message.author.remove_roles(role)
             # Searching to see if the color role is already in the server.
             for role in message.channel.guild.roles:
-                if(role.color == color and role.name == ("Color - " + colorName)):
+                if(role.name == ("Color - " + colorName)):
                     roleCreated = True
                     await message.author.add_roles(role)
             if(not roleCreated):
