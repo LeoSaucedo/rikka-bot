@@ -64,7 +64,7 @@ A Discord bot that performs various functions.
 
 Rikka has a color role system. If it is enabled for your server, you can set your own color from the image below.
 
-![Color Chart](/json/css-color-names.png)
+![Color Chart](https://raw.githubusercontent.com/LeoSaucedo/rikka-bot/master/json/css-color-names.png)
 
 #### Setup
 *Setup requires manage roles permission.*
