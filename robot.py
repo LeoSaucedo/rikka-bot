@@ -321,7 +321,7 @@ async def on_message(message):
                 msg = clever.ask(query)
             except:
                 msg = "cleverbot.io API error. Try again later."
-            await message.channel.send(asdf)
+            await message.channel.send(msg)
 
     elif message.content.lower().startswith(command("wolfram", message)):
         # Wolfram support.
