@@ -2,16 +2,8 @@
 Discord Rikka Bot.
 Carlos Saucedo, 2019
 """
-import os
-import discord
-import string
-import dbl
-import json
-import urllib.request as urllib
-import time
-import datetime
-import asyncio
-import sqlite3
+import os, discord, string, dbl, json, datetime, asyncio, sqlite3, traceback, sys, time
+import urllib
 from urllib.parse import quote_plus
 import Mods.gizoogle as gizoogle
 from random import randint
@@ -27,10 +19,19 @@ import Mods.beemovie as beemovie
 import Mods.xkcd as xkcd
 import Mods.wolfram as wolfram
 import Mods.colors as colors
+from pushbullet import Pushbullet
+
+# Auth tokens
+with open("json/config.json", "r") as h:
+    config = json.load(h)
+with open("json/indicators.json", "r") as h:
+    indicators = json.load(h)
 
 """
 Status message printing
 """
+# Pushbullet error handling
+pushbullet = Pushbullet(config["pushbulletapi"])
 
 # Final variables
 INFO = 0
@@ -46,7 +47,9 @@ def statusMsg(message, category=0):
         status = "[WARN]"
     elif(category == 2):
         status = "[ERROR]"
+        pushbullet.push_note("Rikka-bot Error", timeStamp + "\n\n" + str(message))
     print(str(timeStamp) + ": " + str(status) + " " + str(message))
+
 
 
 # Global Variables
@@ -54,12 +57,6 @@ startTime = time.time()
 
 # Directory stuff
 root_dir = os.path.dirname(__file__)
-
-# Auth tokens
-with open("json/config.json", "r") as h:
-    config = json.load(h)
-with open("json/indicators.json", "r") as h:
-    indicators = json.load(h)
 
 shardCount = 1  # Keeping it simple with 1 for now.
 
@@ -95,7 +92,7 @@ nsfwinsultfile.close()
 
 # Cleverbot
 try:
-    statusMsg("Suspending CleverBot for now.", 1)
+    statusMsg("Suspending CleverBot for now.", WARN)
     clever = CleverApi.Bot(config["userapi"], config["keyapi"])
 except:
     statusMsg("Failed to instantiate CleverBot.")
@@ -216,6 +213,23 @@ async def on_guild_remove(guild):
 
 
 @client.event
+async def on_error(self, event_method, *args, **kwargs):
+    # print('Ignoring exception in {}'.format(event_method), file=sys.stderr)
+    # traceback.print_exc()
+    statusMsg("Error.txt for details...", ERROR)
+    print(file=sys.stderr)
+    f = open("error.txt", "a+")
+    f.write("===== ERROR SUMMARY =====\n")
+    f.write("Timestamp: " + str(datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")) + "\n")
+    f.write("Exception in {}".format(event_method) + "\n")
+    f.write("===== TRACEBACK =====\n")
+    f.write(traceback.format_exc() + "\n\n")
+    with open("error.txt", "r") as file:
+        file_data = pushbullet.upload_file(f, "error.txt")
+    push = pushbullet.push_file(**file_data)
+
+
+@client.event
 async def on_message(message):
     """
     Universal commands
@@ -307,7 +321,7 @@ async def on_message(message):
                 msg = clever.ask(query)
             except:
                 msg = "cleverbot.io API error. Try again later."
-            await message.channel.send(msg)
+            await message.channel.send(asdf)
 
     elif message.content.lower().startswith(command("wolfram", message)):
         # Wolfram support.
@@ -968,6 +982,7 @@ Bot login actions
 """
 @client.event
 async def on_ready():
+    pushbullet.push_note("Rikka-bot Startup", str(datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")))
     statusMsg("Logged in as")
     statusMsg(client.user.name)
     statusMsg(client.user.id)
