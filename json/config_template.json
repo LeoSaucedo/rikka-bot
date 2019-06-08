@@ -3,5 +3,7 @@
     "bltoken": "",
     "userapi": "",
     "keyapi": "",
-    "wolframapi": ""
+    "wolframapi": "",
+    "pushbulletapi": "",
+    "pushbullet": false
 }

@@ -47,7 +47,8 @@ def statusMsg(message, category=0):
         status = "[WARN]"
     elif(category == 2):
         status = "[ERROR]"
-        pushbullet.push_note("Rikka-bot Error", timeStamp + "\n\n" + str(message))
+        if(config["pushbullet"]):
+            pushbullet.push_note("Rikka-bot Error", timeStamp + "\n\n" + str(message))
     print(str(timeStamp) + ": " + str(status) + " " + str(message))
 
 
@@ -214,19 +215,21 @@ async def on_guild_remove(guild):
 
 @client.event
 async def on_error(self, event_method, *args, **kwargs):
-    # print('Ignoring exception in {}'.format(event_method), file=sys.stderr)
-    # traceback.print_exc()
-    statusMsg("Error.txt for details...", ERROR)
-    print(file=sys.stderr)
-    f = open("error.txt", "a+")
-    f.write("===== ERROR SUMMARY =====\n")
-    f.write("Timestamp: " + str(datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")) + "\n")
-    f.write("Exception in {}".format(event_method) + "\n")
-    f.write("===== TRACEBACK =====\n")
-    f.write(traceback.format_exc() + "\n\n")
-    with open("error.txt", "r") as file:
-        file_data = pushbullet.upload_file(f, "error.txt")
-    push = pushbullet.push_file(**file_data)
+    if(config["pushbullet"]):
+        statusMsg("Error.txt for details...", ERROR)
+        print(file=sys.stderr)
+        f = open("error.txt", "a+")
+        f.write("===== ERROR SUMMARY =====\n")
+        f.write("Timestamp: " + str(datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")) + "\n")
+        f.write("Exception in {}".format(event_method) + "\n")
+        f.write("===== TRACEBACK =====\n")
+        f.write(traceback.format_exc() + "\n\n")
+        with open("error.txt", "r") as file:
+            file_data = pushbullet.upload_file(f, "error.txt")
+        push = pushbullet.push_file(**file_data)
+    else:
+        print('Ignoring exception in {}'.format(event_method), file=sys.stderr)
+        traceback.print_exc()
 
 
 @client.event
@@ -982,7 +985,8 @@ Bot login actions
 """
 @client.event
 async def on_ready():
-    pushbullet.push_note("Rikka-bot Startup", str(datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")))
+    if(config["pushbullet"]):
+        pushbullet.push_note("Rikka-bot Startup", str(datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")))
     statusMsg("Logged in as")
     statusMsg(client.user.name)
     statusMsg(client.user.id)
