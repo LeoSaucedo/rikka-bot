@@ -155,7 +155,7 @@ def getRawArgument(command, message):
 
 def fetchBooruPost(postID):
     try:
-        with urllib.urlopen("".join(map(str, ("https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&id=", postID)))) as req:
+        with urllib.request.urlopen("".join(map(str, ("https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&id=", postID)))) as req:
             data = json.load(req)
         if len(data) > 0:
             post = data[0]
@@ -902,7 +902,7 @@ async def on_message(message):
         if message.channel.is_nsfw() == True:
             cmd = message.content.lstrip(command("gelbooru", message))
             args = cmd.lstrip(cmd.split(" ")[0]).lstrip(" ")
-            with urllib.urlopen("https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1") as req:
+            with urllib.request.urlopen("https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1") as req:
                 data = json.load(req)
             embed = discord.Embed(color=0xff0000, title="Error",
                                     description="baaka, you need to specify a subcommand. desu.")
@@ -915,7 +915,7 @@ async def on_message(message):
             if args.startswith("tags"):
                 tags = args.split(" ")[1].split(",")
                 try:
-                    with urllib.urlopen("".join(("https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&tags=", "+".join(map(str, tags))))) as req:
+                    with urllib.request.urlopen("".join(("https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&tags=", "+".join(map(str, tags))))) as req:
                         data = json.load(req)
                     post = data[randint(0, len(data)-1)]["id"]
                     embed = fetchBooruPost(post)
