@@ -2,7 +2,17 @@
 Discord Rikka Bot.
 Carlos Saucedo, 2019
 """
-import os, discord, string, dbl, json, datetime, asyncio, sqlite3, traceback, sys, time
+import os
+import discord
+import string
+import dbl
+import json
+import datetime
+import asyncio
+import sqlite3
+import traceback
+import sys
+import time
 import urllib
 from urllib.parse import quote_plus
 import Mods.gizoogle as gizoogle
@@ -38,6 +48,7 @@ INFO = 0
 WARN = 1
 ERROR = 2
 
+
 def statusMsg(message, category=0):
     timeStamp = datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")
     if(category == 0):
@@ -48,9 +59,9 @@ def statusMsg(message, category=0):
     elif(category == 2):
         status = "[ERROR]"
         if(config["pushbullet"]):
-            pushbullet.push_note("Rikka-bot Error", timeStamp + "\n\n" + str(message))
+            pushbullet.push_note(
+                "Rikka-bot Error", timeStamp + "\n\n" + str(message))
     print(str(timeStamp) + ": " + str(status) + " " + str(message))
-
 
 
 # Global Variables
@@ -220,7 +231,8 @@ async def on_error(self, event_method, *args, **kwargs):
         print(file=sys.stderr)
         f = open("error.txt", "a+")
         f.write("===== ERROR SUMMARY =====\n")
-        f.write("Timestamp: " + str(datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")) + "\n")
+        f.write("Timestamp: " +
+                str(datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")) + "\n")
         f.write("Exception in {}".format(event_method) + "\n")
         f.write("===== TRACEBACK =====\n")
         f.write(traceback.format_exc() + "\n\n")
@@ -336,7 +348,7 @@ async def on_message(message):
             response = "No results. Try revising your search."
         # Embed magic
         answerEmbed = discord.Embed(description=response, color=0xff8920)
-        answerEmbed.set_author(name=query, icon_url="https://pbs.twimg.com/profile_images/804868917990739969/OFknlig__400x400.jpg",
+        answerEmbed.set_author(name=query, icon_url="https://is5-ssl.mzstatic.com/image/thumb/Purple128/v4/19/fd/a8/19fda880-b15a-31a1-958d-32790c4ed5a4/WolframAlpha-AppIcon-0-1x_U007emarketing-0-0-GLES2_U002c0-512MB-sRGB-0-0-0-85-220-0-0-0-5.png/246x0w.jpg",
                                url=("https://m.wolframalpha.com/input/?i=" + quote_plus(query)))
         answerEmbed.set_footer(text="Wolfram|Alpha, all rights reserved")
         await message.channel.send(embed=answerEmbed)
@@ -892,7 +904,7 @@ async def on_message(message):
                     await message.author.add_roles(newRole)
 
             msg = ("{0.author.mention}, changed your color to " +
-                    colorName + "!").format(message)
+                   colorName + "!").format(message)
             await message.channel.send(msg)
 
     """
@@ -905,7 +917,7 @@ async def on_message(message):
             with urllib.request.urlopen("https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1") as req:
                 data = json.load(req)
             embed = discord.Embed(color=0xff0000, title="Error",
-                                    description="baaka, you need to specify a subcommand. desu.")
+                                  description="baaka, you need to specify a subcommand. desu.")
             if args == "random":
                 post = data[randint(0, len(data)-1)]["id"]
                 embed = fetchBooruPost(post)
@@ -986,7 +998,8 @@ Bot login actions
 @client.event
 async def on_ready():
     if(config["pushbullet"]):
-        pushbullet.push_note("Rikka-bot Startup", str(datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")))
+        pushbullet.push_note(
+            "Rikka-bot Startup", str(datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")))
     statusMsg("Logged in as")
     statusMsg(client.user.name)
     statusMsg(client.user.id)
