@@ -49,7 +49,7 @@ WARN = 1
 ERROR = 2
 
 
-def statusMsg(message, category=0):
+def statusMsg(message, category=0, push=False):
     timeStamp = datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")
     if(category == 0):
         # Info
@@ -58,9 +58,8 @@ def statusMsg(message, category=0):
         status = "[WARN]"
     elif(category == 2):
         status = "[ERROR]"
-        if(config["pushbullet"]):
-            pushbullet.push_note(
-                "Rikka-bot Error", timeStamp + "\n\n" + str(message))
+    if(push):
+        pushbullet.push_note("rikka-bot", "str(status)" + " " + "str(message)")
     print(str(timeStamp) + ": " + str(status) + " " + str(message))
 
 
@@ -229,15 +228,19 @@ async def on_error(self, event_method, *args, **kwargs):
     if(config["pushbullet"]):
         statusMsg("Error.txt for details...", ERROR)
         print(file=sys.stderr)
-        f = open("error.txt", "a+")
+        oldfile = open("error.txt", "r")
+        f = open("error.txt", "w")
         f.write("===== ERROR SUMMARY =====\n")
         f.write("Timestamp: " +
                 str(datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S")) + "\n")
         f.write("Exception in {}".format(event_method) + "\n")
         f.write("===== TRACEBACK =====\n")
         f.write(traceback.format_exc() + "\n\n")
+        f.write(oldfile.read())
+        f.close()
+        oldfile.close()
         with open("error.txt", "r") as file:
-            file_data = pushbullet.upload_file(f, "error.txt")
+            file_data = pushbullet.upload_file(file, str(datetime.datetime.now().strftime("%y_%m_%d_%H_%M_%S")) + "_error.txt")
         push = pushbullet.push_file(**file_data)
     else:
         print('Ignoring exception in {}'.format(event_method), file=sys.stderr)
