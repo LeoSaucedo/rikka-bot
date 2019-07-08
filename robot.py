@@ -1022,8 +1022,9 @@ async def on_ready():
     try:
         await botlist.post_server_count()
         statusMsg("Successfully published server count to dbl.")
-    except:
-        statusMsg("Failed to post server count to tbl.")
+    except Exception as e:
+        print(e)
+        statusMsg("Failed to post server count to dbl.")
 
 while True:
     client.run(config["token"])  # runs the bot.
