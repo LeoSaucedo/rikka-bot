@@ -29,6 +29,7 @@ import Mods.beemovie as beemovie
 import Mods.xkcd as xkcd
 import Mods.wolfram as wolfram
 import Mods.colors as colors
+import Mods.assign as assign
 from pushbullet import Pushbullet
 
 # Auth tokens
@@ -58,7 +59,7 @@ def statusMsg(message, category=0, push=False):
         status = "[WARN]"
     elif(category == 2):
         status = "[ERROR]"
-    if(push):
+    if(push and config["pushbullet"]):
         pushbullet.push_note("rikka-bot", "str(status)" + " " + "str(message)")
     print(str(timeStamp) + ": " + str(status) + " " + str(message))
 
@@ -145,20 +146,28 @@ def getServerPrefix(guild):
 
 
 def command(string, message):
-    # Builds a command out of the given string.
+    """Builds a proper message prefix.
+
+    Arguments:
+        string {string} -- The command.
+        message {string} -- The Discord `Message` object.
+
+    Returns:
+        string -- The prefix of the server along with the command.
+    """
     serverPrefix = getServerPrefix(message.channel.guild)
     return (serverPrefix + string).lower()
 
 
 def getArgument(command, message):
-    # Gets the argument text as a string.
+    """ Gets the argument of the command string, ignoring non-ASCII characters. """
     argument = message.content.replace(command + " ", "")
     argument = argument.encode("ascii", "ignore")
     return argument
 
 
 def getRawArgument(command, message):
-    # Gets the raw argument, without being formatted.
+    """Fetches the raw argument of the command string, without being formatted."""
     argument = message.content.replace(command + " ", "")
     return argument
 
@@ -240,7 +249,8 @@ async def on_error(self, event_method, *args, **kwargs):
         f.close()
         oldfile.close()
         with open("error.txt", "r") as file:
-            file_data = pushbullet.upload_file(file, str(datetime.datetime.now().strftime("%y_%m_%d_%H_%M_%S")) + "_error.txt")
+            file_data = pushbullet.upload_file(file, str(
+                datetime.datetime.now().strftime("%y_%m_%d_%H_%M_%S")) + "_error.txt")
         push = pushbullet.push_file(**file_data)
     else:
         print('Ignoring exception in {}'.format(event_method), file=sys.stderr)
@@ -909,6 +919,110 @@ async def on_message(message):
             msg = ("{0.author.mention}, changed your color to " +
                    colorName + "!").format(message)
             await message.channel.send(msg)
+
+    """
+    Self-Assignable Roles
+    """
+    if message.content.lower().startswith(command("iamlist", message)):
+        # List the enabled roles for the server
+        assignList = ""
+        assignableRoles = assign.getAssignList(message.guild.id)
+        if len(assignableRoles) > 0:
+            for role in assignableRoles:
+                roleName = discord.utils.get(message.guild.roles, id=int(role[0])).name
+                assignList += roleName+"\n"
+            assignEmbed = discord.Embed(
+                title="Assignable Roles", color=0x4287f5, description=assignList)
+            await message.channel.send(embed=assignEmbed)
+        else:
+            msg = "{0.author.mention}, no assignable roles have been set.".format(message)
+            await message.channel.send(msg)
+    elif message.content.lower().startswith(command("assign enable", message)) or message.content.lower().startswith(command("assign disable", message)):
+        # Enable assignability.
+        if(message.channel.permissions_for(message.author).manage_roles == True):
+            # User has permission.
+            enabling = None
+            if message.content.lower().startswith(command("assign enable", message)):
+                # User is attempting to enable the role.
+                roleName = getRawArgument(command("assign enable", message), message)
+                enabling = True
+            elif message.content.lower().startswith(command("assign disable", message)):
+                # User is attempting to disable the role.
+                roleName = getRawArgument(command("assign disable", message), message)
+                enabling = False
+            # If the role has already been created.
+            role = discord.utils.get(message.guild.roles, name=(roleName))
+            roleId = role.id
+            if(role == None and enabling):
+                # If the role has not been created.
+                # Create a new role.
+                await message.channel.guild.create_role(name=str(roleName))
+                role = discord.utils.get(message.guild.roles, name=str(roleName))
+                roleId = role.id
+            if roleId != None:
+                roleId = role.id
+                assign.setAssign(message.channel.guild.id, roleId, enabling)
+                if(enabling):
+                    msg = ("Enabled role `" + roleName + \
+                        "` assignment!").format(message)
+                    await message.channel.send(msg)
+                else:
+                    msg = ("Disabled role `" + roleName + \
+                        "` assignment.").format(message)
+                    await message.channel.send(msg)
+        else:
+            msg = "{0.author.mention}, you must have `Manage Roles` permission to enable/disable role assignment.".format(
+                message)
+            await message.channel.send(msg)
+    elif message.content.lower().startswith(command("iam", message)) or message.content.lower().startswith(command("iamnot", message)):
+        # Assign and de-assign roles.
+        assigning = None
+        if(message.content.lower().startswith(command("iamnot", message))):
+            roleName = getRawArgument(command("iamnot", message), message)
+            assigning = False
+        else:
+            roleName = getRawArgument(command("iam", message), message)
+            assigning = True
+        # Check to see if role exists.
+        role = discord.utils.get(message.guild.roles, name=roleName)
+        if(role == None):
+            # If role does not exist
+            msg = "{0.author.mention}, that role does not exist!".format(
+                message)
+            await message.channel.send(msg)
+        else:
+            # Role exists
+            roleId = role.id
+            if(assign.isAssignable(roleId)):
+                # If the role is assignable.
+                roleAssigned = None
+                if(discord.utils.get(message.author.roles, id=roleId) != None):
+                    # Role is not already assigned.
+                    roleAssigned = True
+                else:
+                    roleAssigned = False
+                if(assigning and roleAssigned):
+                    msg = "{0.author.mention}, that role is already assigned to you!".format(
+                        message)
+                    await message.channel.send(msg)
+                elif(not assigning and not roleAssigned):
+                    msg = "{0.author.mention}, you don't have that role assigned!".format(
+                        message)
+                    await message.channel.send(msg)
+                elif(assigning and not roleAssigned):
+                    await message.author.add_roles(role)
+                    msg = ("{0.author.mention}, role `"+ roleName + "` has been assigned.").format(message)
+                    await message.channel.send(msg)
+                elif(not assigning and roleAssigned):
+                    await message.author.remove_roles(role)
+                    msg = ("{0.author.mention}, removed role `" + roleName + "`.").format(message)
+                    await message.channel.send(msg)
+
+
+            else:
+                msg = "{0.author.mention}, that role is not assignable!".format(
+                    message)
+                await message.channel.send(msg)
 
     """
     the lewd

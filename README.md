@@ -11,6 +11,7 @@ A Discord bot that performs various functions.
     - [Main Commands](#main-commands)
         - [Utility Commands](#utility-commands)
         - [Admin Commands](#admin-commands)
+    - [Self-Assignable Roles](#self-assignable-roles)
     - [Color Role System](#color-role-system)
         - [Setup](#setup)
         - [Usage](#usage)
@@ -56,6 +57,21 @@ A Discord bot that performs various functions.
 - `;ban (user)` - Bans the specified user. *(Must have ban permission)*
 - `;add (points) (user(s))` - Adds a set number of points to mentioned user(s). *(Must be admin)*
 - `;subtract (points) (user(s))` - Subtracts a set number of points from mentioned user(s). *(Must be admin)*
+
+### Self-Assignable Roles
+*NOTE: In order to do this, Rikka must be placed above the users you would like to enable assigning to. Failure to do so will fail to assign the roles.*
+
+Rikka has a self-assignable roles system. If it is enabled for your server, you can create roles to assign yourself and other users.
+For these commands to work, the role names must match perfectly.
+
+#### Enabling/Disabling/Listing
+- `;iamlist` - Lists the assignable roles.
+- `;assign enable (role name)` - Enables assignability for the given role. *(Must have Manage Roles permission)*
+- `;assign disable (role name)`- Disables assignability for the given role. *(Must have Manage Roles permission)*
+
+#### Assigning/Unassigning Roles
+- `;iam (role name)` - Assigns yourself the role.
+- `;iamnot (role name)` - Unassigns yourself the role.
 
 ### Color Role System
 
