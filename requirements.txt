@@ -1,7 +1,7 @@
 asyncio
 googletrans
 bs4
-dblpy
+dblpy==0.2
 wolframalpha
 pushbullet.py
 lxml
