@@ -173,3 +173,4 @@ Afterwards, every message with 3 reactions with the "⭐" will get posted to the
 - Credit to phl4nk for their [implementation of the cleverbot.io API for python](https://github.com/phl4nk/CleverApi).
 - Thanks to [Wes](https://github.com/NeonWizard) for his [website](http://wizardlywonders.xyz:3054/) that generates the Bee Movie quotes!
 - Of course, credit to [XKCD](https://xkcd.com/) for the wonderful comic that is a great feature of this bot.
+- Kudos to [bahamas10](https://github.com/bahamas10) for his [list](https://github.com/bahamas10/css-color-names/blob/master/css-color-names.json) of CSS color names!
