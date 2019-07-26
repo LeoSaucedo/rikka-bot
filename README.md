@@ -3,10 +3,11 @@
 A Discord bot that performs various functions.
 
 ![Python 3.6](https://img.shields.io/badge/python-3.5%2C%203.6-blue.svg) [![Discord Bots](https://discordbots.org/api/widget/status/430482288053059584.svg)](https://discordbots.org/bot/430482288053059584) [![Discord Bots](https://discordbots.org/api/widget/servers/430482288053059584.svg)](https://discordbots.org/bot/430482288053059584)
-
 [![Support me on Patreon!](https://cdn.discordapp.com/attachments/437991897269665792/446474035149144074/unknown.png)](https://www.patreon.com/LeoSaucedo)
 
-## Table of Contents
+<details>
+ <summary><strong>Table of Contents</strong> (click to expand)</summary>
+
 1. [Commands](#commands)
     - [Main Commands](#main-commands)
         - [Utility Commands](#utility-commands)
@@ -18,7 +19,7 @@ A Discord bot that performs various functions.
         - [Setup](#setup)
         - [Usage](#usage)
     - [Economy System](#economy-system)
-    - [Fun Commands](#fun-commands)
+    - [Fun Commands](#fun-commans)
         - [XKCD Commands](#xkcd-commands)
         - [GIF Commands](#gif-commands)
         - [Gelbooru Commands](#gelbooru-commands)
@@ -28,6 +29,9 @@ A Discord bot that performs various functions.
         - [Casino Commands](#casino-commands)
 2. [In The Works](#in-the-works)
 3. [Special Thanks](#special-thanks)
+
+</details>
+
 
 ## Commands
 
