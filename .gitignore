@@ -14,3 +14,6 @@ bot_prefixes.list
 config.json
 *.db
 tempCodeRunnerFile.py
+
+# Environment Variables
+.env/*
