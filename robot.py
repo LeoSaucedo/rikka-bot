@@ -123,7 +123,7 @@ question_relPath = "Lists/trivia_questions.list"
 questionPath = os.path.join(root_dir, question_relPath)
 answer_relPath = "Lists/trivia_answers.list"
 answerPath = os.path.join(root_dir, answer_relPath)
-trivia = trivia.triviaGame(questionPath, answerPath)
+trivia = trivia.triviaGame()
 isSent = False
 
 # Eight ball instantiation
@@ -929,13 +929,15 @@ async def on_message(message):
         assignableRoles = assign.getAssignList(message.guild.id)
         if len(assignableRoles) > 0:
             for role in assignableRoles:
-                roleName = discord.utils.get(message.guild.roles, id=int(role[0])).name
+                roleName = discord.utils.get(
+                    message.guild.roles, id=int(role[0])).name
                 assignList += roleName+"\n"
             assignEmbed = discord.Embed(
                 title="Assignable Roles", color=0x4287f5, description=assignList)
             await message.channel.send(embed=assignEmbed)
         else:
-            msg = "{0.author.mention}, no assignable roles have been set.".format(message)
+            msg = "{0.author.mention}, no assignable roles have been set.".format(
+                message)
             await message.channel.send(msg)
     elif message.content.lower().startswith(command("assign enable", message)) or message.content.lower().startswith(command("assign disable", message)):
         # Enable assignability.
@@ -944,11 +946,13 @@ async def on_message(message):
             enabling = None
             if message.content.lower().startswith(command("assign enable", message)):
                 # User is attempting to enable the role.
-                roleName = getRawArgument(command("assign enable", message), message)
+                roleName = getRawArgument(
+                    command("assign enable", message), message)
                 enabling = True
             elif message.content.lower().startswith(command("assign disable", message)):
                 # User is attempting to disable the role.
-                roleName = getRawArgument(command("assign disable", message), message)
+                roleName = getRawArgument(
+                    command("assign disable", message), message)
                 enabling = False
             # If the role has already been created.
             role = discord.utils.get(message.guild.roles, name=(roleName))
@@ -957,18 +961,19 @@ async def on_message(message):
                 # If the role has not been created.
                 # Create a new role.
                 await message.channel.guild.create_role(name=str(roleName))
-                role = discord.utils.get(message.guild.roles, name=str(roleName))
+                role = discord.utils.get(
+                    message.guild.roles, name=str(roleName))
                 roleId = role.id
             if roleId != None:
                 roleId = role.id
                 assign.setAssign(message.channel.guild.id, roleId, enabling)
                 if(enabling):
-                    msg = ("Enabled role `" + roleName + \
-                        "` assignment!").format(message)
+                    msg = ("Enabled role `" + roleName +
+                           "` assignment!").format(message)
                     await message.channel.send(msg)
                 else:
-                    msg = ("Disabled role `" + roleName + \
-                        "` assignment.").format(message)
+                    msg = ("Disabled role `" + roleName +
+                           "` assignment.").format(message)
                     await message.channel.send(msg)
         else:
             msg = "{0.author.mention}, you must have `Manage Roles` permission to enable/disable role assignment.".format(
@@ -1011,13 +1016,14 @@ async def on_message(message):
                     await message.channel.send(msg)
                 elif(assigning and not roleAssigned):
                     await message.author.add_roles(role)
-                    msg = ("{0.author.mention}, role `"+ roleName + "` has been assigned.").format(message)
+                    msg = ("{0.author.mention}, role `" + roleName +
+                           "` has been assigned.").format(message)
                     await message.channel.send(msg)
                 elif(not assigning and roleAssigned):
                     await message.author.remove_roles(role)
-                    msg = ("{0.author.mention}, removed role `" + roleName + "`.").format(message)
+                    msg = ("{0.author.mention}, removed role `" +
+                           roleName + "`.").format(message)
                     await message.channel.send(msg)
-
 
             else:
                 msg = "{0.author.mention}, that role is not assignable!".format(
