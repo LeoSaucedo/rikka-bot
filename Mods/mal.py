@@ -53,7 +53,7 @@ def fetchAnime(id):
                     if result['started']:
                         if 'ended' in result:
                             if result['ended']:
-                                result['airing_status'] = f'Aired `{result["started"]}`` to `{result["ended"]}``'
+                                result['airing_status'] = f'Aired `{result["started"]}` to `{result["ended"]}`'
                             else:
                                 result['airing_status'] = f'Started Airing `{result["started"]}`'
                         else:
