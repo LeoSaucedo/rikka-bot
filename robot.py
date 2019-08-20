@@ -130,7 +130,7 @@ isSent = False
 # Eight ball instantiation
 eight = EightBall.eightBallGenerator()
 
-#mal menus var
+# mal menus var
 menus = {}
 
 
@@ -199,7 +199,8 @@ def fetchBooruPost(postID):
                               description="Invalid post ID")
     return embed
 
-def displayMA(id,embed):
+
+def displayMA(id, embed):
     if id.startswith('a/'):
         data = mal.fetchAnime(id.lstrip('a/'))
     elif id.startswith('m/'):
@@ -225,35 +226,44 @@ def displayMA(id,embed):
             name = 'Genre'
             if len(data['genres']) > 1:
                 name = 'Genres'
-            embed.add_field(name=name,value=''.join(('`','`,`'.join(data['genres']),'`')),inline=False)
+            embed.add_field(name=name, value=''.join(
+                ('`', '`,`'.join(data['genres']), '`')), inline=False)
         if 'episodes' in data:
-            embed.add_field(name='Episodes',value=f'`{data["episodes"]}`',inline=True)
+            embed.add_field(name='Episodes',
+                            value=f'`{data["episodes"]}`', inline=True)
         if 'chapters' in data:
-            embed.add_field(name='Chapters',value=f'`{data["chapters"]}`',inline=True)
+            embed.add_field(name='Chapters',
+                            value=f'`{data["chapters"]}`', inline=True)
         if 'airing_status' in data:
-            embed.add_field(name='Airing Status',value=data["airing_status"],inline=True)
+            embed.add_field(name='Airing Status',
+                            value=data["airing_status"], inline=True)
         if 'publishing_status' in data:
-            embed.add_field(name='Publishing Status',value=data["publishing_status"],inline=True)
+            embed.add_field(name='Publishing Status',
+                            value=data["publishing_status"], inline=True)
         if 'origin' in data:
-            embed.add_field(name='Origin',value=f'`{data["origin"]}`',inline=True)
+            embed.add_field(
+                name='Origin', value=f'`{data["origin"]}`', inline=True)
         if 'licensors' in data:
             name = 'Licensor'
             if len(data['licensors']) > 1:
                 name = 'Licensors'
             if data['licensors']:
-                embed.add_field(name=name,value=''.join(('`','`,`'.join(data['licensors']),'`')),inline=True)
+                embed.add_field(name=name, value=''.join(
+                    ('`', '`,`'.join(data['licensors']), '`')), inline=True)
         if 'studios' in data:
             name = 'Studio'
             if len(data['studios']) > 1:
                 name = 'Studios'
             if data['studios']:
-                embed.add_field(name=name,value=''.join(('`','`,`'.join(data['studios']),'`')),inline=True)
+                embed.add_field(name=name, value=''.join(
+                    ('`', '`,`'.join(data['studios']), '`')), inline=True)
         if 'authors' in data:
             name = 'Author'
             if len(data['authors']) > 1:
                 name = 'Authors'
             if data['authors']:
-                embed.add_field(name=name,value=''.join(('`','`,`'.join(data['authors']),'`')),inline=True)
+                embed.add_field(name=name, value=''.join(
+                    ('`', '`,`'.join(data['authors']), '`')), inline=True)
     elif data['request_status'] == 4:
         embed.title = 'Error!'
         embed.color = 0xff0000
@@ -263,6 +273,7 @@ def displayMA(id,embed):
         embed.color = 0xff0000
         embed.description = f'Sorry, there has been a serious error! (code `{data["request_status"]}`)'
     return embed
+
 
 def canDelete(message):
     if message.author.id == client.user.id:
@@ -274,6 +285,7 @@ def canDelete(message):
         return True
     else:
         return False
+
 
 @client.event
 async def on_guild_join(guild):
@@ -335,6 +347,7 @@ async def on_error(self, event_method, *args, **kwargs):
         print('Ignoring exception in {}'.format(event_method), file=sys.stderr)
         traceback.print_exc()
 
+
 @client.event
 async def on_raw_reaction_add(payload):
     idMessage = str(payload.message_id)
@@ -345,14 +358,16 @@ async def on_raw_reaction_add(payload):
         if emoji in menus[idMessage]:
             embed = discord.Embed(color=0x2e51a2)
             channel = client.get_channel(idChannel)
-            await channel.send(embed=displayMA(str(menus.pop(idMessage)[emoji]),embed))
+            await channel.send(embed=displayMA(str(menus.pop(idMessage)[emoji]), embed))
             message = await channel.fetch_message(idMessage)
             await message.delete()
+
 
 @client.event
 async def on_raw_message_delete(payload):
     if payload.message_id in menus:
         menus.pop(idMessage)
+
 
 @client.event
 async def on_message(message):
@@ -367,7 +382,7 @@ async def on_message(message):
         # Makes sure bot does not reply to another bot.
         return
 
-    #making this bot less awful to add commands to
+    # making this bot less awful to add commands to
     prefix = getServerPrefix(message.channel.guild)
     cmd = message.content.lstrip(prefix).lower()
     rawArguments = cmd.lstrip(cmd.split(" ")[0]).lstrip(" ")
@@ -557,13 +572,13 @@ async def on_message(message):
             else:
                 await message.channel.send(embed=image)
 
-    #mal
+    # mal
     elif cmd.startswith('malqa'):
-        await message.channel.send(embed=displayMA('a/' + str(mal.search(' ' + rawArguments,'anime')[1][0][3]),discord.Embed(color=0x2e51a2)))
+        await message.channel.send(embed=displayMA('a/' + str(mal.search(' ' + rawArguments, 'anime')[1][0][3]), discord.Embed(color=0x2e51a2)))
         if canDelete(message):
             await message.delete()
     elif cmd.startswith('malqm'):
-        await message.channel.send(embed=displayMA('m/' + str(mal.search(' ' + rawArguments,'manga')[1][0][3]),discord.Embed(color=0x2e51a2)))
+        await message.channel.send(embed=displayMA('m/' + str(mal.search(' ' + rawArguments, 'manga')[1][0][3]), discord.Embed(color=0x2e51a2)))
         if canDelete(message):
             await message.delete()
     elif cmd.startswith("mal "):
@@ -571,19 +586,19 @@ async def on_message(message):
         embed = discord.Embed(color=0x2e51a2)
         if subcommand == "id":
             id = rawArguments.split(" ")[1].lower()
-            await message.channel.send(embed=displayMA(id,embed))
+            await message.channel.send(embed=displayMA(id, embed))
             if canDelete(message):
                 await message.delete()
-        else: #search
+        else:  # search
             rawString = ' ' + rawArguments
             searchType = 'anime'
             searchTypeLetter = 'a'
-            rawString.replace('a/','')
+            rawString.replace('a/', '')
             if 'm/' in rawString.lower() or ' m ' in rawString.lower():
                 searchType = 'manga'
                 searchTypeLetter = 'm'
-                rawString.replace('m/','')
-            data = mal.search(rawString,searchType)
+                rawString.replace('m/', '')
+            data = mal.search(rawString, searchType)
             if data[0] == 1:
                 if len(data[1]) > 1:
                     desc = ''
@@ -591,14 +606,14 @@ async def on_message(message):
                     r = len(data[1])
                     if r > 4:
                         r = 4
-                    for i in range(0,r):
+                    for i in range(0, r):
                         result = data[1][i]
                         desc = f'{desc}{indicators[i]} [{result[1]}][{result[0]}]\n'
                         ref[indicators[i]] = f'{searchTypeLetter}/{result[3]}'
                     embed.description = desc
                     sm = await message.channel.send(embed=embed)
                     menus[str(sm.id)] = ref
-                    for i in range(0,r):
+                    for i in range(0, r):
                         await sm.add_reaction(indicators[i])
                     await sm.delete(delay=30)
                     if canDelete(message):
