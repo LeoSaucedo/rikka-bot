@@ -229,7 +229,7 @@ def displayMA(id,embed):
         if 'episodes' in data:
             embed.add_field(name='Episodes',value=f'`{data["episodes"]}`',inline=True)
         if 'chapters' in data:
-            embed.add_field(name='Chapters',value=f'`{data["chapters"]}`'',inline=True)
+            embed.add_field(name='Chapters',value=f'`{data["chapters"]}`',inline=True)
         if 'airing_status' in data:
             embed.add_field(name='Airing Status',value=f'`{data["airing_status"]}`',inline=True)
         if 'publishing_status' in data:
