@@ -36,10 +36,10 @@ def fetchAnime(id):
         if 'airing' in data:
             result['airing'] = data['airing']
             if data['airing'] and result['status']:
-                result['airing_status'] = result['status']
+                result['airing_status'] = f'`{result["status"]}`'
                 aStatus = True
             elif data['airing']:
-                result['airing_status'] = 'unknown'
+                result['airing_status'] = '`unknown`'
                 aStatus = True
         if 'aired' in data:
             if 'from' in data['aired']:
@@ -59,9 +59,9 @@ def fetchAnime(id):
                         else:
                             result['airing_status'] = f'Started Airing `{result["started"]}`'
                     else:
-                        result['airing_status'] = data['status']
+                        result['airing_status'] = f'`{data["status"]}`'
                 else:
-                    result['airing_status'] = data['status']
+                    result['airing_status'] = f'`{data["status"]}`'
         if 'licensors' in data:
             result['licensors'] = []
             for licensor in data['licensors']:
