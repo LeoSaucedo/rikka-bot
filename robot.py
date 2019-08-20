@@ -264,7 +264,8 @@ def displayMA(id,embed):
 def canDelete(message):
     if message.author.id == client.user.id:
         return True
-    elif message.channel.permissions_for(message.guild.fetch_member(client.user.id)).manage_messages:
+    permissions = await message.channel.permissions_for(message.guild.fetch_member(client.user.id))
+    if permissions.manage_messages:
         return True
     else:
         return False
