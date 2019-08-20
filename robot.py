@@ -361,7 +361,7 @@ async def on_message(message):
     spaceArguments = rawArguments.split(" ")
     commaArguments = rawArguments.split(",")
 
-    elif message.content.lower().startswith(command("sayd", message)):
+    if message.content.lower().startswith(command("sayd", message)):
         # Anonymous comment.
         arg = getRawArgument(command("sayd", message), message)
         arglist = arg.split()
