@@ -30,6 +30,7 @@ import Mods.xkcd as xkcd
 import Mods.wolfram as wolfram
 import Mods.colors as colors
 import Mods.assign as assign
+import Mods.mal as mal
 from pushbullet import Pushbullet
 
 # Auth tokens
@@ -129,6 +130,9 @@ isSent = False
 # Eight ball instantiation
 eight = EightBall.eightBallGenerator()
 
+# mal menus var
+menus = {}
+
 
 def getServerPrefix(guild):
     # Returns the server prefix.
@@ -196,6 +200,93 @@ def fetchBooruPost(postID):
     return embed
 
 
+def displayMA(id, embed):
+    if id.startswith('a/'):
+        data = mal.fetchAnime(id.lstrip('a/'))
+    elif id.startswith('m/'):
+        data = mal.fetchManga(id.lstrip('m/'))
+    else:
+        data = mal.fetchAnime(id)
+        if int(data['request_status']) != 1:
+            data = mal.fetchManga(id)
+    embed.title = 'fuckin error m8'
+    embed.description = 'get shat on'
+    if data['request_status'] == 1:
+        if 'title_formatted' in data:
+            embed.title = data['title_formatted']
+        if 'synopsis' in data:
+            if len(data['synopsis']) > 600:
+                short = data['synopsis'][0:599]
+                embed.description = f'[[url]]({data["page_url"]})\n```\n{short}...\n```'
+            else:
+                embed.description = f'[[url]]({data["page_url"]})\n```\n{data["synopsis"]}\n```'
+        if 'thumb_url' in data:
+            embed.set_thumbnail(url=data['thumb_url'])
+        if 'genres' in data:
+            name = 'Genre'
+            if len(data['genres']) > 1:
+                name = 'Genres'
+            embed.add_field(name=name, value=''.join(
+                ('`', '`,`'.join(data['genres']), '`')), inline=False)
+        if 'episodes' in data:
+            embed.add_field(name='Episodes',
+                            value=f'`{data["episodes"]}`', inline=True)
+        if 'chapters' in data:
+            embed.add_field(name='Chapters',
+                            value=f'`{data["chapters"]}`', inline=True)
+        if 'airing_status' in data:
+            embed.add_field(name='Airing Status',
+                            value=data["airing_status"], inline=True)
+        if 'publishing_status' in data:
+            embed.add_field(name='Publishing Status',
+                            value=data["publishing_status"], inline=True)
+        if 'origin' in data:
+            embed.add_field(
+                name='Origin', value=f'`{data["origin"]}`', inline=True)
+        if 'licensors' in data:
+            name = 'Licensor'
+            if len(data['licensors']) > 1:
+                name = 'Licensors'
+            if data['licensors']:
+                embed.add_field(name=name, value=''.join(
+                    ('`', '`,`'.join(data['licensors']), '`')), inline=True)
+        if 'studios' in data:
+            name = 'Studio'
+            if len(data['studios']) > 1:
+                name = 'Studios'
+            if data['studios']:
+                embed.add_field(name=name, value=''.join(
+                    ('`', '`,`'.join(data['studios']), '`')), inline=True)
+        if 'authors' in data:
+            name = 'Author'
+            if len(data['authors']) > 1:
+                name = 'Authors'
+            if data['authors']:
+                embed.add_field(name=name, value=''.join(
+                    ('`', '`,`'.join(data['authors']), '`')), inline=True)
+    elif data['request_status'] == 4:
+        embed.title = 'Error!'
+        embed.color = 0xff0000
+        embed.description = 'Sorry, that can\'t be found!'
+    else:
+        embed.title = 'Fatal Error!'
+        embed.color = 0xff0000
+        embed.description = f'Sorry, there has been a serious error! (code `{data["request_status"]}`)'
+    return embed
+
+
+def canDelete(message):
+    if message.author.id == client.user.id:
+        return True
+    guild = message.guild
+    member = guild.get_member(client.user.id)
+    permissions = message.channel.permissions_for(member)
+    if permissions.manage_messages:
+        return True
+    else:
+        return False
+
+
 @client.event
 async def on_guild_join(guild):
     serversConnected = str(len(client.guilds))
@@ -258,6 +349,27 @@ async def on_error(self, event_method, *args, **kwargs):
 
 
 @client.event
+async def on_raw_reaction_add(payload):
+    idMessage = str(payload.message_id)
+    idChannel = payload.channel_id
+    idUser = payload.user_id
+    emoji = payload.emoji.name
+    if str(idUser) == str(menus[idMessage]['user']):
+        if emoji in menus[idMessage]:
+            embed = discord.Embed(color=0x2e51a2)
+            channel = client.get_channel(idChannel)
+            await channel.send(embed=displayMA(str(menus.pop(idMessage)[emoji]), embed))
+            message = await channel.fetch_message(idMessage)
+            await message.delete()
+
+
+@client.event
+async def on_raw_message_delete(payload):
+    if payload.message_id in menus:
+        menus.pop(idMessage)
+
+
+@client.event
 async def on_message(message):
     """
     Universal commands
@@ -270,7 +382,14 @@ async def on_message(message):
         # Makes sure bot does not reply to another bot.
         return
 
-    elif message.content.lower().startswith(command("sayd", message)):
+    # making this bot less awful to add commands to
+    prefix = getServerPrefix(message.channel.guild)
+    cmd = message.content.lstrip(prefix).lower()
+    rawArguments = cmd.lstrip(cmd.split(" ")[0]).lstrip(" ")
+    spaceArguments = rawArguments.split(" ")
+    commaArguments = rawArguments.split(",")
+
+    if message.content.lower().startswith(command("sayd", message)):
         # Anonymous comment.
         arg = getRawArgument(command("sayd", message), message)
         arglist = arg.split()
@@ -452,6 +571,63 @@ async def on_message(message):
                 await message.channel.send(msg)
             else:
                 await message.channel.send(embed=image)
+
+    # mal
+    elif cmd.startswith('malqa'):
+        await message.channel.send(embed=displayMA('a/' + str(mal.search(' ' + rawArguments, 'anime')[1][0][3]), discord.Embed(color=0x2e51a2)))
+        if canDelete(message):
+            await message.delete()
+    elif cmd.startswith('malqm'):
+        await message.channel.send(embed=displayMA('m/' + str(mal.search(' ' + rawArguments, 'manga')[1][0][3]), discord.Embed(color=0x2e51a2)))
+        if canDelete(message):
+            await message.delete()
+    elif cmd.startswith("mal "):
+        subcommand = rawArguments.split(" ")[0]
+        embed = discord.Embed(color=0x2e51a2)
+        if subcommand == "id":
+            id = rawArguments.split(" ")[1].lower()
+            await message.channel.send(embed=displayMA(id, embed))
+            if canDelete(message):
+                await message.delete()
+        else:  # search
+            rawString = ' ' + rawArguments
+            searchType = 'anime'
+            searchTypeLetter = 'a'
+            rawString.replace('a/', '')
+            if 'm/' in rawString.lower() or ' m ' in rawString.lower():
+                searchType = 'manga'
+                searchTypeLetter = 'm'
+                rawString.replace('m/', '')
+            data = mal.search(rawString, searchType)
+            if data[0] == 1:
+                if len(data[1]) > 1:
+                    desc = ''
+                    ref = {'user': str(message.author.id)}
+                    r = len(data[1])
+                    if r > 4:
+                        r = 4
+                    for i in range(0, r):
+                        result = data[1][i]
+                        desc = f'{desc}{indicators[i]} [{result[1]}][{result[0]}]\n'
+                        ref[indicators[i]] = f'{searchTypeLetter}/{result[3]}'
+                    embed.description = desc
+                    sm = await message.channel.send(embed=embed)
+                    menus[str(sm.id)] = ref
+                    for i in range(0, r):
+                        await sm.add_reaction(indicators[i])
+                    await sm.delete(delay=30)
+                    if canDelete(message):
+                        await message.delete()
+            elif data[0] != 1:
+                if data[0] == 'NR':
+                    embed.title = 'Error!'
+                    embed.color = 0xff0000
+                    embed.description = f'Sorry, there are no results for "{rawString}"! (code `ID` `10` `T`)'
+                else:
+                    embed.title = 'Fatal Error!'
+                    embed.color = 0xff0000
+                    embed.description = f'Sorry, there has been a serious error! (code `{data[0]}`)'
+                await message.channel.send(embed=embed)
 
     elif message.content.lower().startswith(command("raffle", message)):
         nbusers = []
