@@ -53,11 +53,11 @@ def fetchAnime(id):
                     if result['started']:
                         if 'ended' in result:
                             if result['ended']:
-                                result['airing_status'] = f'Aired {result["started"]} to {result["ended"]}'
+                                result['airing_status'] = f'Aired `{result["started"]}`` to `{result["ended"]}``'
                             else:
-                                result['airing_status'] = f'Started Airing {result["started"]}'
+                                result['airing_status'] = f'Started Airing `{result["started"]}`'
                         else:
-                            result['airing_status'] = f'Started Airing {result["started"]}'
+                            result['airing_status'] = f'Started Airing `{result["started"]}`'
                     else:
                         result['airing_status'] = data['status']
                 else:
@@ -66,10 +66,14 @@ def fetchAnime(id):
             result['licensors'] = []
             for licensor in data['licensors']:
                 result['licensors'].append(licensor['name'])
+            if len(result['licensors']) == 0:
+                result['licensors'] = ['None']
         if 'studios' in data:
             result['studios'] = []
             for studio in data['studios']:
                 result['studios'].append(studio['name'])
+            if len(result['studios']) == 0:
+                result['studios'] = ['None']
         if 'source' in data:
             result['origin'] = data['source']
     else:

@@ -227,30 +227,33 @@ def displayMA(id,embed):
                 name = 'Genres'
             embed.add_field(name=name,value=''.join(('`','`,`'.join(data['genres']),'`')),inline=False)
         if 'episodes' in data:
-            embed.add_field(name='Episodes',value=data['episodes'],inline=True)
+            embed.add_field(name='Episodes',value=f'`{data["episodes"]}`',inline=True)
         if 'chapters' in data:
-            embed.add_field(name='Chapters',value=data['chapters'],inline=True)
+            embed.add_field(name='Chapters',value=f'`{data["chapters"]}`'',inline=True)
         if 'airing_status' in data:
-            embed.add_field(name='Airing Status',value=data['airing_status'],inline=True)
+            embed.add_field(name='Airing Status',value=f'`{data["airing_status"]}`',inline=True)
         if 'publishing_status' in data:
-            embed.add_field(name='Publishing Status',value=data['publishing_status'],inline=True)
+            embed.add_field(name='Publishing Status',value=f'`{data["publishing_status"]}`',inline=True)
         if 'origin' in data:
-            embed.add_field(name='Origin',value=data['origin'],inline=True)
+            embed.add_field(name='Origin',value=f'`{data["origin"]}`',inline=True)
         if 'licensors' in data:
             name = 'Licensor'
             if len(data['licensors']) > 1:
                 name = 'Licensors'
-            embed.add_field(name=name,value=''.join(('`','`,`'.join(data['licensors']),'`')),inline=True)
+            if data['licensors']:
+                embed.add_field(name=name,value=''.join(('`','`,`'.join(data['licensors']),'`')),inline=True)
         if 'studios' in data:
             name = 'Studio'
             if len(data['studios']) > 1:
                 name = 'Studios'
-            embed.add_field(name=name,value=''.join(('`','`,`'.join(data['studios']),'`')),inline=True)
+            if data['studios']:
+                embed.add_field(name=name,value=''.join(('`','`,`'.join(data['studios']),'`')),inline=True)
         if 'authors' in data:
             name = 'Author'
             if len(data['authors']) > 1:
                 name = 'Authors'
-            embed.add_field(name=name,value=''.join(('`','`,`'.join(data['authors']),'`')),inline=True)
+            if data['authors']:
+                embed.add_field(name=name,value=''.join(('`','`,`'.join(data['authors']),'`')),inline=True)
     elif data['request_status'] == 4:
         embed.title = 'Error!'
         embed.color = 0xff0000
