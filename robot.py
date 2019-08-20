@@ -261,6 +261,13 @@ def displayMA(id,embed):
         embed.description = f'Sorry, there has been a serious error! (code `{data["request_status"]}`)'
     return embed
 
+def canDelete(message):
+    if message.author.id == client.user.id:
+        return True
+    elif message.channel.permissions_for(message.guild.fetch_member(client.user.id)).manage_messages:
+        return True
+    else:
+        return False
 
 @client.event
 async def on_guild_join(guild):
@@ -547,15 +554,20 @@ async def on_message(message):
     #mal
     elif cmd.startswith('malqa'):
         await message.channel.send(embed=displayMA('a/' + str(mal.search(' ' + rawArguments,'anime')[1][0][3]),discord.Embed(color=0x2e51a2)))
+        if canDelete(message):
+            await message.delete()
     elif cmd.startswith('malqm'):
         await message.channel.send(embed=displayMA('m/' + str(mal.search(' ' + rawArguments,'manga')[1][0][3]),discord.Embed(color=0x2e51a2)))
+        if canDelete(message):
+            await message.delete()
     elif cmd.startswith("mal "):
         subcommand = rawArguments.split(" ")[0]
         embed = discord.Embed(color=0x2e51a2)
         if subcommand == "id":
             id = rawArguments.split(" ")[1].lower()
             await message.channel.send(embed=displayMA(id,embed))
-            await message.delete()
+            if canDelete(message):
+                await message.delete()
         else: #search
             rawString = ' ' + rawArguments
             searchType = 'anime'
@@ -583,7 +595,8 @@ async def on_message(message):
                     for i in range(0,r):
                         await sm.add_reaction(indicators[i])
                     await sm.delete(delay=30)
-                    await message.delete()
+                    if canDelete(message):
+                        await message.delete()
             elif data[0] != 1:
                 if data[0] == 'NR':
                     embed.title = 'Error!'
