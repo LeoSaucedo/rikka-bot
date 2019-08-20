@@ -575,13 +575,13 @@ async def on_message(message):
                         r = 4
                     for i in range(0,r):
                         result = data[1][i]
-                        desc = f'{desc}{regionalindicators[i]} [{result[1]}][{result[0]}]\n'
-                        ref[regionalindicators[i]] = f'{searchTypeLetter}/{result[3]}'
+                        desc = f'{desc}{indicators[i]} [{result[1]}][{result[0]}]\n'
+                        ref[indicators[i]] = f'{searchTypeLetter}/{result[3]}'
                     embed.description = desc
                     sm = await message.channel.send(embed=embed)
                     menus[str(sm.id)] = ref
                     for i in range(0,r):
-                        await sm.add_reaction(regionalindicators[i])
+                        await sm.add_reaction(indicators[i])
                     await sm.delete(delay=30)
                     await message.delete()
             elif data[0] != 1:
