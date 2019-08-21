@@ -348,25 +348,25 @@ async def on_error(self, event_method, *args, **kwargs):
         traceback.print_exc()
 
 
-@client.event
-async def on_raw_reaction_add(payload):
-    idMessage = str(payload.message_id)
-    idChannel = payload.channel_id
-    idUser = payload.user_id
-    emoji = payload.emoji.name
-    if str(idUser) == str(menus[idMessage]['user']):
-        if emoji in menus[idMessage]:
-            embed = discord.Embed(color=0x2e51a2)
-            channel = client.get_channel(idChannel)
-            await channel.send(embed=displayMA(str(menus.pop(idMessage)[emoji]), embed))
-            message = await channel.fetch_message(idMessage)
-            await message.delete()
+# @client.event
+# async def on_raw_reaction_add(payload):
+#     idMessage = str(payload.message_id)
+#     idChannel = payload.channel_id
+#     idUser = payload.user_id
+#     emoji = payload.emoji.name
+#     if str(idUser) == str(menus[idMessage]['user']):
+#         if emoji in menus[idMessage]:
+#             embed = discord.Embed(color=0x2e51a2)
+#             channel = client.get_channel(idChannel)
+#             await channel.send(embed=displayMA(str(menus.pop(idMessage)[emoji]), embed))
+#             message = await channel.fetch_message(idMessage)
+#             await message.delete()
 
 
-@client.event
-async def on_raw_message_delete(payload):
-    if payload.message_id in menus:
-        menus.pop(idMessage)
+# @client.event
+# async def on_raw_message_delete(payload):
+#     if payload.message_id in menus:
+#         menus.pop(idMessage)
 
 
 @client.event
