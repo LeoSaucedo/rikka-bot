@@ -7,17 +7,18 @@ api = 'https://api.jikan.moe/v3'
 lastRequest = datetime.datetime.utcnow().timestamp()
 
 def RLRequest(url):
-    global lastRequest
-    while lastRequest == 0:
-        sleep(0.5)
-    time = datetime.datetime.utcnow().timestamp()
-    lr = lastRequest + 2
-    lastRequest = 0
-    if time < lr:
-        sleep(lr - time)
-    response = requests.get(url,headers={'User-Agent':'Megumin-Tan/Discord'})
-    lastRequest = datetime.datetime.utcnow().timestamp()
-    return response
+    return None
+    # global lastRequest
+    # while lastRequest == 0:
+    #     sleep(0.5)
+    # time = datetime.datetime.utcnow().timestamp()
+    # lr = lastRequest + 2
+    # lastRequest = 0
+    # if time < lr:
+    #     sleep(lr - time)
+    # response = requests.get(url,headers={'User-Agent':'Megumin-Tan/Discord'})
+    # lastRequest = datetime.datetime.utcnow().timestamp()
+    # return response
 
 def fetchAnime(id):
     response = RLRequest(f'{api}/anime/{id}')
