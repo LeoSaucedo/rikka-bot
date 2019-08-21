@@ -6,33 +6,35 @@ A Discord bot that performs various functions.
 [![Support me on Patreon!](https://cdn.discordapp.com/attachments/437991897269665792/446474035149144074/unknown.png)](https://www.patreon.com/LeoSaucedo)
 
 ## Table of Contents
+
 1. [Commands](#commands)
-    - [Main Commands](#main-commands)
-        - [Utility Commands](#utility-commands)
-        - [Admin Commands](#admin-commands)
-    - [Self-Assignable Roles](#self-assignable-roles)
-        - [Enabling/Disabling/Listing](#enablingdisablinglisting)
-        - [Assigning/Unassigning Roles](#assigningunassigning-roles)
-    - [Color Role System](#color-role-system)
-        - [Setup](#setup)
-        - [Usage](#usage)
-    - [Economy System](#economy-system)
-    - [Fun Commands](#fun-commans)
-        - [XKCD Commands](#xkcd-commands)
-        - [GIF Commands](#gif-commands)
-        - [Gelbooru Commands](#gelbooru-commands)
-        - [Emotes](#emotes)
-    - [Game Commands](#game-commands)
-        - [Trivia Commands](#trivia-commands)
-        - [Casino Commands](#casino-commands)
+   - [Main Commands](#main-commands)
+     - [Utility Commands](#utility-commands)
+     - [Admin Commands](#admin-commands)
+   - [Self-Assignable Roles](#self-assignable-roles)
+     - [Enabling/Disabling/Listing](#enablingdisablinglisting)
+     - [Assigning/Unassigning Roles](#assigningunassigning-roles)
+   - [Color Role System](#color-role-system)
+     - [Setup](#setup)
+     - [Usage](#usage)
+   - [Economy System](#economy-system)
+   - [Fun Commands](#fun-commans)
+     - [XKCD Commands](#xkcd-commands)
+     - [GIF Commands](#gif-commands)
+     - [Gelbooru Commands](#gelbooru-commands)
+     - [Emotes](#emotes)
+   - [Game Commands](#game-commands)
+     - [Trivia Commands](#trivia-commands)
+     - [Casino Commands](#casino-commands)
 2. [In The Works](#in-the-works)
 3. [Special Thanks](#special-thanks)
 
 ## Commands
 
-*Right now, this bot's prefix is* `;`*.*
+_Right now, this bot's prefix is_ `;`_._
 
 ### Main Commands
+
 #### Utility Commands
 
 - `@mention help` - Returns a command list, along with your server's prefix.
@@ -50,44 +52,49 @@ A Discord bot that performs various functions.
 
 #### Admin Commands
 
-- `;prefix (prefix)` - Changes the prefix to a set custom prefix. *(Must be admin)*
-- `;clear (number)` - Clears a set number of messages from the given channel. *(Must have manage message permission)*
-- `;clear (user)` - Clears any messages authored by the specified user in the channel. *(Must have manage message permission)*
-- `;mute / ;unmute (user)` - Mutes/unmutes specified user. *(Must have manage message permission)*
-- `;kick (user)` - Kicks the specified user. *(Must have kick permission)*
-- `;ban (user)` - Bans the specified user. *(Must have ban permission)*
-- `;add (points) (user(s))` - Adds a set number of points to mentioned user(s). *(Must be admin)*
-- `;subtract (points) (user(s))` - Subtracts a set number of points from mentioned user(s). *(Must be admin)*
+- `;prefix (prefix)` - Changes the prefix to a set custom prefix. _(Must be admin)_
+- `;clear (number)` - Clears a set number of messages from the given channel. _(Must have manage message permission)_
+- `;clear (user)` - Clears any messages authored by the specified user in the channel. _(Must have manage message permission)_
+- `;mute / ;unmute (user)` - Mutes/unmutes specified user. _(Must have manage message permission)_
+- `;kick (user)` - Kicks the specified user. _(Must have kick permission)_
+- `;ban (user)` - Bans the specified user. _(Must have ban permission)_
+- `;add (points) (user(s))` - Adds a set number of points to mentioned user(s). _(Must be admin)_
+- `;subtract (points) (user(s))` - Subtracts a set number of points from mentioned user(s). _(Must be admin)_
 
 ### Self-Assignable Roles
-*NOTE: In order to do this, Rikka must be placed above the users you would like to enable assigning to. Failure to do so will fail to assign the roles.*
+
+_NOTE: In order to do this, Rikka must be placed above the users you would like to enable assigning to. Failure to do so will fail to assign the roles._
 
 Rikka has a self-assignable roles system. If it is enabled for your server, you can create roles to assign yourself and other users.
 For these commands to work, the role names must match perfectly.
 
 #### Enabling/Disabling/Listing
+
 - `;iamlist` - Lists the assignable roles.
-- `;assign enable (role name)` - Enables assignability for the given role. *(Must have Manage Roles permission)*
-- `;assign disable (role name)`- Disables assignability for the given role. *(Must have Manage Roles permission)*
+- `;assign enable (role name)` - Enables assignability for the given role. _(Must have Manage Roles permission)_
+- `;assign disable (role name)`- Disables assignability for the given role. _(Must have Manage Roles permission)_
 
 #### Assigning/Unassigning Roles
+
 - `;iam (role name)` - Assigns yourself the role.
 - `;iamnot (role name)` - Unassigns yourself the role.
 
 ### Color Role System
 
-
-*NOTE: In order to do this, Rikka must be placed above the roles whose colors you would like to override. Failure to do so will just create and assign the role without any effect.*
+_NOTE: In order to do this, Rikka must be placed above the roles whose colors you would like to override. Failure to do so will just create and assign the role without any effect._
 
 Rikka has a color role system. If it is enabled for your server, you can set your own color from the image below.
 
 ![Color Chart](https://raw.githubusercontent.com/LeoSaucedo/rikka-bot/master/json/css-color-names.png)
 
 #### Setup
-*Setup requires manage roles permission.*
+
+_Setup requires manage roles permission._
+
 - `;colors (enable/disable)` - enables or disables the color role mode for your server.
 
 #### Usage
+
 - `;color (color)` - Sets your color to the specified color.
 - `;color reset` - Removes all of your color roles, resetting you to your original color.
 
@@ -110,6 +117,15 @@ Rikka's economy system consists of a global leaderboard. Currently, you can get 
 - `;ping` - For that annoying person who keeps `@everyone`ing.
 - `;beemovie` - Returns a random bee movie quote.
 
+#### MAL Commands
+
+- `;mal (anime)` - Returns the result of the anime search.
+- `;mal m/(manga)` - Returns the result of the manga search.
+- `;malqa (anime)` - Returns the result of the anime search.
+- `;malqm (manga)` - Returns the result of the manga search.
+- `;mal id a/(anime id)` - Returns the result of the anime ID search.
+- `;mal id m/(manga id)` - Returns the result of the manga ID search.
+
 #### XKCD Commands
 
 - `;xkcd` - Returns a random XKCD comic.
@@ -124,13 +140,13 @@ Rikka's economy system consists of a global leaderboard. Currently, you can get 
 
 #### Emotes
 
-*Note: All emotes are entirely SFW.*
+_Note: All emotes are entirely SFW._
 
 - `shocked, smile, hentai, blush, bdsm, rekt, boop, fuckoff, sanic, dreamy, kys`
 
 #### Gelbooru Commands
 
-*These commands require the channel to be marked as NSFW.*
+_These commands require the channel to be marked as NSFW._
 
 - `;gelbooru random` - Fetches a random gelbooru post.
 - `;gelbooru latest` - Fetches the latest gelbooru post.
@@ -154,13 +170,14 @@ Rikka's economy system consists of a global leaderboard. Currently, you can get 
 
 ### Board Functionality
 
-*This feature is currently not functional. Sorry!*
+_This feature is currently not functional. Sorry!_
 
 The board functionality allows popular messages to be posted on a special channel, titled `board`.
 To use this functionality, you must first run `;board enable`.
 Afterwards, every message with 3 reactions with the "⭐" will get posted to the board.
 
 #### In the works
+
 - Improved, proprietary AI, instead of cleverbot.
 - Aliases for Self-Assignable Roles
 - Minecraft Server Status
