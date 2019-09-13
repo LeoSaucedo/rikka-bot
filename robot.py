@@ -1090,7 +1090,7 @@ async def on_message(message):
                 if(newRole == None):
                     statusMsg("Error fetching role " + colorName + ".", ERROR)
                     msg = "{0.author.mention}, an unknown error ocurred, please try again.".format(
-                        msg)
+                        message)
                     await message.author.send(msg)
                 else:
                     # Place the role directly under the bot's top role position.
