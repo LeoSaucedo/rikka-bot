@@ -281,7 +281,7 @@ def canDelete(message):
     guild = message.guild
     member = guild.get_member(client.user.id)
     permissions = message.channel.permissions_for(member)
-    if permissions.manage_messages:
+    if permissions.manage_messages or message.author.id == config["admin"]:
         return True
     else:
         return False
@@ -868,9 +868,9 @@ async def on_message(message):
         """
         Board enable command.
         """
-        if message.channel.permissions_for(message.author).manage_channels == True:
+        if message.channel.permissions_for(message.author).manage_channels == True or message.author.id == config["admin"]:
             if getRawArgument(command("board", message), message) == "enable":
-                if message.channel.permissions_for(message.author).manage_channels == True:
+                if message.channel.permissions_for(message.author).manage_channels == True or message.author.id == config["admin"]:
                     await message.guild.create_text_channel('board')
                     msg = "Created board channel! You might want to change the channel permissions/category."
                     await message.channel.send(msg)
@@ -882,7 +882,7 @@ async def on_message(message):
         """
         Kick command.
         """
-        if message.channel.permissions_for(message.author).kick_members == True:
+        if message.channel.permissions_for(message.author).kick_members == True or message.author.id == config["admin"]:
             user = message.mentions[0]
             try:
                 await message.guild.kick(user)
@@ -899,7 +899,7 @@ async def on_message(message):
         """
         Ban command.
         """
-        if message.channel.permissions_for(message.author).ban_members == True:
+        if message.channel.permissions_for(message.author).ban_members == True or message.author.id == config["admin"]:
             user = message.mentions[0]
             try:
                 await message.guild.ban(user)
@@ -913,7 +913,7 @@ async def on_message(message):
             msg = "Insufficient permissions."
             await message.channel.send(msg)
 
-    elif message.channel.permissions_for(message.author).manage_messages == True:
+    elif message.channel.permissions_for(message.author).manage_messages == True or message.author.id == config["admin"]:
         """
         Moderator commands.
         """
@@ -966,7 +966,7 @@ async def on_message(message):
                 msg = "You must specify a user."
                 await message.channel.send(msg)
 
-    if message.channel.permissions_for(message.author).administrator == True:
+    if message.channel.permissions_for(message.author).administrator == True or message.author.id == config["admin"]:
         """
         Administrator Commands.
         """
@@ -1033,7 +1033,7 @@ async def on_message(message):
         msg = "{0.author.mention}, color roles are not enabled for this server... sorry!".format(
             message)
         await message.channel.send(msg)
-    if (message.channel.permissions_for(message.author).manage_roles == True
+    if ((message.channel.permissions_for(message.author).manage_roles == True or message.author.id == config["admin"])
             and message.content.lower().startswith(command("colors", message))):
         status = getRawArgument(command("colors", message), message)
         if(status == "enable"):
@@ -1122,7 +1122,7 @@ async def on_message(message):
             await message.channel.send(msg)
     elif message.content.lower().startswith(command("assign enable", message)) or message.content.lower().startswith(command("assign disable", message)):
         # Enable assignability.
-        if(message.channel.permissions_for(message.author).manage_roles == True):
+        if(message.channel.permissions_for(message.author).manage_roles == True or message.author.id == config["admin"]):
             # User has permission.
             enabling = None
             if message.content.lower().startswith(command("assign enable", message)):
@@ -1137,7 +1137,6 @@ async def on_message(message):
                 enabling = False
             # If the role has already been created.
             role = discord.utils.get(message.guild.roles, name=(roleName))
-            roleId = role.id
             if(role == None and enabling):
                 # If the role has not been created.
                 # Create a new role.
