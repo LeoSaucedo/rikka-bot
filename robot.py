@@ -452,6 +452,11 @@ async def on_message(message):
         msg = "no u {0.author.mention}".format(message)
         await message.channel.send(msg)
 
+    elif message.content.lower().startswith(command("gayy", message)):
+        # no me
+        msg = "no me {0.author.mention}".format(message)
+        await message.channel.send(msg)
+
     elif message.content.lower().startswith(command("translate", message)):
         # Translates the given text into english.
         translatedMessage = translator.translate(
