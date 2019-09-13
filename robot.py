@@ -447,14 +447,14 @@ async def on_message(message):
         msg = ramsaylist[randint(0, ramsayCount - 1)]
         await message.channel.send(msg)
 
-    elif message.content.lower().startswith(command("gay", message)):
-        # no u
-        msg = "no u {0.author.mention}".format(message)
-        await message.channel.send(msg)
-
     elif message.content.lower().startswith(command("gayy", message)):
         # no me
         msg = "no me {0.author.mention}".format(message)
+        await message.channel.send(msg)
+
+    elif message.content.lower().startswith(command("gay", message)):
+        # no u
+        msg = "no u {0.author.mention}".format(message)
         await message.channel.send(msg)
 
     elif message.content.lower().startswith(command("translate", message)):
