@@ -104,11 +104,12 @@ nsfwInsultCount = len(nsfwinsultlist)
 nsfwinsultfile.close()
 
 # Cleverbot
-try:
-    statusMsg("Suspending CleverBot for now.", WARN)
-    clever = CleverApi.Bot(config["userapi"], config["keyapi"])
-except:
-    statusMsg("Failed to instantiate CleverBot.")
+if(config["cleverbot"]):
+    try:
+        statusMsg("Suspending CleverBot for now.", WARN)
+        clever = CleverApi.Bot(config["userapi"], config["keyapi"])
+    except:
+        statusMsg("Failed to instantiate CleverBot.")
 
 # Instances
 client = discord.Client()
@@ -326,6 +327,7 @@ async def on_guild_remove(guild):
 @client.event
 async def on_error(self, event_method, *args, **kwargs):
     if(config["pushbullet"]):
+        print("Pushbullet is enabled.")
         statusMsg("Error.txt for details...", ERROR)
         print(file=sys.stderr)
         oldfile = open("error.txt", "r")
@@ -1083,19 +1085,11 @@ async def on_message(message):
                 # If the role has not yet been created.
                 # Remove the previously existing role - if applicable.
                 # Create a new role with the specified color.
-                await message.channel.guild.create_role(color=color, name=("Color - " + colorName))
-                newRole = None
-                newRole = discord.utils.get(
-                    message.guild.roles, name=("Color - " + colorName))
-                if(newRole == None):
-                    statusMsg("Error fetching role " + colorName + ".", ERROR)
-                    msg = "{0.author.mention}, an unknown error ocurred, please try again.".format(
-                        message)
-                    await message.author.send(msg)
-                else:
-                    # Place the role directly under the bot's top role position.
-                    await newRole.edit(position=(message.channel.guild.me.top_role.position-1))
-                    await message.author.add_roles(newRole)
+                newRole = await message.channel.guild.create_role(color=color, name=("Color - " + colorName))
+                await message.channel.send(newRole)
+                # Place the role directly under the bot's top role position.
+                await newRole.edit(position=(message.channel.guild.me.top_role.position-1))
+                await message.author.add_roles(newRole)
 
             msg = ("{0.author.mention}, changed your color to " +
                    colorName + "!").format(message)
