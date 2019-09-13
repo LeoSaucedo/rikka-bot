@@ -1,9 +1,8 @@
-# rikka-bot
+# rikka-bot [![Support me on Patreon!](https://cdn.discordapp.com/attachments/437991897269665792/446474035149144074/unknown.png)](https://www.patreon.com/LeoSaucedo)
 
 A Discord bot that performs various functions.
 
 ![Python 3.6](https://img.shields.io/badge/python-3.5%2C%203.6-blue.svg) [![Discord Bots](https://discordbots.org/api/widget/status/430482288053059584.svg)](https://discordbots.org/bot/430482288053059584) [![Discord Bots](https://discordbots.org/api/widget/servers/430482288053059584.svg)](https://discordbots.org/bot/430482288053059584)
-[![Support me on Patreon!](https://cdn.discordapp.com/attachments/437991897269665792/446474035149144074/unknown.png)](https://www.patreon.com/LeoSaucedo)
 
 ## Table of Contents
 
@@ -42,7 +41,7 @@ _Right now, this bot's prefix is_ `;`_._
 - `;info` - Returns information about the bot.
 - `;paypal` - Returns donation link to contribute to server hosting.
 - `;vote` - Returns this server's vote link on [discordbots.org](https://discordbots.org/).
-- `;clever (text)` - Returns the cleverbot response to the given text.
+- `;clever (text)` - Returns the cleverbot response to the given text.        
 - `;gizoogle (text)` - Translates a given text with gizoogle.
 - `;translate (text)` - Translates the specified text to English.
 - `;suggest (suggestion)` - Adds a completely anonymous suggestion to better the bot.
