@@ -496,6 +496,8 @@ async def on_message(message):
         # Returns information about the bot.
         msg = ("Hi there! I'm Rikka. This robot was created by Leo. This server's command Prefix is: `" + getServerPrefix(
             message.channel.guild) + "`. To get help, use `" + getServerPrefix(message.channel.guild) + "help`.").format(message)
+        if(message.author.id == config["admin"]):
+            await message.channel.send("Hello, Leo! Thanks for creating me. ^-^")
         await message.channel.send(msg)
 
     elif (len(message.mentions) > 0) and (message.mentions[0] == client.user) and ("help" in message.content):
@@ -1104,12 +1106,27 @@ async def on_message(message):
         assignableRoles = assign.getAssignList(message.guild.id)
         if len(assignableRoles) > 0:
             for role in assignableRoles:
-                roleName = discord.utils.get(
-                    message.guild.roles, id=int(role[0])).name
-                assignList += roleName+"\n"
-            assignEmbed = discord.Embed(
-                title="Assignable Roles", color=0x4287f5, description=assignList)
-            await message.channel.send(embed=assignEmbed)
+                # If the role still exists,
+                # Add it to the list of assignable roles.
+                roleObject = discord.utils.get(
+                    message.guild.roles, id=int(role[0]))
+                if roleObject != None:
+                    # If the role still exists in the serer,
+                    # Add it to the print list.
+                    roleName = roleObject.name
+                    assignList += roleName+"\n"
+                else:
+                    # If the role doesn't exist anymore,
+                    # delete it from the database.
+                    assign.setAssign(message.channel.guild.id, int(role[0]), False)
+            if(assignList != ""):
+                assignEmbed = discord.Embed(
+                    title="Assignable Roles", color=0x4287f5, description=assignList)
+                await message.channel.send(embed=assignEmbed)
+            else:
+                msg = "{0.author.mention}, no assignable roles have been set.".format(
+                message)
+                await message.channel.send(msg)
         else:
             msg = "{0.author.mention}, no assignable roles have been set.".format(
                 message)
@@ -1138,7 +1155,8 @@ async def on_message(message):
                 role = discord.utils.get(
                     message.guild.roles, name=str(roleName))
                 roleId = role.id
-            if roleId != None:
+            if role != None:
+                # Role has been created.
                 roleId = role.id
                 assign.setAssign(message.channel.guild.id, roleId, enabling)
                 if(enabling):
