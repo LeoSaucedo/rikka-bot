@@ -1151,9 +1151,7 @@ async def on_message(message):
             if(role == None and enabling):
                 # If the role has not been created.
                 # Create a new role.
-                await message.channel.guild.create_role(name=str(roleName))
-                role = discord.utils.get(
-                    message.guild.roles, name=str(roleName))
+                role = await message.channel.guild.create_role(name=str(roleName))
                 roleId = role.id
             if role != None:
                 # Role has been created.
