@@ -506,6 +506,14 @@ async def on_message(message):
             message.channel.guild) + "`. To get help, use `" + getServerPrefix(message.channel.guild) + "help`.").format(message)
         await message.channel.send(msg)
 
+    elif message.content.lower().startswith(command("codeformat", message)):
+        # Tells the user how to use discord's multiline code formatting
+        msg = ("To use discord's muliline code formatting, send your message with the following template:\n"
+            + "\`\`\`python\nprint(\"Hello, World\")\n\`\`\`\n\n"
+            + "This outputs:\n```python\nprint(\"Hello, World\")\n```\n"
+            + "Replace \"language\" with the language you are using to get some pretty syntax highlighting!")
+        await message.channel.send(msg)
+    
     elif message.content.lower().startswith(command("donate", message)) or message.content.startswith(command("patreon", message)):
         msg = (
             "Help my programmer out, become a patron today! https://www.patreon.com/LeoSaucedo")
