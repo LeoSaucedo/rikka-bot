@@ -1,3 +1,4 @@
+discord.py>=1.2.3
 asyncio
 googletrans
 bs4
