@@ -275,7 +275,7 @@ def displayMA(id, embed):
         embed.description = f'Sorry, there has been a serious error! (code `{data["request_status"]}`)'
     return embed
 
-def getAllRealServerUserIDStrings(server):
+def getAllServerUserIDStrings(server):
     nbusers = []
     for user in server.members:
         if not user.bot:
@@ -793,7 +793,7 @@ async def on_message(message):
 
     elif message.content.lower() == command("leaderboard local", message):
         scoreList = ""
-        localScores = trivia.getLocalLeaderboard(getAllRealServerUserIDStrings(message.guild))
+        localScores = trivia.getLocalLeaderboard(getAllServerUserIDStrings(message.guild))
         if len(localScores) < 10:
             place = 1
             for score in localScores:
