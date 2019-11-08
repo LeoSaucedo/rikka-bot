@@ -1,8 +1,0 @@
-discord.py>=1.2.3
-asyncio
-googletrans
-bs4
-dblpy==0.2
-wolframalpha
-pushbullet.py
-lxml
