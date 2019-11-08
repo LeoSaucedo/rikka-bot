@@ -118,7 +118,7 @@ botlist = dbl.Client(client, config["bltoken"])
 wolframClient = wolfram.Client(config["wolframapi"])
 
 # Prefix things
-defaultPrefix = ";"
+defaultPrefix = config["prefix"]
 
 # Trivia instantiation
 question_relPath = "Lists/trivia_questions.list"
