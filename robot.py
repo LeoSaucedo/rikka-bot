@@ -779,7 +779,9 @@ async def on_message(message):
             while (place <= 10 and i < len(globalScores)):
                 print(globalScores[i][1])
                 user = client.get_user(int(globalScores[i][1]))
+                print(user != None)
                 if user != None:
+                    print(globalScores[i][2])
                     score = globalScores[i][2]
                     scoreList = scoreList + \
                         (str(place) + ": " + user.name +
