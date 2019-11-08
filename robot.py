@@ -278,8 +278,7 @@ def displayMA(id, embed):
 def getAllServerUserIDStrings(server):
     nbusers = []
     for user in server.members:
-        if not user.bot:
-            nbusers.append(str(user.id))
+        nbusers.append(str(user.id))
     return nbusers
 
 
