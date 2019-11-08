@@ -275,6 +275,12 @@ def displayMA(id, embed):
         embed.description = f'Sorry, there has been a serious error! (code `{data["request_status"]}`)'
     return embed
 
+def getAllServerUserIDStrings(server):
+    nbusers = []
+    for user in server.members:
+        nbusers.append(str(user.id))
+    return nbusers
+
 
 def canDelete(message):
     if message.author.id == client.user.id:
@@ -513,7 +519,7 @@ async def on_message(message):
             + "This outputs:\n```python\nprint(\"Hello, World\")\n```\n"
             + "Replace \"python\" with the language you are using to get some pretty syntax highlighting!")
         await message.channel.send(msg)
-    
+
     elif message.content.lower().startswith(command("donate", message)) or message.content.startswith(command("patreon", message)):
         msg = (
             "Help my programmer out, become a patron today! https://www.patreon.com/LeoSaucedo")
@@ -786,7 +792,7 @@ async def on_message(message):
 
     elif message.content.lower() == command("leaderboard local", message):
         scoreList = ""
-        localScores = trivia.getLocalLeaderboard(message.guild.id)
+        localScores = trivia.getLocalLeaderboard(getAllServerUserIDStrings(message.guild))
         if len(localScores) < 10:
             place = 1
             for score in localScores:
