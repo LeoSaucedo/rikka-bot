@@ -1,0 +1,19 @@
+#VSCode
+.vscode/*
+
+*.txt
+*.pyc
+bot.cfg
+test.py
+robotold.py
+.project
+.pydevproject
+bot_prefixes.list
+/.settings/*
+!requirements.txt
+config.json
+*.db
+tempCodeRunnerFile.py
+
+# Environment Variables
+.env/*
