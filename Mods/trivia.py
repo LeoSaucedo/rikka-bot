@@ -133,7 +133,7 @@ class triviaGame:
         conn = sqlite3.connect("db/database.db")
         c = conn.cursor()
 
-        c.execute('SELECT * FROM leaderboard ORDER BY score DESC LIMIT 10;')
+        c.execute('SELECT * FROM leaderboard ORDER BY score DESC;')
         globalScores = c.fetchall()
         c.close()
 
@@ -143,7 +143,7 @@ class triviaGame:
         conn = sqlite3.connect("db/database.db")
         c = conn.cursor()
         usersl = "'" + "', '".join(users) + "'"
-        c.execute(f'SELECT * FROM leaderboard WHERE user IN ({usersl}) ORDER BY score DESC LIMIT 10;')
+        c.execute(f'SELECT * FROM leaderboard WHERE user IN ({usersl}) ORDER BY score DESC;')
         localScores = c.fetchall()
         c.close()
         return localScores
