@@ -14,7 +14,10 @@ def text(input_text: str) -> str:
     target_url = "http://www.gizoogle.net/textilizer.php"
     resp = requests.post(target_url, data=params)
     # the html returned is in poor form normally.
-    soup_input = re.sub("/name=translatetext[^>]*>/", 'name="translatetext" >', resp.text)
+    soup_input = re.sub(
+        "/name=translatetext[^>]*>/",
+        'name="translatetext" >',
+        resp.text)
     soup = bs4.BeautifulSoup(soup_input, "lxml")
     giz = soup.find_all(text=True)
     giz_text = giz[39].strip("\r\n")  # Hacky, but consistent.
@@ -23,12 +26,17 @@ def text(input_text: str) -> str:
 
 def link(dest_url: str) -> str:
     params = {"search": dest_url}
-    return "http://www.gizoogle.net/tranzizzle.php?{}".format(parse.urlencode(params))
+    return "http://www.gizoogle.net/tranzizzle.php?{}".format(
+        parse.urlencode(params))
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Make some text a bit more gangster.")
-    parser.add_argument("-t", "--text", help="Process text through textilizer.")
+    parser = argparse.ArgumentParser(
+        description="Make some text a bit more gangster.")
+    parser.add_argument(
+        "-t",
+        "--text",
+        help="Process text through textilizer.")
     parser.add_argument("-l", "--link", help="Gizoogle a website.")
 
     args = parser.parse_args()

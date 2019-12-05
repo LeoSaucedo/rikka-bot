@@ -1,10 +1,13 @@
 #!/usr/bin/python3
-#Made by Tomo-Nyan
+# Made by Tomo-Nyan
 
-import requests,datetime, urllib
+import requests
+import datetime
+import urllib
 from time import sleep
 api = 'https://api.jikan.moe/v3'
 lastRequest = datetime.datetime.utcnow().timestamp()
+
 
 def RLRequest(url):
     return None
@@ -20,19 +23,20 @@ def RLRequest(url):
     # lastRequest = datetime.datetime.utcnow().timestamp()
     # return response
 
+
 def fetchAnime(id):
     response = RLRequest(f'{api}/anime/{id}')
     result = {}
     if response.status_code == 200:
         data = response.json()
-        result = _fetchAMShared(data,result)
+        result = _fetchAMShared(data, result)
         result['request_status'] = 1
         aStatus = False
         if 'title' in result:
             title = result['title']
         elif 'title_ja' in result:
             title = result['title_ja']
-        if 'type_mal' in result and title != None:
+        if 'type_mal' in result and title is not None:
             result['title_formatted'] = f'[A/{id}][{result["type_mal"]}][{title}]'
         if 'airing' in data:
             result['airing'] = data['airing']
@@ -81,37 +85,39 @@ def fetchAnime(id):
         result['request_status'] = _responseParse(response)
     return result
 
+
 def _responseParse(response):
-    if response.status_code == 400: #invalid request
+    if response.status_code == 400:  # invalid request
         print('[ERROR][mal.py] 400 Invalid Request')
         return 3
-    elif response.status_code == 404: #mal not found
+    elif response.status_code == 404:  # mal not found
         print('[ERROR][mal.py] 404 Not Found')
         return 4
-    elif response.status_code == 405: #invalid request
+    elif response.status_code == 405:  # invalid request
         print('[ERROR][mal.py] 405 Invalid Request')
         return 5
-    elif response.status_code == 429: #rate limited
+    elif response.status_code == 429:  # rate limited
         print('[ERROR][mal.py] 429 Rate Limited')
         return 6
-    elif response.status_code == 500: #cunt's fucked
+    elif response.status_code == 500:  # cunt's fucked
         print('[ERROR][mal.py] 500 Internal Server Error')
         return 7
     else:
         return 0
 
+
 def fetchManga(id):
     response = RLRequest(f'{api}/manga/{id}/')
     if response.status_code == 200:
         data = response.json()
-        result = _fetchAMShared(data,{})
+        result = _fetchAMShared(data, {})
         result['request_status'] = 1
         pStatus = False
         if 'title' in result:
             title = result['title']
         elif 'title_ja' in result:
             title = result['title_ja']
-        if 'type_mal' in result and title != None:
+        if 'type_mal' in result and title is not None:
             result['title_formatted'] = f'[M/{id}][{result["type_mal"]}][{title}]'
         if 'publishing' in data:
             result['publishing'] = data['publishing']
@@ -150,7 +156,9 @@ def fetchManga(id):
         result['request_status'] = _responseParse(response)
     return result
 
-def _fetchAMShared(data,initialResult): #this sets the properties that both anime and manga pages use, to save space.
+
+# this sets the properties that both anime and manga pages use, to save space.
+def _fetchAMShared(data, initialResult):
     result = initialResult
     if 'url' in data:
         result['page_url'] = data['url']
@@ -177,7 +185,8 @@ def _fetchAMShared(data,initialResult): #this sets the properties that both anim
         result['genres'] = genres
     return result
 
-def search(query,type):
+
+def search(query, type):
     query = urllib.parse.quote(query)
     response = RLRequest(f'{api}/search/{type}?q={query}&page=1&limit=8')
     if response.status_code == 200:
@@ -187,8 +196,11 @@ def search(query,type):
             if len(data['results']) > 0:
                 for searchResult in data['results']:
                     if searchResult['type'].lower() != 'music':
-                        result.append([searchResult['title'],searchResult['type'],searchResult['image_url'],searchResult['mal_id']])
-                result = [1,result]
+                        result.append([searchResult['title'],
+                                       searchResult['type'],
+                                       searchResult['image_url'],
+                                       searchResult['mal_id']])
+                result = [1, result]
             else:
                 result = ['NR']
         else:

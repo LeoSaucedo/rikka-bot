@@ -39,7 +39,7 @@ class triviaGame:
                 answer = self.answerList[self.questionNumber][0]
                 x.setQuestion(question, answer)
                 return x.getQuestion()
-        if inList == False:
+        if not inList:
             # The server has not initiated a trivia game.
             self.questionNumber = randint(0, self.questionCount - 1)
             question = self.questionList[self.questionNumber][0]
@@ -71,7 +71,7 @@ class triviaGame:
             if x.getServer() == serverID:
                 inList = True
                 return x.getSent()
-        if inList == False:
+        if not inList:
             return False
 
     def setSent(self, serverID, state):
@@ -86,7 +86,10 @@ class triviaGame:
 
         # Search for the entries
         # TODO: More efficient?
-        c.execute("SELECT * FROM leaderboard WHERE user='"+str(userID)+"';")
+        c.execute(
+            "SELECT * FROM leaderboard WHERE user='" +
+            str(userID) +
+            "';")
         if(len(c.fetchall()) == 0):
             # If the entry does not exist
             c.execute('''
@@ -94,10 +97,13 @@ class triviaGame:
             VALUES (''' + "'" + str(serverID) + "', '" + str(userID) + "', '" + str(amount) + "', '"
                       + str(datetime.datetime.now().isoformat()) + "');")
         else:
-            c.execute("SELECT * FROM leaderboard WHERE user='"+str(userID)+"';")
+            c.execute(
+                "SELECT * FROM leaderboard WHERE user='" +
+                str(userID) +
+                "';")
             currentScore = c.fetchone()[2]
             c.execute("UPDATE leaderboard\n" +
-                      "SET score=" + str(currentScore+amount) + "\n" +
+                      "SET score=" + str(currentScore + amount) + "\n" +
                       "WHERE user='" + str(userID) + "';")
         # End the connection
         conn.commit()
@@ -120,7 +126,7 @@ class triviaGame:
             formatted = formatted.replace("the ", "")
         if attempt.startswith("an "):
             formatted = formatted.replace("an ", "")
-        formatted = re.sub("[\(\[].*?[\)\]]", "", formatted)
+        formatted = re.sub(r"[\(\[].*?[\)\]]", "", formatted)
         return formatted
 
     def flag(self):
@@ -143,7 +149,8 @@ class triviaGame:
         conn = sqlite3.connect("db/database.db")
         c = conn.cursor()
         usersl = "'" + "', '".join(users) + "'"
-        c.execute(f'SELECT * FROM leaderboard WHERE user IN ({usersl}) ORDER BY score DESC;')
+        c.execute(
+            f'SELECT * FROM leaderboard WHERE user IN ({usersl}) ORDER BY score DESC;')
         localScores = c.fetchall()
         c.close()
         return localScores

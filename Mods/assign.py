@@ -4,19 +4,19 @@ Carlos Saucedo, 2019
 """
 import sqlite3
 
+
 def setAssign(serverId, roleId, status):
     """Sets the assignability of a certain role."""
 
     conn = sqlite3.connect("db/database.db")
     c = conn.cursor()
 
-
     if(status):
         # Enable the role.
         c.execute('''
         SELECT role FROM assign_roles WHERE role=?
         ''', (str(roleId),))
-        if(c.fetchone() == None):
+        if(c.fetchone() is None):
             # If there is no entry,
             # Add the entry to the database.
             c.execute('''
@@ -33,6 +33,7 @@ def setAssign(serverId, roleId, status):
     conn.commit()
     conn.close()
 
+
 def isAssignable(roleId):
     """Verifies whether the role is assignable."""
     conn = sqlite3.connect("db/database.db")
@@ -41,7 +42,7 @@ def isAssignable(roleId):
     c.execute('''
     SELECT role FROM assign_roles WHERE role=?
     ''', (str(roleId),))
-    if(c.fetchone() == None):
+    if(c.fetchone() is None):
         # If the role isn't in the database, aka
         # If the role isn't enabled.
         return(False)
@@ -50,6 +51,7 @@ def isAssignable(roleId):
 
     conn.commit()
     conn.close()
+
 
 def getAssignList(serverId):
     """Fetches the assignable roles for the given server."""

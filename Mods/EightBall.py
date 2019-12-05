@@ -5,6 +5,7 @@ Carlos Saucedo, 2019
 
 from random import randint
 
+
 class eightBallGenerator:
     def __init__(self):
         self.responses = [
@@ -31,8 +32,8 @@ class eightBallGenerator:
             "outlook not so good.",
             "very doubtful.",
             "chances aren't good."
-            ]
+        ]
 
     def getAnswer(self):
-        responseIndex = randint(0, len(self.responses)-1)
+        responseIndex = randint(0, len(self.responses) - 1)
         return self.responses[responseIndex]

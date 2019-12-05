@@ -21,7 +21,7 @@ def setColorMode(status, serverID):
 
     c.execute("SELECT color_roles FROM server_settings WHERE server=?",
               (str(serverID),))
-    if(c.fetchone() == None):
+    if(c.fetchone() is None):
         # If there is no entry.
         c.execute('''
         INSERT INTO server_settings (server, color_roles)
@@ -46,7 +46,7 @@ def getColorMode(serverID):
     c = conn.cursor()
     c.execute("SELECT color_roles FROM server_settings WHERE server=?",
               (str(serverID),))
-    if(c.fetchone() == None):
+    if(c.fetchone() is None):
         return False
     else:
         c.execute(
@@ -63,7 +63,7 @@ def getColor(name):
     with open("json/css-color-names.json", "r") as h:
         colors = json.load(h)
     colorHex = colors.get(name)
-    if(colorHex == None):
+    if(colorHex is None):
         return None
     else:
         colorHex = colorHex.lstrip('#')
