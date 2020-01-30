@@ -1095,14 +1095,15 @@ async def on_message(message):
             for role in message.channel.guild.roles:
                 if(role.name == ("Color - " + colorName)):
                     roleCreated = True
+                    # Place the role directly under the bot's top role positon.
                     await role.edit(position=(message.channel.guild.me.top_role.position-1))
                     await message.author.add_roles(role)
+                    break;
             if(not roleCreated):
                 # If the role has not yet been created.
                 # Remove the previously existing role - if applicable.
                 # Create a new role with the specified color.
                 newRole = await message.channel.guild.create_role(color=color, name=("Color - " + colorName))
-                await message.channel.send(newRole)
                 # Place the role directly under the bot's top role position.
                 await newRole.edit(position=(message.channel.guild.me.top_role.position-1))
                 await message.author.add_roles(newRole)
