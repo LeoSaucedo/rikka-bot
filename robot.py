@@ -71,8 +71,6 @@ startTime = time.time()
 # Directory stuff
 root_dir = os.path.dirname(__file__)
 
-shardCount = 1  # Keeping it simple with 1 for now.
-
 # lists
 hug_relPath = "Lists/hug_gifs.list"
 hug_absPath = os.path.join(root_dir, hug_relPath)
@@ -112,7 +110,7 @@ if(config["cleverbot"]):
         statusMsg("Failed to instantiate CleverBot.")
 
 # Instances
-client = discord.Client()
+client = discord.AutoShardedClient()
 translator = Translator()
 botlist = dbl.Client(client, config["bltoken"])
 wolframClient = wolfram.Client(config["wolframapi"])
@@ -274,6 +272,7 @@ def displayMA(id, embed):
         embed.color = 0xff0000
         embed.description = f'Sorry, there has been a serious error! (code `{data["request_status"]}`)'
     return embed
+
 
 def getAllServerUserIDStrings(server):
     nbusers = []
@@ -515,9 +514,9 @@ async def on_message(message):
     elif message.content.lower().startswith(command("codeformat", message)):
         # Tells the user how to use discord's multiline code formatting
         msg = ("To use discord's muliline code formatting, send your message with the following template:\n"
-            + "\`\`\`python\nprint(\"Hello, World\")\n\`\`\`\n\n"
-            + "This outputs:\n```python\nprint(\"Hello, World\")\n```\n"
-            + "Replace \"python\" with the language you are using to get some pretty syntax highlighting!")
+               + "\`\`\`python\nprint(\"Hello, World\")\n\`\`\`\n\n"
+               + "This outputs:\n```python\nprint(\"Hello, World\")\n```\n"
+               + "Replace \"python\" with the language you are using to get some pretty syntax highlighting!")
         await message.channel.send(msg)
 
     elif message.content.lower().startswith(command("donate", message)) or message.content.startswith(command("patreon", message)):
@@ -792,7 +791,8 @@ async def on_message(message):
 
     elif message.content.lower() == command("leaderboard local", message):
         scoreList = ""
-        localScores = trivia.getLocalLeaderboard(getAllServerUserIDStrings(message.guild))
+        localScores = trivia.getLocalLeaderboard(
+            getAllServerUserIDStrings(message.guild))
         if len(localScores) < 10:
             place = 1
             for score in localScores:
@@ -1098,7 +1098,7 @@ async def on_message(message):
                     # Place the role directly under the bot's top role positon.
                     await role.edit(position=(message.channel.guild.me.top_role.position-1))
                     await message.author.add_roles(role)
-                    break;
+                    break
             if(not roleCreated):
                 # If the role has not yet been created.
                 # Remove the previously existing role - if applicable.
@@ -1133,14 +1133,15 @@ async def on_message(message):
                 else:
                     # If the role doesn't exist anymore,
                     # delete it from the database.
-                    assign.setAssign(message.channel.guild.id, int(role[0]), False)
+                    assign.setAssign(message.channel.guild.id,
+                                     int(role[0]), False)
             if(assignList != ""):
                 assignEmbed = discord.Embed(
                     title="Assignable Roles", color=0x4287f5, description=assignList)
                 await message.channel.send(embed=assignEmbed)
             else:
                 msg = "{0.author.mention}, no assignable roles have been set.".format(
-                message)
+                    message)
                 await message.channel.send(msg)
         else:
             msg = "{0.author.mention}, no assignable roles have been set.".format(
@@ -1339,7 +1340,6 @@ async def on_ready():
     usersConnected = len(client.users)
     # Returns number of guilds connected to
     statusMsg("Guilds connected: " + str(serversConnected))
-    statusMsg("Shards connected: " + str(shardCount))
     statusMsg("Users connected: " + str(usersConnected))
     game = discord.Game(name='with ' + str(usersConnected) +
                         ' users, on '+str(serversConnected)+" servers!")
