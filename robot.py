@@ -12,7 +12,8 @@ import sqlite3
 # TODO: Add and remove cogs per server.
 cogs = [
     "Cogs.Info",
-    "Cogs.Utils"
+    "Cogs.Utils",
+    "Cogs.Wolfram"
 ]
 
 

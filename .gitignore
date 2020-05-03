@@ -17,3 +17,6 @@ tempCodeRunnerFile.py
 
 # Environment Variables
 .env/*
+
+# File Cache
+cache/*
