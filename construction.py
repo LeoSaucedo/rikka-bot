@@ -16,7 +16,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    await bot.change_presence(discord.Game(name="Under construction..."))
+    await bot.change_presence(activity=discord.Game(name="Under construction..."))
 
 if __name__ == "__main__":
 
