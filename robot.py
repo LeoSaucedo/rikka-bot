@@ -13,7 +13,8 @@ import sqlite3
 cogs = [
     "Cogs.Info",
     "Cogs.Utils",
-    "Cogs.Wolfram"
+    "Cogs.Wolfram",
+    "Cogs.Admin"
 ]
 
 

@@ -5,7 +5,6 @@ Carlos Saucedo, 2020
 
 import discord
 from discord.ext import commands
-import wolframalpha
 import json
 from urllib.parse import quote_plus
 import aiohttp
@@ -19,6 +18,12 @@ class Wolfram(commands.Cog):
 
     @commands.command()
     async def wolfimg(self, ctx, *, arg):
+        """Sends an image result from Wolfram.
+
+        Args:
+            ctx (discord.ext.Context): The message Context.
+            arg (string): The Wolfram query.
+        """
         params = {"i": arg, "appid": self.key}
         async with aiohttp.ClientSession() as session:
             async with session.get("https://api.wolframalpha.com/v1/simple", params=params)as res:
@@ -35,6 +40,12 @@ class Wolfram(commands.Cog):
 
     @commands.command()
     async def wolfram(self, ctx, *, arg):
+        """Sends a text response from Wolfram.
+
+        Args:
+            ctx (discord.ext.Context): The message Context.
+            arg (string): The Wolfram query.
+        """
         params = {"i": arg, "appid": self.key}
         async with aiohttp.ClientSession() as session:
             async with session.get("https://api.wolframalpha.com/v1/result", params=params) as res:

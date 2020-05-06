@@ -1,3 +1,8 @@
+"""
+Information Module.
+Carlos Saucedo, 2020
+"""
+
 import discord
 from discord.ext import commands
 
