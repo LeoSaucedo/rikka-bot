@@ -9,10 +9,8 @@ async def displayBooruPost(data):
     if data is not None and len(data) > 0:
         embed = discord.Embed(color=0xff28fb)
         embed.set_image(url=data['file_url'])
-        embed.title = f"Post ID:{data['id']} | Created:{data['created_at']}"
-        # concat all tags with `, ` inbetween, then concat onto that a start and end `
-        tagsFormatted = "".join(
-            ('`', "`, `".join(data['tags'].split(' ')), '`'))
+        embed.title = f"Post ID:{data['id']} | Created:{data['created_at']}" # concat all tags with `, ` inbetween, then concat onto that a start and end `
+        tagsFormatted = "".join(('`', "`, `".join(data['tags'].split(' ')), '`'))
         if data['source'] is not None and data['source'] != '':
             embed.description = f"{tagsFormatted}\n[[Gelbooru]](https://gelbooru.com/index.php?page=post&s=view&id={data['id']})[[Source]]({data['source']})"
         else:
@@ -42,15 +40,11 @@ class booru(commands.Cog):
     @commands.command()
     async def gelbooru(self, ctx, *args):
         session = aiohttp.ClientSession()
-        postFetcher = fetchJSONData(
-            session, 'https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1')
-        posts = await postFetcher
+        posts = await fetchJSONData(session, 'https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1')
         if str(args[0]).lower() == 'latest':
-            # async with session.get('https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1') as data:
             embed = await displayBooruPost(posts[0])
             if embed[0] == 0:
-                print(
-                    f"[ERROR][Gelbooru] displayBooruPost: empty data for latest post")
+                print(f"[ERROR][Gelbooru] displayBooruPost: empty data for latest post")
                 ctx.send(embed=await generateErrorEmbed('Sorry, there was an unexpected error'))
             elif embed[0] == 1:
                 ctx.send(embed=embed[1])
@@ -58,16 +52,14 @@ class booru(commands.Cog):
             post = None
             while post == None:
                 # generate number between 0 and latest post ID
-                postid = posts[random.randint(1, posts[0]['id'])]
-                coro = fetchJSONData(
-                    session, f"https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&id={postid}")
+                postid = posts[random.randint(0, len(posts) - 1)]
+                coro = fetchJSONData(session, f"https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&id={postid}")
                 post = await coro
                 if post:
                     break
             embed = await displayBooruPost(post[0])
             if embed[0] == 0:
-                print(
-                    f"[ERROR][Gelbooru] displayBooruPost: empty data for random post (id {postid})")
+                print(f"[ERROR][Gelbooru] displayBooruPost: empty data for random post (id {postid})")
                 ctx.send(embed=await generateErrorEmbed('Sorry, there was an unexpected error'))
             elif embed[0] == 1:
                 ctx.send(embed=embed[1])
@@ -77,8 +69,7 @@ class booru(commands.Cog):
                 post = search[random.randint(0, len(search)-1)]
                 embed = await displayBooruPost(post)
                 if embed[0] == 0:
-                    print(
-                        f"[ERROR][Gelbooru] displayBooruPost: empty data for search (id {post['id']})")
+                    print(f"[ERROR][Gelbooru] displayBooruPost: empty data for search (id {post['id']})")
                     ctx.send(embed=await generateErrorEmbed('Sorry, there was an unexpected error'))
                 elif embed[0] == 1:
                     ctx.send(embed=embed[1])
