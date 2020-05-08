@@ -45,9 +45,9 @@ class booru(commands.Cog):
             embed = await displayBooruPost(posts[0])
             if embed[0] == 0:
                 print(f"[ERROR][Gelbooru] displayBooruPost: empty data for latest post")
-                ctx.send(embed=await generateErrorEmbed('Sorry, there was an unexpected error'))
+                await ctx.send(embed=await generateErrorEmbed('Sorry, there was an unexpected error'))
             elif embed[0] == 1:
-                ctx.send(embed=embed[1])
+                await ctx.send(embed=embed[1])
         if str(args[0]).lower() == 'random':
             post = None
             while post == None:
@@ -60,9 +60,9 @@ class booru(commands.Cog):
             embed = await displayBooruPost(post[0])
             if embed[0] == 0:
                 print(f"[ERROR][Gelbooru] displayBooruPost: empty data for random post (id {postid})")
-                ctx.send(embed=await generateErrorEmbed('Sorry, there was an unexpected error'))
+                await ctx.send(embed=await generateErrorEmbed('Sorry, there was an unexpected error'))
             elif embed[0] == 1:
-                ctx.send(embed=embed[1])
+                await ctx.send(embed=embed[1])
         if str(args[0]).lower() == 'tags':
             search = await fetchJSONData(session, 'https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&tags=' + '+'.join(args[1:]))
             if search:
@@ -70,13 +70,13 @@ class booru(commands.Cog):
                 embed = await displayBooruPost(post)
                 if embed[0] == 0:
                     print(f"[ERROR][Gelbooru] displayBooruPost: empty data for search (id {post['id']})")
-                    ctx.send(embed=await generateErrorEmbed('Sorry, there was an unexpected error'))
+                    await ctx.send(embed=await generateErrorEmbed('Sorry, there was an unexpected error'))
                 elif embed[0] == 1:
-                    ctx.send(embed=embed[1])
+                    await ctx.send(embed=embed[1])
             else:
-                ctx.send(embed=await generateErrorEmbed('Sorry, I couldn\'t find that'))
+                await ctx.send(embed=await generateErrorEmbed('Sorry, I couldn\'t find that'))
         else:
-            ctx.send(embed=await generateErrorEmbed('Please enter a valid subcommand!'))
+            await ctx.send(embed=await generateErrorEmbed('Please enter a valid subcommand!'))
         await session.close()
 
 
