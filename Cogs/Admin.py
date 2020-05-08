@@ -59,8 +59,9 @@ class Admin(commands.Cog):
             user = ctx.message.mentions[0]
             await ctx.message.guild.ban(user)
             await ctx.send("Banned `"+user.name+"`.")
-        except:
+        except Exception as e:
             await ctx.send("Failed to ban user.")
+            raise e
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
@@ -76,8 +77,9 @@ class Admin(commands.Cog):
             user = ctx.message.mentions[0]
             await ctx.message.guild.kick(user)
             await ctx.send("Kicked `"+user.name+"`.")
-        except:
+        except Exception as e:
             await ctx.send("Failed to kick user.")
+            raise e
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)

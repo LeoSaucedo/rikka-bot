@@ -14,7 +14,8 @@ cogs = [
     "Cogs.Info",
     "Cogs.Utils",
     "Cogs.Wolfram",
-    "Cogs.Admin"
+    "Cogs.Admin",
+    "Cogs.Gelbooru"
 ]
 
 
