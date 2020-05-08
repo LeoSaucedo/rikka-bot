@@ -75,6 +75,29 @@ class booru(commands.Cog):
                     await ctx.send(embed=embed[1])
             else:
                 await ctx.send(embed=await generateErrorEmbed('Sorry, I couldn\'t find that'))
+        if str(args[0]).lower() == 'id':
+            if len(args) > 1:
+                try:
+                    postid = int(args[1])
+                except:
+                    await ctx.send(embed=await generateErrorEmbed('Please enter a valid post ID!'))
+                else:
+                    if len(args) > 1 and postid > 0 and postid < int(posts[0]['id']):
+                        post = await fetchJSONData(self.session, f"https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&id={args[1]}")
+                        if post:
+                            embed = await displayBooruPost(post[0])
+                            if embed[0] == 1:
+                                await ctx.send(embed=embed[1])
+                            else:
+                                print(f"[ERROR][Gelbooru] displayBooruPost: empty data for id post (id {args[1]})")
+                                await ctx.send(embed=await generateErrorEmbed('Sorry, there was an unexpected error'))
+                        else:
+                            print(f"[ERROR][Gelbooru] fetchJSONData: error condition for id post (id {args[1]})")
+                            await ctx.send(embed=await generateErrorEmbed('Sorry, there was an unexpected error or that post does not exist'))
+                    else:
+                        await ctx.send(embed=await generateErrorEmbed('Please enter a valid post ID!'))
+            else:
+                await ctx.send(embed=await generateErrorEmbed('Please enter a post ID!'))
         else:
             await ctx.send(embed=await generateErrorEmbed('Please enter a valid subcommand!'))
 
