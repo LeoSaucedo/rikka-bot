@@ -21,7 +21,7 @@ async def displayBooruPost(data):
 
 
 async def generateErrorEmbed(msg):
-    embed = discord.Embed(color=0xff0000, title="Error", description=msg)
+    return discord.Embed(color=0xff0000, title="Error", description=msg)
 
 
 async def fetchJSONData(session, url):
@@ -36,11 +36,11 @@ async def fetchJSONData(session, url):
 class booru(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.session = aiohttp.ClientSession()
 
     @commands.command()
     async def gelbooru(self, ctx, *args):
-        session = aiohttp.ClientSession()
-        posts = await fetchJSONData(session, 'https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1')
+        posts = await fetchJSONData(self.session, 'https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1')
         if str(args[0]).lower() == 'latest':
             embed = await displayBooruPost(posts[0])
             if embed[0] == 0:
@@ -53,7 +53,7 @@ class booru(commands.Cog):
             while post == None:
                 # generate number between 0 and latest post ID
                 postid = posts[random.randint(0, len(posts) - 1)]
-                coro = fetchJSONData(session, f"https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&id={postid}")
+                coro = fetchJSONData(self.session, f"https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&id={postid}")
                 post = await coro
                 if post:
                     break
@@ -64,7 +64,7 @@ class booru(commands.Cog):
             elif embed[0] == 1:
                 await ctx.send(embed=embed[1])
         if str(args[0]).lower() == 'tags':
-            search = await fetchJSONData(session, 'https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&tags=' + '+'.join(args[1:]))
+            search = await fetchJSONData(self.session, 'https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&tags=' + '+'.join(args[1:]))
             if search:
                 post = search[random.randint(0, len(search)-1)]
                 embed = await displayBooruPost(post)
@@ -77,7 +77,6 @@ class booru(commands.Cog):
                 await ctx.send(embed=await generateErrorEmbed('Sorry, I couldn\'t find that'))
         else:
             await ctx.send(embed=await generateErrorEmbed('Please enter a valid subcommand!'))
-        await session.close()
 
 
 def setup(bot):
