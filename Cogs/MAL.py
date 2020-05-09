@@ -170,9 +170,9 @@ async def formatItem(session,data):
         raise JikanError()
         return None
 
-async def search(session,query,type):
+async def search(session,query,type,limit=4):
     #query = requests.utils.quote(query,safe='')
-    data = await RLRequest(session,f'{baseAPIURL}/search/{type}?q={query}&page=1&limit=4')
+    data = await RLRequest(session,f'{baseAPIURL}/search/{type}?q={query}&page=1&limit={limit}')
     result = []
     if data:
         if await checkExists('results',data):
@@ -201,8 +201,24 @@ class cogMal(commands.Cog):
             if data:
                 embed = await formatItem(session,data)
                 await ctx.send(embed=embed)
-            #else:
-                #print('')
+        elif args[0].lower() == 'qa': #Quick Anime (searches and displays the first result)
+            query = str(''.join(args[1:])).lower()
+            data = await search(session,query,'anime',1)
+            if data:
+                data = await fetchItem(session,f'A/{data[0][3]}')
+                if data:
+                    embed = await formatItem(session,data)
+                    if embed:
+                        await ctx.send(embed=embed)
+        elif args[0].lower() == 'qm': #Quick Manga (searches and displays the first result)
+            query = str(''.join(args[1:])).lower()
+            data = await search(session,query,'manga',1)
+            if data:
+                data = await fetchItem(session,f'M/{data[0][3]}')
+                if data:
+                    embed = await formatItem(session,data)
+                    if embed:
+                        await ctx.send(embed=embed)
         else: #search
             query = str(''.join(args[0:])).lower()
             if query.startswith('m/') or query.startswith('m '):
