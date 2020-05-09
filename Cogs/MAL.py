@@ -1,6 +1,7 @@
 import discord,random,aiohttp,json,datetime
 from discord.ext import commands
 from time import sleep
+from Cogs.Errors import APIError
 baseAPIURL = 'https://api.jikan.moe/v3'
 with open('json/indicators.json','r') as h:
     regionalindicators = json.load(h)
@@ -17,7 +18,7 @@ async def fetchJSONData(session,url):
             if data.status == 200:
                 return await data.json()
             else:
-                print(f'[ERROR][MAL] fetchJSONData url \'{url}\' returned code \'{data.status}\'')
+                raise JikanError(f'[ERROR][MAL] fetchJSONData - code {data.status} when fetching URL \'{url}\'')
                 return None
 
 async def RLRequest(session,url): #rate-limits requests to jikan endpoint
@@ -35,7 +36,7 @@ async def RLRequest(session,url): #rate-limits requests to jikan endpoint
 
 async def checkExists(property,dict):
     if str(property) in dict:
-        if dict[str(property)] is not None and str(property) != '':
+        if dict[str(property)] is not None and dict[str(property)] != '' and dict[str(property)] != 'null':
             return True
         else:
             return False
@@ -78,16 +79,17 @@ async def formatItem(session,data):
         if await checkExists('image_url',data):
             embed.set_thumbnail(url=data['image_url'])
         if await checkExists('genres',data):
-            name = 'Genre'
-            arrGenres = []
-            if len(data['genres']) > 1:
-                name = 'Genres'
-            for genre in data['genres']:
-                if await checkExists('url',genre):
-                    arrGenres.append(f"[{genre['name']}](https://myanimelist.net/{genre['type']}/genre/{genre['mal_id']})")
-                else:
-                    arrgenres.append(genre['name'])
-            embed.add_field(name=name,value=', '.join(arrGenres),inline=False)
+            if len(data['genres']) > 0:
+                name = 'Genre'
+                arrGenres = []
+                if len(data['genres']) > 1:
+                    name = 'Genres'
+                for genre in data['genres']:
+                    if await checkExists('url',genre):
+                        arrGenres.append(f"[{genre['name']}](https://myanimelist.net/{genre['type']}/genre/{genre['mal_id']})")
+                    else:
+                        arrgenres.append(genre['name'])
+                embed.add_field(name=name,value=', '.join(arrGenres),inline=False)
         if await checkExists('episodes',data):
             embed.add_field(name='Episodes',value=f"`{data['episodes']}`",inline=True)
         elif await checkExists('chapters',data):
@@ -128,41 +130,45 @@ async def formatItem(session,data):
         if await checkExists('source',data):
             embed.add_field(name='Origin',value=f"`{data['source']}`",inline=True)
         if await checkExists('licensors',data):
-            name = 'Licensor'
-            arrLicensors = []
-            if len(data['licensors']) > 1:
-                name = 'Licensors'
-            for licensor in data['licensors']:
-                if await checkExists('url',licensor):
-                    arrLicensors.append(f"[{licensor['name']}](https://myanimelist.net/anime/producer/{licensor['mal_id']})")
-                else:
-                    arrLicensors.append(licensor['name'])
-            embed.add_field(name=name,value=', '.join(arrLicensors))
+            if len(data['licensors']) > 0:
+                name = 'Licensor'
+                arrLicensors = []
+                if len(data['licensors']) > 1:
+                    name = 'Licensors'
+                for licensor in data['licensors']:
+                    if await checkExists('url',licensor):
+                        arrLicensors.append(f"[{licensor['name']}](https://myanimelist.net/anime/producer/{licensor['mal_id']})")
+                    else:
+                        arrLicensors.append(licensor['name'])
+                embed.add_field(name=name,value=', '.join(arrLicensors))
         if  await checkExists('studios',data):
-            name = 'Studio'
-            arrstudios = []
-            if len(data['studios']) > 1:
-                name = 'Studios'
-            for studio in data['studios']:
-                if await checkExists('url',studio):
-                    arrstudios.append(f"[{studio['name']}](https://myanimelist.net/anime/producer/{studio['mal_id']})")
-                else:
-                    arrstudios.append(studio['name'])
-            embed.add_field(name=name,value=', '.join(arrstudios))
+            if len(data['studios']) > 0:
+                name = 'Studio'
+                arrstudios = []
+                if len(data['studios']) > 1:
+                    name = 'Studios'
+                for studio in data['studios']:
+                    if await checkExists('url',studio):
+                        arrstudios.append(f"[{studio['name']}](https://myanimelist.net/anime/producer/{studio['mal_id']})")
+                    else:
+                        arrstudios.append(studio['name'])
+                embed.add_field(name=name,value=', '.join(arrstudios))
         if  await checkExists('authors',data):
-            name = 'author'
-            arrauthors = []
-            if len(data['authors']) > 1:
-                name = 'authors'
-            for author in data['authors']:
-                if await checkExists('url',author):
-                    arrauthors.append(f"[{author['name']}](https://myanimelist.net/people/{author['mal_id']})")
-                else:
-                    arrauthors.append(author['name'])
-            embed.add_field(name=name,value=', '.join(arrauthors))
+            if len(data['authors']) > 0:
+                name = 'author'
+                arrauthors = []
+                if len(data['authors']) > 1:
+                    name = 'authors'
+                for author in data['authors']:
+                    if await checkExists('url',author):
+                        arrauthors.append(f"[{author['name']}](https://myanimelist.net/people/{author['mal_id']})")
+                    else:
+                        arrauthors.append(author['name'])
+                embed.add_field(name=name,value=', '.join(arrauthors))
         return embed
     else:
-        return await generateErrorEmbed('Sorry, but there was an unexpected error.')
+        raise JikanError()
+        return None
 
 async def search(session,query,type):
     #query = requests.utils.quote(query,safe='')
@@ -174,9 +180,15 @@ async def search(session,query,type):
                 for searchResult in data["results"]:
                     result.append([searchResult['title'],searchResult['type'],searchResult['image_url'],searchResult['mal_id']])
                 return result
+            else:
+                raise JikanError(f'Sorry, I couldn\'t find any results for \'{query}\'')
+                return None
+        else:
+            raise JikanError(f'Sorry, I couldn\'t find any results for \'{query}\'')
             return None
+    else:
+        raise JikanError()
         return None
-    return None
 
 class cogMal(commands.Cog):
     def __init__(self, bot):
@@ -189,8 +201,8 @@ class cogMal(commands.Cog):
             if data:
                 embed = await formatItem(session,data)
                 await ctx.send(embed=embed)
-            else:
-                print('')
+            #else:
+                #print('')
         else: #search
             query = str(''.join(args[0:])).lower()
             if query.startswith('m/') or query.startswith('m '):
@@ -199,19 +211,22 @@ class cogMal(commands.Cog):
             else:
                 searchType = 'A'
                 data = await search(session,query,'anime')
-            reference = {'user': str(ctx.author.id)}
-            desc = ''
-            for i in range(0,len(data)):
-                result = data[i]
-                desc = f'{desc}{regionalindicators[i]} [{result[1]}][{result[0]}]\n'
-                reference[regionalindicators[i]] = f'{searchType}/{result[3]}'
-            embed = discord.Embed(color=0x2e51a2,title=f'Search for \'{query}\'',description=desc)
-            msg = await ctx.send(embed=embed)
-            menus[f'{ctx.guild.id}|{msg.id}'] = reference
-            for i in range(0,len(data)):
-                await msg.add_reaction(regionalindicators[i])
-            await msg.delete(delay=30)
-            await ctx.message.delete()
+            if data:
+                reference = {'user': str(ctx.author.id)}
+                desc = ''
+                for i in range(0,len(data)):
+                    result = data[i]
+                    desc = f'{desc}{regionalindicators[i]} [{result[1]}][{result[0]}]\n'
+                    reference[regionalindicators[i]] = f'{searchType}/{result[3]}'
+                embed = discord.Embed(color=0x2e51a2,title=f'Search for \'{query}\'',description=desc)
+                msg = await ctx.send(embed=embed)
+                menus[f'{ctx.guild.id}|{msg.id}'] = reference
+                for i in range(0,len(data)):
+                    await msg.add_reaction(regionalindicators[i])
+                await msg.delete(delay=30)
+                await ctx.message.delete()
+            else:
+                raise JikanError()
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
@@ -228,11 +243,21 @@ class cogMal(commands.Cog):
                 data = await fetchItem(session,str(menus.pop(index)[emoji]))
                 if data:
                     embed = await formatItem(session,data)
-                else:
-                    embed = await generateErrorEmbed('Sorry, there was an unexpected error!')
-                await channel.send(embed=embed)
+                #else:
+                    #embed = await generateErrorEmbed('Sorry, there was an unexpected error!')
+                    await channel.send(embed=embed)
                 message = await channel.fetch_message(idMessage)
                 await message.delete()
+
+class JikanError(APIError):
+    #raised when jikan returns an error (!200)
+    def __init__(self, message='Jikan API Error.'):
+        super().__init__(message)
+
+class InvalidID(commands.BadArgument):
+    #raised when the specified ID doesn't exist
+    def __init__(self, message='Invalid ID.'):
+        super().__init__(message)
 
 def setup(bot):
     bot.add_cog(cogMal(bot))
