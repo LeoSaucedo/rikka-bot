@@ -11,6 +11,7 @@ import sqlite3
 # The different Cogs supported by Rikka.
 # TODO: Add and remove cogs per server.
 cogs = [
+    "Cogs.Errors",
     "Cogs.Info",
     "Cogs.Utils",
     "Cogs.Wolfram",
