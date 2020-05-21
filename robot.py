@@ -49,11 +49,6 @@ bot = commands.AutoShardedBot(command_prefix=get_prefix)
 botlist = dbl.Client(bot, json.load(open("json/config.json"))["bltoken"])
 
 
-@bot.command()
-async def test(ctx, *, arg):
-    await ctx.send(arg)
-
-
 @bot.event
 async def on_ready():
     """Runs when the bot has started.
