@@ -7,17 +7,18 @@ import discord
 from discord.ext import commands
 import json
 import sqlite3
+import dbl
+import logging
 
 # The different Cogs supported by Rikka.
-# TODO: Add and remove cogs per server.
 cogs = [
     "Cogs.Errors",
+    "Cogs.Owner",
     "Cogs.Info",
     "Cogs.Utils",
     "Cogs.Wolfram",
     "Cogs.Admin",
-    "Cogs.Gelbooru",
-    "Cogs.MAL"
+    "Cogs.Gelbooru"
 ]
 
 
@@ -45,6 +46,7 @@ def get_prefix(bot, message):
 
 
 bot = commands.AutoShardedBot(command_prefix=get_prefix)
+botlist = dbl.Client(bot, json.load(open("json/config.json"))["bltoken"])
 
 
 @bot.command()
@@ -56,10 +58,17 @@ async def test(ctx, *, arg):
 async def on_ready():
     """Runs when the bot has started.
     """
-    print('Logged in as')
-    print(bot.user.name)
-    print(bot.user.id)
-    print('------')
+    print('Logged in as: ', bot.user.name, ": ", bot.user.id)
+    print("Connected to: ", len(bot.guilds), " guilds.")
+    print("Connected to: ", len(bot.users), " users.")
+
+    # DBL authentication
+    try:
+        await botlist.post_guild_count()
+        print("Published server count to dbl.")
+    except Exception as e:
+        print("Failed to post server count to dbl: ", str(e))
+
 
 if __name__ == "__main__":
     # Add all cogs.
