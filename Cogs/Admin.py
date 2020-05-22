@@ -115,7 +115,7 @@ class Admin(commands.Cog):
             ctx (discord.ext.Context): The message Context.
             arg (string): The user to mute.
         """
-        if(len(ctx.message.mentions > 0)):
+        if(len(ctx.message.mentions) > 0):
             sinner = ctx.message.mentions[0]
             await ctx.message.channel.set_permissions(sinner, send_messages=False)
             await ctx.send("Muted {0.mentions[0].mention}1".format(ctx.message))
