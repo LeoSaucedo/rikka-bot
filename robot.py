@@ -80,7 +80,7 @@ async def on_guild_join(guild):
     await bot.change_presence(activity=game)
 
 
-@bot_event
+@bot.event
 async def on_guild_remove(guild):
     logging.info("Left server `", guild.name, "`.")
     logging.info("Connected to: ", len(bot.guilds), " guilds.")
