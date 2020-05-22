@@ -45,13 +45,18 @@ def get_prefix(bot, message):
         return prefix[0]
 
 
+def log_info(message):
+    logging.info(message)
+    print(message)
+
+
 bot = commands.AutoShardedBot(command_prefix=get_prefix)
 botlist = dbl.Client(bot, json.load(open("json/config.json"))["bltoken"])
 logging.basicConfig(
     filename="bot.log",
     filemode='w',
     format='%(asctime)s [%(levelname)s] %(message)s',
-    level=logging.INFO,
+    level=logging.ERROR,
     datefmt='%d.%b %Y %H:%M:%S')
 logging.getLogger().addHandler(logging.StreamHandler())
 
@@ -60,16 +65,16 @@ logging.getLogger().addHandler(logging.StreamHandler())
 async def on_ready():
     """Runs when the bot has started.
     """
-    logging.info('Logged in as: '+bot.user.name + ": " + str(bot.user.id))
-    logging.info("Connected to: " + str(len(bot.guilds)) + " guilds.")
-    logging.info("Connected to: " + str(len(bot.users)) + " users.")
+    log_info('Logged in as: '+bot.user.name + ": " + str(bot.user.id))
+    log_info("Connected to: " + str(len(bot.guilds)) + " guilds.")
+    log_info("Connected to: " + str(len(bot.users)) + " users.")
 
     # DBL authentication
     try:
         await botlist.post_guild_count()
-        logging.info("Published server count to dbl.")
+        log_info("Published server count to dbl.")
     except Exception as e:
-        logging.warning("Failed to post server count to dbl: " + str(e))
+        log_info("Failed to post server count to dbl: " + str(e))
 
     game = discord.Game(name="With " + str(len(bot.users)) +
                         " users, on " + str(len(bot.guilds))+" guilds!")
@@ -78,9 +83,9 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(guild):
-    logging.info("Joined server `" + guild.name, "`!")
-    logging.info("Connected to: " + str(len(bot.guilds)) + " guilds.")
-    logging.info("Connected to: " + str(len(bot.users)) + " users.")
+    log_info("Joined server `" + guild.name, "`!")
+    log_info("Connected to: " + str(len(bot.guilds)) + " guilds.")
+    log_info("Connected to: " + str(len(bot.users)) + " users.")
     game = discord.Game(name="With " + str(len(bot.users)) +
                         " users, on " + str(len(bot.guilds))+" guilds!")
     await bot.change_presence(activity=game)
@@ -88,9 +93,9 @@ async def on_guild_join(guild):
 
 @bot.event
 async def on_guild_remove(guild):
-    logging.info("Left server `" + guild.name + "`.")
-    logging.info("Connected to: " + str(len(bot.guilds)) + " guilds.")
-    logging.info("Connected to: " + str(len(bot.users)) + " users.")
+    log_info("Left server `" + guild.name + "`.")
+    log_info("Connected to: " + str(len(bot.guilds)) + " guilds.")
+    log_info("Connected to: " + str(len(bot.users)) + " users.")
     game = discord.Game(name="With " + str(len(bot.users)) +
                         " users, on " + str(len(bot.guilds))+" guilds!")
     await bot.change_presence(activity=game)

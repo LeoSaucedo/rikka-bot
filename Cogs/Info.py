@@ -29,8 +29,8 @@ class Info(commands.Cog):
         Args:
             ctx (discord.ext.commands.Context): The message context.
         """
-        msg = "h-hello {0.author.mention}-chan!".format(ctx.message)
-        + "https://cdn.discordapp.com/attachments/402744318013603840/430592483282386974/image.gif"
+        msg = ("h-hello {0.author.mention}-chan!"
+               + "https://cdn.discordapp.com/attachments/402744318013603840/430592483282386974/image.gif").format(ctx.message)
         await ctx.send(msg)
 
     @commands.command()
