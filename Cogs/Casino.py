@@ -26,7 +26,7 @@ class Casino(commands.Cog):
         if((not die[0].isnumeric()) or (not die[1].isnumeric)):
             raise commands.BadArgument("Invalid dice number.")
             return
-        elif(int(die[0]) > 100 or int(die[1] > 100)):
+        elif(int(die[0]) > 100 or int(die[1]) > 100):
             raise commands.BadArgument("Too large dice number!")
             return
         else:
