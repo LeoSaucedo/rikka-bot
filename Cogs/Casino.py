@@ -12,6 +12,32 @@ class Casino(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command()
+    async def roll(self, ctx, arg):
+        """Rolls the specified dice.
+
+        Args:
+            ctx (discord.ext.Context): The message Context.
+            arg (string): The dice to roll.
+        """
+        res = "("
+        sum = 0
+        die = arg.split("d")
+        if((not die[0].isnumeric()) or (not die[1].isnumeric)):
+            raise commands.BadArgument("Invalid dice number.")
+        else:
+            for x in range(int(die[0])):
+                roll = randint(1, int(die[1]))
+                sum += roll
+                if(x > 0):
+                    res += " + "
+                res += str(roll)
+            res += ") = " + str(sum)
+        embed = discord.Embed(title=arg, description=res, color=0x8000ff)
+        embed.set_author(
+            name="Dice Roller", icon_url="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/game-die_1f3b2.png")
+        await ctx.send(embed=embed)
+
     @commands.command(name="8ball")
     async def eightball(self, ctx):
         """Gets a message from the eight-ball.
