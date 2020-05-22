@@ -25,6 +25,10 @@ class Casino(commands.Cog):
         die = arg.split("d")
         if((not die[0].isnumeric()) or (not die[1].isnumeric)):
             raise commands.BadArgument("Invalid dice number.")
+            return
+        elif(int(die[0]) > 100 or int(die[1] > 100)):
+            raise commands.BadArgument("Too large dice number!")
+            return
         else:
             for x in range(int(die[0])):
                 roll = randint(1, int(die[1]))
