@@ -19,6 +19,9 @@ class Errors(commands.Cog):
         pebkac = (commands.BadArgument,
                   commands.BotMissingPermissions,
                   commands.MissingPermissions,
+                  commands.ExtensionAlreadyLoaded,
+                  commands.ExtensionNotLoaded,
+                  commands.ExtensionNotFound,
                   APIError)
 
         # Allows us to check for original exceptions raised and sent to CommandInvokeError.
