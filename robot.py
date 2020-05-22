@@ -54,9 +54,9 @@ logging.basicConfig(level=logging.INFO)
 async def on_ready():
     """Runs when the bot has started.
     """
-    logging.info('Logged in as: ', bot.user.name, ": ", bot.user.id)
-    logging.info("Connected to: ", len(bot.guilds), " guilds.")
-    logging.info("Connected to: ", len(bot.users), " users.")
+    logging.info('Logged in as: '+bot.user.name + ": " + bot.user.id)
+    logging.info("Connected to: " + len(bot.guilds) + " guilds.")
+    logging.info("Connected to: " + len(bot.users) + " users.")
 
     # DBL authentication
     try:
@@ -72,9 +72,9 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(guild):
-    logging.info("Joined server `", guild.name, "`!")
-    logging.info("Connected to: ", len(bot.guilds), " guilds.")
-    logging.info("Connected to: ", len(bot.users), " users.")
+    logging.info("Joined server `" + guild.name, "`!")
+    logging.info("Connected to: " + len(bot.guilds) + " guilds.")
+    logging.info("Connected to: " + len(bot.users) + " users.")
     game = discord.Game(name="With " + str(len(bot.users)) +
                         " users, on " + str(len(bot.guilds))+" guilds!")
     await bot.change_presence(activity=game)
@@ -82,9 +82,9 @@ async def on_guild_join(guild):
 
 @bot.event
 async def on_guild_remove(guild):
-    logging.info("Left server `", guild.name, "`.")
-    logging.info("Connected to: ", len(bot.guilds), " guilds.")
-    logging.info("Connected to: ", len(bot.users), " users.")
+    logging.info("Left server `" + guild.name + "`.")
+    logging.info("Connected to: " + len(bot.guilds) + " guilds.")
+    logging.info("Connected to: " + len(bot.users) + " users.")
     game = discord.Game(name="With " + str(len(bot.users)) +
                         " users, on " + str(len(bot.guilds))+" guilds!")
     await bot.change_presence(activity=game)
