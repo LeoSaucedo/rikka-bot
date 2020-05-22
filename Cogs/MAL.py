@@ -286,18 +286,19 @@ class MyAnimeList(commands.Cog):
         idUser = payload.user_id
         emoji = payload.emoji.name
         index = f'{idGuild}|{idMessage}'
-        if str(idUser) == str(menus[index]['user']):
-            if emoji in menus[index]:
-                embed = discord.Embed(color=0x2e51a2)
-                channel = self.bot.get_channel(idChannel)
-                data = await fetchItem(session, str(menus.pop(index)[emoji]))
-                if data:
-                    embed = await formatItem(session, data)
-                # else:
-                    # embed = await generateErrorEmbed('Sorry, there was an unexpected error!')
-                    await channel.send(embed=embed)
-                message = await channel.fetch_message(idMessage)
-                await message.delete()
+        if index in menus:
+            if str(idUser) == str(menus[index]['user']):
+                if emoji in menus[index]:
+                    embed = discord.Embed(color=0x2e51a2)
+                    channel = self.bot.get_channel(idChannel)
+                    data = await fetchItem(session, str(menus.pop(index)[emoji]))
+                    if data:
+                        embed = await formatItem(session, data)
+                    # else:
+                        # embed = await generateErrorEmbed('Sorry, there was an unexpected error!')
+                        await channel.send(embed=embed)
+                    message = await channel.fetch_message(idMessage)
+                    await message.delete()
 
 
 class JikanError(APIError):
