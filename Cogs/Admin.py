@@ -102,7 +102,7 @@ class Admin(commands.Cog):
                 await ctx.message.channel.delete_messages(messages)
                 await ctx.send("Deleted `"+str(len(messages))+"` messages!")
         else:
-            await ctx.message.channel.purge(limit=(arg+1), bulk=True)
+            await ctx.message.channel.purge(limit=(int(arg)+1), bulk=True)
             await ctx.send("Deleted "+str(arg)+" messages!")
 
     @commands.command()
