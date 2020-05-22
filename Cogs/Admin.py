@@ -7,6 +7,7 @@ Carlos Saucedo, 2020
 import discord
 from discord.ext import commands
 import sqlite3
+from Cogs.Errors import APIError
 
 
 class Admin(commands.Cog):
@@ -60,8 +61,7 @@ class Admin(commands.Cog):
             await ctx.message.guild.ban(user)
             await ctx.send("Banned `"+user.name+"`.")
         except Exception as e:
-            await ctx.send("Failed to ban user.")
-            raise e
+            raise APIError(str(e))
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
@@ -78,8 +78,7 @@ class Admin(commands.Cog):
             await ctx.message.guild.kick(user)
             await ctx.send("Kicked `"+user.name+"`.")
         except Exception as e:
-            await ctx.send("Failed to kick user.")
-            raise e
+            raise APIError(str(e))
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
@@ -121,7 +120,7 @@ class Admin(commands.Cog):
             await ctx.message.channel.set_permissions(sinner, send_messages=False)
             await ctx.send("Muted {0.mentions[0].mention}1".format(ctx.message))
         else:
-            await ctx.send("You  must specify a user.")
+            await ctx.send("You must specify a user.")
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)

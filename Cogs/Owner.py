@@ -25,7 +25,6 @@ class Owner(commands.Cog):
             self.bot.reload_extension(arg)
             await ctx.send("Reloaded `" + arg + "` cog.")
         except Exception as e:
-            await ctx.send("Unable to load `" + arg + "` cog.")
             raise e
 
     @commands.command(hidden=True)
@@ -41,7 +40,6 @@ class Owner(commands.Cog):
             self.bot.load_extension(arg)
             await ctx.send("Loaded `" + arg + "` cog.")
         except Exception as e:
-            await ctx.send("Unable to load `" + arg + "` cog.")
             raise e
 
     @commands.command(hidden=True)
@@ -57,7 +55,6 @@ class Owner(commands.Cog):
             self.bot.unload_extension(arg)
             await ctx.send("Unloaded `" + arg + "` cog.")
         except Exception as e:
-            await ctx.send("Unable to unload `" + arg + "` cog.")
             raise e
 
 
