@@ -90,7 +90,7 @@ class Admin(commands.Cog):
             ctx (discord.ext.Context): The message Context.
             arg (string): The user to clear, or number of messages to clear.
         """
-        if(len(ctx.message.mentions != 0)):
+        if(len(ctx.message.mentions) != 0):
             # Clear a user's messages.
             messages = []
             async for msg in ctx.message.channel.history():

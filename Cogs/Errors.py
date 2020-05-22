@@ -1,3 +1,8 @@
+"""
+Error Handling Module.
+Carlos Saucedo, 2020
+"""
+
 import discord
 import traceback
 import sys
