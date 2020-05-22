@@ -83,7 +83,7 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(guild):
-    log_info("Joined server `" + guild.name, "`!")
+    log_info("Joined server `" + guild.name + "`!")
     log_info("Connected to: " + str(len(bot.guilds)) + " guilds.")
     log_info("Connected to: " + str(len(bot.users)) + " users.")
     game = discord.Game(name="With " + str(len(bot.users)) +
