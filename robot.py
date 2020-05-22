@@ -47,22 +47,47 @@ def get_prefix(bot, message):
 
 bot = commands.AutoShardedBot(command_prefix=get_prefix)
 botlist = dbl.Client(bot, json.load(open("json/config.json"))["bltoken"])
+logging.basicConfig(level=logging.INFO)
 
 
 @bot.event
 async def on_ready():
     """Runs when the bot has started.
     """
-    print('Logged in as: ', bot.user.name, ": ", bot.user.id)
-    print("Connected to: ", len(bot.guilds), " guilds.")
-    print("Connected to: ", len(bot.users), " users.")
+    logging.info('Logged in as: ', bot.user.name, ": ", bot.user.id)
+    logging.info("Connected to: ", len(bot.guilds), " guilds.")
+    logging.info("Connected to: ", len(bot.users), " users.")
 
     # DBL authentication
     try:
         await botlist.post_guild_count()
-        print("Published server count to dbl.")
+        logging.info("Published server count to dbl.")
     except Exception as e:
-        print("Failed to post server count to dbl: ", str(e))
+        logging.warning("Failed to post server count to dbl: ", str(e))
+
+    game = discord.Game(name="With " + str(len(bot.users)) +
+                        " users, on " + str(len(bot.guilds))+" guilds!")
+    await bot.change_presence(activity=game)
+
+
+@bot.event
+async def on_guild_join(guild):
+    logging.info("Joined server `", guild.name, "`!")
+    logging.info("Connected to: ", len(bot.guilds), " guilds.")
+    logging.info("Connected to: ", len(bot.users), " users.")
+    game = discord.Game(name="With " + str(len(bot.users)) +
+                        " users, on " + str(len(bot.guilds))+" guilds!")
+    await bot.change_presence(activity=game)
+
+
+@bot_event
+async def on_guild_remove(guild):
+    logging.info("Left server `", guild.name, "`.")
+    logging.info("Connected to: ", len(bot.guilds), " guilds.")
+    logging.info("Connected to: ", len(bot.users), " users.")
+    game = discord.Game(name="With " + str(len(bot.users)) +
+                        " users, on " + str(len(bot.guilds))+" guilds!")
+    await bot.change_presence(activity=game)
 
 
 if __name__ == "__main__":

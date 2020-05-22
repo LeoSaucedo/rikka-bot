@@ -28,8 +28,6 @@ class Wolfram(commands.Cog):
         params = {"i": arg, "appid": self.key}
         async with aiohttp.ClientSession() as session:
             async with session.get("https://api.wolframalpha.com/v1/simple", params=params)as res:
-                print("Content type: ", res.headers.get(
-                    "content-type"), "Status: ", res.status)
                 if(res.status != 200):
                     if("text/plain" in res.headers.get("content-type")):
                         raise WolframError(await res.text())
