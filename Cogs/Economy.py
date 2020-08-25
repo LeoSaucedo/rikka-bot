@@ -11,10 +11,8 @@ class Economy(commands.Cog):
 
     @commands.command()
     async def score(self, ctx):
-        """Returns the author's score.
-
-        Args:
-            ctx (discord.ext.Context): The message Context.
+        """
+        Returns the author's score.
         """
         await ctx.send("Your score is: ", str(await getScore(ctx.author.id)))
 
@@ -30,12 +28,8 @@ class Economy(commands.Cog):
 
 
 async def addPoints(serverID, userID, amount):
-    """Adds the specified number of points to the user.
-
-    Args:
-        serverID (string): The server the user is in.
-        userID (string): The user the server is in.
-        amount (int): The amount to add to the user.
+    """
+    Adds the specified number of points to the user.
     """
     conn = sqlite3.connect("db/database.db")
     c = conn.cursor()
@@ -64,10 +58,8 @@ async def addPoints(serverID, userID, amount):
 
 
 async def getScore(userID):
-    """Returns the score of the user.
-
-    Args:
-        userID (int): The user's ID.
+    """
+    Returns the score of the user.
     """
     conn = sqlite3.connect("db/database.db")
     c = conn.cursor()

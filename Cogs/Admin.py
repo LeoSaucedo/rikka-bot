@@ -18,11 +18,8 @@ class Admin(commands.Cog):
     @commands.has_permissions(administrator=True)
     @commands.bot_has_permissions(administrator=True)
     async def prefix(self, ctx, arg):
-        """Sets the prefix to the provided argument.
-
-        Args:
-            ctx (discord.ext.Context): The message Context.
-            arg (string): The new prefix.
+        """
+        Sets the prefix to the provided argument.
         """
         conn = sqlite3.connect("db/database.db")
         c = conn.cursor()
@@ -50,11 +47,8 @@ class Admin(commands.Cog):
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
     async def ban(self, ctx, arg):
-        """Bans the specified user.
-
-        Args:
-            ctx (discord.ext.Context): The message Context.
-            arg (string): The user to ban.
+        """
+        Bans the specified user.
         """
         try:
             user = ctx.message.mentions[0]
@@ -67,11 +61,8 @@ class Admin(commands.Cog):
     @commands.has_permissions(kick_members=True)
     @commands.bot_has_permissions(kick_members=True)
     async def kick(self, ctx, arg):
-        """Kicks the specified user.
-
-        Args:
-            ctx (discord.ext.Context): The message Context.
-            arg (string): The user to kick.
+        """
+        Kicks the specified user.
         """
         try:
             user = ctx.message.mentions[0]
@@ -84,11 +75,8 @@ class Admin(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
     async def clear(self, ctx, arg):
-        """Clears a set number of messages from the channel.
-
-        Args:
-            ctx (discord.ext.Context): The message Context.
-            arg (string): The user to clear, or number of messages to clear.
+        """
+        Clears a set number of messages from the channel.
         """
         if(len(ctx.message.mentions) != 0):
             # Clear a user's messages.
@@ -109,11 +97,8 @@ class Admin(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
     async def mute(self, ctx, arg):
-        """Mutes the specified user.
-
-        Args:
-            ctx (discord.ext.Context): The message Context.
-            arg (string): The user to mute.
+        """
+        Mutes the specified user.
         """
         if(len(ctx.message.mentions) > 0):
             sinner = ctx.message.mentions[0]
@@ -126,11 +111,8 @@ class Admin(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
     async def unmute(self, ctx, arg):
-        """Unmutes the specified user.
-
-        Args:
-            ctx (discord.ext.Context): The message Context.
-            arg (string): The user to unmute.
+        """
+        Unmutes the specified user.
         """
         if(len(ctx.message.mentions) > 0):
             await ctx.message.channel.set_permissions(ctx.message.mentions[0], send_messages=True)

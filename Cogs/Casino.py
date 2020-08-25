@@ -6,6 +6,7 @@ Carlos Saucedo, 2020
 import discord
 from discord.ext import commands
 from random import randint
+import re
 
 
 class Casino(commands.Cog):
@@ -14,15 +15,12 @@ class Casino(commands.Cog):
 
     @commands.command()
     async def roll(self, ctx, arg):
-        """Rolls the specified dice.
-
-        Args:
-            ctx (discord.ext.Context): The message Context.
-            arg (string): The dice to roll.
+        """
+        Rolls the specified dice.
         """
         res = "("
         sum = 0
-        die = arg.split("d")
+        die = arg.split("d")  # TODO: Modifier support
         if((not die[0].isnumeric()) or (not die[1].isnumeric)):
             raise commands.BadArgument("Invalid dice number.")
             return
@@ -44,10 +42,8 @@ class Casino(commands.Cog):
 
     @commands.command(name="8ball")
     async def eightball(self, ctx):
-        """Gets a message from the eight-ball.
-
-        Args:
-            ctx (discord.ext.Context): The message Context.
+        """
+        Gets a message from the eight-ball.
         """
         responses = [
             "it is certain.",

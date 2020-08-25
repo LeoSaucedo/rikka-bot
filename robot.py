@@ -19,7 +19,8 @@ cogs = [
     "Cogs.Wolfram",
     "Cogs.Admin",
     "Cogs.Gelbooru",
-    "Cogs.Casino"
+    "Cogs.Casino",
+    "Cogs.Roles"
 ]
 
 
