@@ -5,7 +5,6 @@ Carlos Saucedo, 2020
 import discord
 from discord.ext import commands
 import sqlite3
-from Cogs.Errors import APIError
 
 
 class Roles(commands.Cog):

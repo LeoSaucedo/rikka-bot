@@ -27,6 +27,7 @@ class Errors(commands.Cog):
                   commands.ExtensionAlreadyLoaded,
                   commands.ExtensionNotLoaded,
                   commands.ExtensionNotFound,
+                  commands.MissingRequiredArgument,
                   APIError)
 
         # Allows us to check for original exceptions raised and sent to CommandInvokeError.

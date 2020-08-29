@@ -108,5 +108,6 @@ if __name__ == "__main__":
     for cog in cogs:
         bot.load_extension(cog)
 
-    # Load bot token and run bot.
-    bot.run(json.load(open("json/config.json", "r"))["token"])
+    while True:
+        # Load bot token and run bot.
+        bot.run(json.load(open("json/config.json", "r"))["token"])
