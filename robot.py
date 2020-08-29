@@ -20,7 +20,8 @@ cogs = [
     "Cogs.Admin",
     "Cogs.Gelbooru",
     "Cogs.Casino",
-    "Cogs.Roles"
+    "Cogs.Roles",
+    "Cogs.Colors"
 ]
 
 
