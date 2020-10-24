@@ -83,6 +83,33 @@ class Casino(commands.Cog):
             inline=False
         )
         await ctx.send(embed=embed)
+        
+    @commands.command(name="kekw")
+    async def kekw(self, ctx):
+        """
+        Posts a healthy bit of cringe.
+        """
+        responses = [
+            "dont type to me",
+            "idc",
+            "ur brainwashed",
+            "lib logic",
+            "don't care about what your typing",
+            "triggered xDDDDDDDDDDD",
+            "everyone just attacks me",
+            "just a senile old man shouting at the sky",
+            "dont care"
+        ]
+        response = (responses[randint(0, len(responses)-1)]).format(ctx.message)
+        embed = discord.Embed(
+            color=0x8000ff,
+            description=response
+        )
+        embed.set_author(
+            name="kekw",
+            icon_url="https://i.imgur.com/KaUqGzV.png"
+        )
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
