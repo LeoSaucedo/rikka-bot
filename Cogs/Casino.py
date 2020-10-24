@@ -84,7 +84,7 @@ class Casino(commands.Cog):
         )
         await ctx.send(embed=embed)
         
-    @commands.command(name="kekw")
+    @commands.command()
     async def kekw(self, ctx):
         """
         Posts a healthy bit of cringe.
