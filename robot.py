@@ -79,8 +79,7 @@ async def on_ready():
     except Exception as e:
         log_info("Failed to post server count to dbl: " + str(e))
 
-    game = discord.Game(name="With " + str(len(bot.users)) +
-                        " users, on " + str(len(bot.guilds))+" guilds!")
+    game = discord.Game(name="on " + str(len(bot.guilds))+" guilds!")
     await bot.change_presence(activity=game)
 
 
@@ -89,8 +88,7 @@ async def on_guild_join(guild):
     log_info("Joined server `" + guild.name + "`!")
     log_info("Connected to: " + str(len(bot.guilds)) + " guilds.")
     log_info("Connected to: " + str(len(bot.users)) + " users.")
-    game = discord.Game(name="With " + str(len(bot.users)) +
-                        " users, on " + str(len(bot.guilds))+" guilds!")
+    game = discord.Game(name="on " + str(len(bot.guilds))+" guilds!")
     await bot.change_presence(activity=game)
 
 
@@ -99,8 +97,7 @@ async def on_guild_remove(guild):
     log_info("Left server `" + guild.name + "`.")
     log_info("Connected to: " + str(len(bot.guilds)) + " guilds.")
     log_info("Connected to: " + str(len(bot.users)) + " users.")
-    game = discord.Game(name="With " + str(len(bot.users)) +
-                        " users, on " + str(len(bot.guilds))+" guilds!")
+    game = discord.Game(name="on " + str(len(bot.guilds))+" guilds!")
     await bot.change_presence(activity=game)
 
 
