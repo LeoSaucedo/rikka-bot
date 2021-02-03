@@ -21,7 +21,8 @@ cogs = [
     "Cogs.Gelbooru",
     "Cogs.Casino",
     "Cogs.Roles",
-    "Cogs.Colors"
+    "Cogs.Colors",
+    "Cogs.MAL"
 ]
 
 
