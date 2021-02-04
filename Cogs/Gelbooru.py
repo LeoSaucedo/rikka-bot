@@ -36,34 +36,35 @@ class booru(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.session = aiohttp.ClientSession()
+        self.validSubCommands = ['id','latest','random','tags']
 
     @commands.command()
     @commands.is_nsfw()
     async def gelbooru(self, ctx, *args):
         if(len(args) == 0):
-            raise InvalidSubcommand("Please enter a subcommand.")
+            raise InvalidSubcommand('Please enter a subcommand.')
+        elif not str(args[0]).lower() in self.validSubCommands:
+            raise InvalidSubcommand()
         posts = await fetchJSONData(self.session, 'https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1')
         if str(args[0]).lower() == 'latest':
             embed = await displayBooruPost(posts[0])
             if embed[0] == 0:
-                raise APIError(
-                    f"[ERROR][Gelbooru] displayBooruPost: empty data for latest post")
+                raise APIError(f"[ERROR][Gelbooru] displayBooruPost: empty data for latest post")
             elif embed[0] == 1:
                 await ctx.send(embed=embed[1])
         if str(args[0]).lower() == 'random':
             post = None
             while post == None:
                 # generate number between 0 and latest post ID
-                postid = posts[random.randint(0, len(posts) - 1)]
-                coro = fetchJSONData(
-                    self.session, f"https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&id={postid}")
+                maxpostid = int(posts[0]['id']) - 1
+                randompostid = random.randint(1, maxpostid)
+                coro = fetchJSONData(self.session, f"https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&id={randompostid}")
                 post = await coro
                 if post:
                     break
             embed = await displayBooruPost(post[0])
             if embed[0] == 0:
-                raise APIError(
-                    f"[ERROR][Gelbooru] displayBooruPost: empty data for random post (id {postid})")
+                raise APIError(f"[ERROR][Gelbooru] displayBooruPost: empty data for random post (id {randompostid})")
             elif embed[0] == 1:
                 await ctx.send(embed=embed[1])
         if str(args[0]).lower() == 'tags':
@@ -72,8 +73,7 @@ class booru(commands.Cog):
                 post = search[random.randint(0, len(search)-1)]
                 embed = await displayBooruPost(post)
                 if embed[0] == 0:
-                    raise APIError(
-                        f"[ERROR][Gelbooru] displayBooruPost: empty data for search (id {post['id']})")
+                    raise APIError(f"[ERROR][Gelbooru] displayBooruPost: empty data for search (id {post['id']})")
                 elif embed[0] == 1:
                     await ctx.send(embed=embed[1])
             else:
@@ -92,17 +92,13 @@ class booru(commands.Cog):
                             if embed[0] == 1:
                                 await ctx.send(embed=embed[1])
                             else:
-                                raise APIError(
-                                    f"displayBooruPost: empty data for id post (id {args[1]})")
+                                raise APIError(f"displayBooruPost: empty data for id post (id {args[1]})")
                         else:
-                            raise InvalidPostID(
-                                f"[ERROR][Gelbooru] fetchJSONData: error condition for id post (id {args[1]})")
+                            raise InvalidPostID(f"[ERROR][Gelbooru] fetchJSONData: error condition for id post (id {args[1]})")
                     else:
                         raise InvalidPostID()
             else:
                 raise InvalidPostID()
-        else:
-            raise InvalidSubcommand()
 
 
 class InvalidSubcommand(commands.BadArgument):
