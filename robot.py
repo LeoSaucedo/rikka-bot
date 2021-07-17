@@ -22,7 +22,8 @@ cogs = [
     "Cogs.Casino",
     "Cogs.Roles",
     "Cogs.Colors",
-    "Cogs.MAL"
+    "Cogs.MAL",
+    "Cogs.Economy"
 ]
 
 
