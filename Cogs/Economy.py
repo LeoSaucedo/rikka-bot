@@ -19,6 +19,35 @@ class Economy(commands.Cog):
     await ctx.send("`" + str(user.name) + "`'s score is: " + str(getScore(user.id)))
 
   @commands.command()
+  fight
+  async def fight(self, ctx):
+    numPlayers = len(ctx.message.mentions)
+    vicNum = random.randint(0, numPlayers)
+    rewardAmt = random.randint(1, 5)
+    if(numPlayers < 1) or (ctx.message.author in ctx.message.mentions):
+      msg = '<@!'+ str(ctx.message.author.id)+'>' + ", you can't fight yourself! Choose a set of opponents."
+      await ctx.send(msg)
+    else:
+      victor = ctx.message.author if vicNum == numPlayers else ctx.message.mentions[vicNum]
+      await addPoints(str(ctx.message.guild.id), str(victor.id), rewardAmt)
+      msg = '<@!'+str(victor.id)+'>' + " wins! " + str(rewardAmt)
+      msg += " point." if rewardAmt == 1 else " points."
+      await ctx.send(msg)
+      if numPlayers < 2:
+        if not victor == ctx.message.author:
+          await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), rewardAmt * -1)
+          loser = str(ctx.message.author.id)
+        else:
+          await addPoints(str(ctx.message.guild.id), str(ctx.message.mentions[0].id), rewardAmt * -1)
+          loser = str(ctx.message.mentions[0].id)
+        msg = '<@!'+ loser + '>' + ": For your loss, you lose " + str(rewardAmt)
+        if rewardAmt == 1:
+          msg += " point. Better luck next time."
+        else:
+          msg += " points. Better luck next time."
+        await ctx.send(msg)
+        
+  @commands.command()
   async def leaderboard(self, ctx):
     """Gets the leaderboard."""
     conn = sqlite3.connect("db/database.db")
@@ -45,7 +74,6 @@ class Economy(commands.Cog):
           name="Leaderboard", icon_url="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/money-bag_1f4b0.png")
       await ctx.send(embed=embed)
 
-
 async def addPoints(serverID, userID, amount):
   """Adds the specified number of points to the user.
 
@@ -57,7 +85,7 @@ async def addPoints(serverID, userID, amount):
   conn = sqlite3.connect("db/database.db")
   c = conn.cursor()
 
-  c.execute("SELECT * FROM leaderboard WHERE user=?;", userID)
+  c.execute("SELECT * FROM leaderboard WHERE user=?;", (userID,))
   if(len(c.fetchall()) == 0):
     # If the user does not exist
     c.execute('''
@@ -67,7 +95,7 @@ async def addPoints(serverID, userID, amount):
 
   else:
     # User already exists.
-    c.execute("SELECT * FROM leaderboard WHERE user=?;", userID)
+    c.execute("SELECT * FROM leaderboard WHERE user=?;", (userID,))
     currentScore = c.fetchone()[2]
     c.execute('''
         UPDATE leaderboard
