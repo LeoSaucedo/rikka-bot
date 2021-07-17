@@ -19,7 +19,6 @@ class Economy(commands.Cog):
     await ctx.send("`" + str(user.name) + "`'s score is: " + str(getScore(user.id)))
 
   @commands.command()
-  fight
   async def fight(self, ctx):
     numPlayers = len(ctx.message.mentions)
     vicNum = random.randint(0, numPlayers)
