@@ -20,11 +20,13 @@ class Economy(commands.Cog):
 
   @commands.command()
   async def fight(self, ctx):
+    """Fights a user and rewards points to the winner."""
     numPlayers = len(ctx.message.mentions)
     vicNum = random.randint(0, numPlayers)
     rewardAmt = random.randint(1, 5)
     if(numPlayers < 1) or (ctx.message.author in ctx.message.mentions):
-      msg = '<@!'+ str(ctx.message.author.id)+'>' + ", you can't fight yourself! Choose a set of opponents."
+      msg = '<@!' + str(ctx.message.author.id)+'>' + \
+          ", you can't fight yourself! Choose a set of opponents."
       await ctx.send(msg)
     else:
       victor = ctx.message.author if vicNum == numPlayers else ctx.message.mentions[vicNum]
@@ -39,13 +41,14 @@ class Economy(commands.Cog):
         else:
           await addPoints(str(ctx.message.guild.id), str(ctx.message.mentions[0].id), rewardAmt * -1)
           loser = str(ctx.message.mentions[0].id)
-        msg = '<@!'+ loser + '>' + ": For your loss, you lose " + str(rewardAmt)
+        msg = '<@!' + loser + '>' + \
+            ": For your loss, you lose " + str(rewardAmt)
         if rewardAmt == 1:
           msg += " point. Better luck next time."
         else:
           msg += " points. Better luck next time."
         await ctx.send(msg)
-        
+
   @commands.command()
   async def leaderboard(self, ctx, arg1=None):
     """Gets the leaderboard."""
@@ -55,7 +58,8 @@ class Economy(commands.Cog):
     c = conn.cursor()
     if arg1 == 'local':
       guildid = str(ctx.message.guild.id)
-      c.execute("SELECT * FROM leaderboard WHERE server=? ORDER BY score DESC", (guildid,))
+      c.execute(
+          "SELECT * FROM leaderboard WHERE server=? ORDER BY score DESC", (guildid,))
     elif arg1 == 'global':
       c.execute("SELECT * FROM leaderboard ORDER BY score DESC")
     else:
@@ -70,18 +74,20 @@ class Economy(commands.Cog):
       i = 0
       while(i < 9 and i < len(data)):
         try:
-          user = '<@!'+ str(data[i][1])+'>' if arg1 == 'local' else await self.bot.fetch_user(data[i][1])
+          user = '<@!' + str(data[i][1])+'>' if arg1 == 'local' else await self.bot.fetch_user(data[i][1])
           msg += str(i+1) + ": " + user + ': ' + str(data[i][2]) + "\n" if arg1 == 'local' else str(i+1) + ": " + "`" + str(user.display_name) + \
               "` - " + str(data[i][2]) + "\n"
           i += 1
         except:
           pass
-      title = "Top 10 Globally:" if arg1 == 'global' else "Top 10 in " + ctx.message.guild.name + ':'
-      embed = discord.Embed(title= title,
+      title = "Top 10 Globally:" if arg1 == 'global' else "Top 10 in " + \
+          ctx.message.guild.name + ':'
+      embed = discord.Embed(title=title,
                             description=msg, color=0x12f202)
       embed.set_author(
           name="Leaderboard", icon_url="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/money-bag_1f4b0.png")
       await ctx.send(embed=embed)
+
 
 async def addPoints(serverID, userID, amount):
   """Adds the specified number of points to the user.
