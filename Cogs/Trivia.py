@@ -11,7 +11,7 @@ class Trivia(commands.Cog):
 
   @commands.command()
   async def ask(self, ctx):
-    # Ask a trivia question.
+    """Ask a trivia question."""
     conn = sqlite3.connect("db/database.db")
     c = conn.cursor()
     c.execute("SELECT * FROM trivia ORDER BY random() LIMIT 1")
@@ -25,7 +25,7 @@ class Trivia(commands.Cog):
 
   @commands.command(pass_context=True, aliases=['a'])
   async def answer(self, ctx, *, answer):
-    # Answer a trivia question.
+    """Answer a trivia question."""
     if ctx.guild.id not in self.currentQuestions:
       await ctx.send("There is no question being asked.")
       return
@@ -38,7 +38,7 @@ class Trivia(commands.Cog):
 
   @commands.command()
   async def reveal(self, ctx):
-    # Reveal the answer to a trivia question.
+    """Reveal the answer to a trivia question."""
     if ctx.guild.id not in self.currentQuestions:
       await ctx.send("There is no question being asked.")
       return
