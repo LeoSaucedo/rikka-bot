@@ -11,6 +11,7 @@ class Economy(commands.Cog):
 
   @commands.command()
   async def score(self, ctx):
+    """Gets the amount of money you have."""
     if(len(ctx.message.mentions) == 0):
       user = ctx.message.author
     else:
@@ -18,6 +19,7 @@ class Economy(commands.Cog):
     await ctx.send("`" + str(user.name) + "`'s score is: " + str(getScore(user.id)))
 
   @commands.command()
+  fight
   async def fight(self, ctx):
     numPlayers = len(ctx.message.mentions)
     vicNum = random.randint(0, numPlayers)
@@ -44,9 +46,33 @@ class Economy(commands.Cog):
         else:
           msg += " points. Better luck next time."
         await ctx.send(msg)
-    
-    
-
+        
+  @commands.command()
+  async def leaderboard(self, ctx):
+    """Gets the leaderboard."""
+    conn = sqlite3.connect("db/database.db")
+    c = conn.cursor()
+    c.execute("SELECT * FROM leaderboard ORDER BY score DESC")
+    data = c.fetchall()
+    conn.close()
+    if(len(data) == 0):
+      await ctx.send("There is no one on the leaderboard.")
+    else:
+      msg = ""
+      i = 0
+      while(i < 9):
+        try:
+          user = await self.bot.fetch_user(data[i][1])
+          msg += str(i+1) + ": " + "`" + str(user.display_name) + \
+              "` - " + str(data[i][2]) + "\n"
+          i += 1
+        except:
+          pass
+      embed = discord.Embed(title="Top 10 Globally:",
+                            description=msg, color=0x12f202)
+      embed.set_author(
+          name="Leaderboard", icon_url="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/money-bag_1f4b0.png")
+      await ctx.send(embed=embed)
 
 async def addPoints(serverID, userID, amount):
   """Adds the specified number of points to the user.
