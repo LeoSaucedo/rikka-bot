@@ -33,7 +33,7 @@ class Trivia(commands.Cog):
       return
     if answer.lower() == self.currentQuestions[ctx.guild.id]["answer"].lower():
       points = randint(1, 5)
-      await ctx.send("Correct! +" + str(points) + "points.")
+      await ctx.send("Correct! +" + str(points) + " points.")
       await economy.addPoints(str(ctx.guild.id), str(ctx.author.id), points)
       del self.currentQuestions[ctx.guild.id]
     else:
