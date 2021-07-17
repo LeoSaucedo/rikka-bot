@@ -57,7 +57,7 @@ async def addPoints(serverID, userID, amount):
   conn = sqlite3.connect("db/database.db")
   c = conn.cursor()
 
-  c.execute("SELECT * FROM leaderboard WHERE user=?;", userID)
+  c.execute("SELECT * FROM leaderboard WHERE user=?;", (userID,))
   if(len(c.fetchall()) == 0):
     # If the user does not exist
     c.execute('''
@@ -67,7 +67,7 @@ async def addPoints(serverID, userID, amount):
 
   else:
     # User already exists.
-    c.execute("SELECT * FROM leaderboard WHERE user=?;", userID)
+    c.execute("SELECT * FROM leaderboard WHERE user=?;", (userID,))
     currentScore = c.fetchone()[2]
     c.execute('''
         UPDATE leaderboard
