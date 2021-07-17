@@ -47,11 +47,20 @@ class Economy(commands.Cog):
         await ctx.send(msg)
         
   @commands.command()
-  async def leaderboard(self, ctx):
+  async def leaderboard(self, ctx, arg1=None):
     """Gets the leaderboard."""
+    if arg1 is None:
+      arg1 = 'local'
     conn = sqlite3.connect("db/database.db")
     c = conn.cursor()
-    c.execute("SELECT * FROM leaderboard ORDER BY score DESC")
+    if arg1 == 'local':
+      guildid = str(ctx.message.guild.id)
+      c.execute("SELECT * FROM leaderboard WHERE server=? ORDER BY score DESC", (guildid,))
+    elif arg1 == 'global':
+      c.execute("SELECT * FROM leaderboard ORDER BY score DESC")
+    else:
+      await ctx.send(arg1 + " is not a valid option for leaderboard")
+      return
     data = c.fetchall()
     conn.close()
     if(len(data) == 0):
@@ -59,15 +68,16 @@ class Economy(commands.Cog):
     else:
       msg = ""
       i = 0
-      while(i < 9):
+      while(i < 9 and i < len(data)):
         try:
-          user = await self.bot.fetch_user(data[i][1])
-          msg += str(i+1) + ": " + "`" + str(user.display_name) + \
+          user = '<@!'+ str(data[i][1])+'>' if arg1 == 'local' else await self.bot.fetch_user(data[i][1])
+          msg += str(i+1) + ": " + user + ': ' + str(data[i][2]) + "\n" if arg1 == 'local' else str(i+1) + ": " + "`" + str(user.display_name) + \
               "` - " + str(data[i][2]) + "\n"
           i += 1
         except:
           pass
-      embed = discord.Embed(title="Top 10 Globally:",
+      title = "Top 10 Globally:" if arg1 == 'global' else "Top 10 in " + ctx.message.guild.name + ':'
+      embed = discord.Embed(title= title,
                             description=msg, color=0x12f202)
       embed.set_author(
           name="Leaderboard", icon_url="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/money-bag_1f4b0.png")
