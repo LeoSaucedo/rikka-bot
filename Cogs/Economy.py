@@ -6,7 +6,6 @@ import datetime
 import re
 import json
 
-
 class Economy(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
@@ -148,12 +147,13 @@ class Economy(commands.Cog):
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, you do not have enough points to purchase a custom color.')
       else:  # subtract points from user, add color to inventory
         await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), -20)
-        await addItem(str(ctx.message.author.id), msg.content.strip(), 1)
+        await addItem(str(ctx.message.author.id), msg.content.strip().upper(), 1)
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, your custom color ' + msg.content + ' has been added to your inventory. You now have ' + str(score-20) + ' points.')
 
   @commands.command()
-  async def inv(self, ctx):
+  async def inv(self, ctx, *args):
     """displays a users inventory"""
+    #getting inventory from db
     userID = str(ctx.message.author.id)
     user = await self.bot.fetch_user(ctx.message.author.id)
     conn = sqlite3.connect("db/database.db")
@@ -161,19 +161,39 @@ class Economy(commands.Cog):
     c.execute("SELECT inventory FROM inventory WHERE user=?;", (userID,))
     data = c.fetchone()
     conn.close()
-    if data is None:
-      await ctx.send('<@!' + str(ctx.message.author.id)+'>, your inventory is empty.')
-      return
-    data = json.loads(data[0])
-    msg = ""
-    for key, value in data.items():
-      if str(key) == 'hint':
-        msg += "Trivia Hints: " + str(value) + '\n'
-      else: #color
-        msg += str(key).upper() + '\n'
-    embed = discord.Embed(title = str(user.display_name) + "'s inventory", description = msg, color = 0x12f202)
-    await ctx.send(embed=embed)
 
+    #if inventory is empty
+    if data is None:
+      embed = discord.Embed(title = str(user.display_name) + "'s inventory", description = "Trivia Hints: 0\n", color = 0x12f202)
+      await ctx.send(embed=embed)
+      return
+    #load inventory into data
+    data = json.loads(data[0])
+    #displays inventory
+    if not args: 
+      if "hint" not in data:
+        msg = "Trivia hints: 0\n"
+      else:
+        msg = "Trivia hints: " + str(data.get("hint")) + '\n'
+      for key, value in data.items():
+        if str(key) == "hint":
+          continue
+        else: #color
+          msg += str(key).upper() + '\n'
+      embed = discord.Embed(title = str(user.display_name) + "'s inventory", description = msg, color = 0x12f202)
+      await ctx.send(embed=embed)
+    #change user color
+    elif len(args) == 3 and args[0] == 'use' and args[1] == 'color':
+      hex = args[2].strip()
+      if not hex.upper() in data.keys():
+        await ctx.send('<@!' + str(ctx.message.author.id)+'>, ' + hex + ' is not in your inventory. Exiting shop.\n')
+        return
+      else:
+        color_cog = self.bot.get_cog('Colors')
+        await color_cog.color(ctx, str(ctx.message.author.name), hex)
+    else:
+      await ctx.send("<@!" + str(ctx.message.author.id)+">, invalid arguments for inv.")
+      
 async def addPoints(serverID, userID, amount):
   """Adds the specified number of points to the user.
 

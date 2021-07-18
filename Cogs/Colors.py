@@ -34,13 +34,13 @@ class Colors(commands.Cog):
                 "Invalid option. only enable/disable permitted.")
 
     @commands.command()
-    async def color(self, ctx, color):
+    async def color(self, ctx, color, hex=None):
         """
         Set your color role.
         """
         if(getColorMode(ctx.guild.id)):
             # Colors are enabled
-            colorObj = getColor(color)
+            colorObj = getColor(color) if hex == None else getColor(color, hex)
             if(colorObj == None):
                 raise commands.BadArgument("Invalid color name.")
             else:
@@ -55,7 +55,7 @@ class Colors(commands.Cog):
                     if(role.name == ("Color - " + color)):
                         roleCreated = True
                         # Place the role directly under the bots top role position.
-                        await role.edit(position=(ctx.guild.me.top_role.position-1))
+                        await role.edit(position=(ctx.guild.me.top_role.position-1), color = colorObj)
                         await ctx.author.add_roles(role)
                         break
                 if(not roleCreated):
@@ -127,15 +127,19 @@ def getColorMode(serverID):
         return False
 
 
-def getColor(name):
+def getColor(name, hex=None):
     """
     Generates a discord.Color object from the color name as a string.
     """
-    with open("json/css-color-names.json", "r") as h:
-        colors = json.load(h)
-    colorHex = colors.get(name)
-    if(colorHex is None):
-        return None
+    if hex == None:
+        with open("json/css-color-names.json", "r") as h:
+            colors = json.load(h)
+        colorHex = colors.get(name)
+        if(colorHex is None):
+            return None
+        else:
+            colorHex = colorHex.lstrip('#')
+            return discord.Color(int(colorHex, 16))
     else:
-        colorHex = colorHex.lstrip('#')
-        return discord.Color(int(colorHex, 16))
+        hex = hex.lstrip('#')
+        return discord.Color(int(hex, 16))
