@@ -1,13 +1,18 @@
+from sqlite3 import Cursor
+from typing import Tuple
+
 import discord
 from discord.ext import commands
 import random
 import sqlite3
 import datetime
 
+from discord.ext.commands import Context, Bot
+
 
 class Economy(commands.Cog):
   def __init__(self, bot):
-    self.bot = bot
+    self.bot: Bot = bot
 
   @commands.command()
   async def score(self, ctx):
@@ -88,6 +93,36 @@ class Economy(commands.Cog):
           name="Leaderboard", icon_url="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/money-bag_1f4b0.png")
       await ctx.send(embed=embed)
 
+  @commands.command()
+  async def give(self, ctx: Context, _, amount: str = None, *args):
+    print('Amount: ', amount, type(amount))
+    amount: int = int(amount)
+    msg: discord.Message = ctx.message
+    # Ensure valid input before continuing
+    if amount < 0:
+      await addPoints(ctx.message.guild.id, msg.author.id, -1)
+      return await ctx.send(
+        f'Do you think you\'re funny? Trying to steal points I see. . . Deducting 1 point from your score.'
+      )
+    elif amount == 0:
+      return await ctx.send('Why waste my time trying to send 0 points?')
+    if len(msg.mentions) != 1:
+      return await ctx.send(f'You provided {len(msg.mentions)} mentions, but must provide one.')
+    mention = msg.mentions[0]
+    if msg.author == mention:
+      return await ctx.send(f'You cannot give to yourself. . .')
+
+    # Input should be valid, continue
+    author_score = getScore(msg.author.id)
+
+    # Ensure sender has sufficient points to complete transaction
+    if author_score < amount:
+      return await ctx.send(f'You cannot send {amount} points because you have {author_score} points.')
+
+    await addPoints(ctx.message.guild.id, mention.id, amount)
+    await addPoints(ctx.message.guild.id, msg.author.id, -amount)
+
+    await ctx.send(f'Added {amount} points to <@!{mention.id}>\'s score courtesy of <@!{msg.author.id}>.')
 
 async def addPoints(serverID, userID, amount):
   """Adds the specified number of points to the user.
