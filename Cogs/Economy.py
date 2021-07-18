@@ -235,5 +235,19 @@ def addItem(userID, item, quantity):
               (json.dumps(inventory), userID))
 
 
+def getQuantity(userID, item):
+  """Returns the number of items in the user's inventory.
+
+  Args:
+      userID (string): Discord user ID
+      item (string): Name of the item in the inventory.
+  """
+  conn = sqlite3.connect("db/database.db")
+  c = conn.cursor()
+  c.execute("SELECT inventory FROM inventory WHERE user=?", (userID,))
+  inventory = json.loads(c.fetchone()[0])
+  return inventory.get(item, 0)
+
+
 def setup(bot):
   bot.add_cog(Economy(bot))
