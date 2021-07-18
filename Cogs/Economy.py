@@ -90,6 +90,8 @@ class Economy(commands.Cog):
   
   @commands.command()
   async def shop(self, ctx):
+    """displays shop and allows user to buy items"""
+    #displaying initial shop menu with emoji reactions for user input
     emojis = ['🔍', '🎨']
     msg = "Would you like to shop for:\n" + emojis[0] + ": Trivia hints - 5 pts\n" + emojis[1] + ": Custom colors - 20 pts\n"
     embed = discord.Embed(title= "Welcome to the shop!", description=msg, color=0x12f202)
@@ -97,17 +99,24 @@ class Economy(commands.Cog):
     for emoji in emojis:
       await emb.add_reaction(emoji)
 
+    #reaction check function, checks that reaction is made on the display message, by the author, and a valid emoji
     def chk(reaction, user):
         return str(reaction.emoji) in emojis and user == ctx.message.author and reaction.message == emb
     
+    #get reaction from user
     react, user = await self.bot.wait_for('reaction_add', check=chk)
 
+    #message check function, ensures replies to bot are by the author
     def check_message(m):
       return m.author == ctx.message.author
+
     score = getScore(str(ctx.message.author.id))
-    if str(react) == emojis[0]:
+    
+    if str(react) == emojis[0]: #purchasing hints
       await ctx.send('<@!' + str(ctx.message.author.id)+">, Enter the number of hints you would like to purchase.") 
+      #wait for author to reply
       msg = await self.bot.wait_for('message', check = check_message)
+      #check that reply is valid and that user has enough points
       if not msg.content.isnumeric():
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, ' + msg.content + ' is not a valid number of hints.')
         return
@@ -115,20 +124,22 @@ class Economy(commands.Cog):
       if numpurchased*5 > score:
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, you do not have enough points to purchase ' + str(numpurchased) + ' hints.')
         return
+      #subtract points from user, add hints to inventory
       await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), numpurchased*-5)
       await ctx.send('<@!' + str(ctx.message.author.id)+">, you have purchased " + str(numpurchased) + " hints. You now have " + str(score - numpurchased*5) + " points.") 
-    elif str(react) == emojis[1]:
+    elif str(react) == emojis[1]: #purchasing a color
       await ctx.send('<@!' + str(ctx.message.author.id)+">, Enter the hex code of the color you would like to purchase.") 
-
+      #function to check that user replied with a hex code
       def isHex(hexcode):
         return re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', hexcode)
-
+      #wait for author to reply
       msg = await self.bot.wait_for('message', check = check_message)
+      #check reply and user points
       if not isHex(msg.content):
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, ' + msg.content + ' is not a valid hex code.')
       elif 20 > score:
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, you do not have enough points to purchase a custom color.')
-      else:
+      else: #subtract points from user, add color to inventory
         await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), -20)
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, your custom color ' + msg.content + ' has been added to your inventory. You now have ' + str(score-20) + ' points.')
 
