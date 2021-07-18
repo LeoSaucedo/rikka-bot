@@ -95,9 +95,17 @@ class Economy(commands.Cog):
 
   @commands.command()
   async def give(self, ctx: Context, _, amount: str = None, *args):
-    print('Amount: ', amount, type(amount))
-    amount: int = int(amount)
+    """ Give points to another player via mention """
+    # Make sure amount is a valid number
+    try:
+      amount: int = int(amount)
+    except ValueError:
+      return await ctx.send(
+        f'I only accept valid numbers for amount. May I remind you `{ctx.prefix}give <mention> <amount>`'
+      )
+
     msg: discord.Message = ctx.message
+
     # Ensure valid input before continuing
     if amount < 0:
       await addPoints(ctx.message.guild.id, msg.author.id, -1)
@@ -119,9 +127,11 @@ class Economy(commands.Cog):
     if author_score < amount:
       return await ctx.send(f'You cannot send {amount} points because you have {author_score} points.')
 
+    # Finish transaction by adding and deducting points
     await addPoints(ctx.message.guild.id, mention.id, amount)
     await addPoints(ctx.message.guild.id, msg.author.id, -amount)
 
+    # Final output message
     await ctx.send(f'Added {amount} points to <@!{mention.id}>\'s score courtesy of <@!{msg.author.id}>.')
 
 async def addPoints(serverID, userID, amount):
