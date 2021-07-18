@@ -153,14 +153,26 @@ class Economy(commands.Cog):
 
   @commands.command()
   async def inv(self, ctx):
+    """displays a users inventory"""
     userID = str(ctx.message.author.id)
+    user = await self.bot.fetch_user(ctx.message.author.id)
     conn = sqlite3.connect("db/database.db")
     c = conn.cursor()
     c.execute("SELECT inventory FROM inventory WHERE user=?;", (userID,))
-    data = c.fetchall()
+    data = c.fetchone()
     conn.close()
-    print(data)
-
+    if data is None:
+      await ctx.send('<@!' + str(ctx.message.author.id)+'>, your inventory is empty.')
+      return
+    data = json.loads(data[0])
+    msg = ""
+    for key, value in data.items():
+      if str(key) == 'hint':
+        msg += "Trivia Hints: " + str(value) + '\n'
+      else: #color
+        msg += str(key).upper() + '\n'
+    embed = discord.Embed(title = str(user.display_name) + "'s inventory", description = msg, color = 0x12f202)
+    await ctx.send(embed=embed)
 
 async def addPoints(serverID, userID, amount):
   """Adds the specified number of points to the user.
