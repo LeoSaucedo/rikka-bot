@@ -31,7 +31,7 @@ class Trivia(commands.Cog):
     if ctx.guild.id not in self.currentQuestions:
       await ctx.send("There is no question being asked.")
       return
-    if answer.lower() == self.currentQuestions[ctx.guild.id]["answer"].lower():
+    if(format(answer) == format(self.currentQuestions[ctx.guild.id]["answer"])):
       points = randint(1, 5)
       await ctx.send("Correct! +" + str(points) + " points.")
       await economy.addPoints(str(ctx.guild.id), str(ctx.author.id), points)
@@ -73,6 +73,20 @@ class Trivia(commands.Cog):
       else:
         # Send a message telling the user they don't have enough points.
         await ctx.send("You don't have enough points to use this command.")
+
+
+def format(attempt):
+    # Formats an attempt to make it easier to guess.
+    # Removes "the", "a", "an", and any parenthetical words.
+  formatted = attempt.lower()
+  if attempt.startswith("a "):
+    formatted = formatted.replace("a ", "")
+  if attempt.startswith("the "):
+    formatted = formatted.replace("the ", "")
+  if attempt.startswith("an "):
+    formatted = formatted.replace("an ", "")
+  formatted = re.sub(r"[\(\[].*?[\)\]]", "", formatted)
+  return formatted
 
 
 def setup(bot):
