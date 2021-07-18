@@ -4,6 +4,8 @@ import random
 import sqlite3
 import datetime
 import re
+import json
+
 
 class Economy(commands.Cog):
   def __init__(self, bot):
@@ -87,27 +89,30 @@ class Economy(commands.Cog):
       embed.set_author(
           name="Leaderboard", icon_url="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/money-bag_1f4b0.png")
       await ctx.send(embed=embed)
-  
+
   @commands.command()
   async def shop(self, ctx):
     emojis = ['🔍', '🎨']
-    msg = "Would you like to shop for:\n" + emojis[0] + ": Trivia hints - 5 pts\n" + emojis[1] + ": Custom colors - 20 pts\n"
-    embed = discord.Embed(title= "Welcome to the shop!", description=msg, color=0x12f202)
+    msg = "Would you like to shop for:\n" + \
+        emojis[0] + ": Trivia hints - 5 pts\n" + \
+          emojis[1] + ": Custom colors - 20 pts\n"
+    embed = discord.Embed(title="Welcome to the shop!",
+                          description=msg, color=0x12f202)
     emb = await ctx.send(embed=embed)
     for emoji in emojis:
       await emb.add_reaction(emoji)
 
     def chk(reaction, user):
-        return str(reaction.emoji) in emojis and user == ctx.message.author and reaction.message == emb
-    
+      return str(reaction.emoji) in emojis and user == ctx.message.author and reaction.message == emb
+
     react, user = await self.bot.wait_for('reaction_add', check=chk)
 
     def check_message(m):
       return m.author == ctx.message.author
     score = getScore(str(ctx.message.author.id))
     if str(react) == emojis[0]:
-      await ctx.send('<@!' + str(ctx.message.author.id)+">, Enter the number of hints you would like to purchase.") 
-      msg = await self.bot.wait_for('message', check = check_message)
+      await ctx.send('<@!' + str(ctx.message.author.id)+">, Enter the number of hints you would like to purchase.")
+      msg = await self.bot.wait_for('message', check=check_message)
       if not msg.content.isnumeric():
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, ' + msg.content + ' is not a valid number of hints.')
         return
@@ -116,14 +121,14 @@ class Economy(commands.Cog):
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, you do not have enough points to purchase ' + str(numpurchased) + ' hints.')
         return
       await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), numpurchased*-5)
-      await ctx.send('<@!' + str(ctx.message.author.id)+">, you have purchased " + str(numpurchased) + " hints. You now have " + str(score - numpurchased*5) + " points.") 
+      await ctx.send('<@!' + str(ctx.message.author.id)+">, you have purchased " + str(numpurchased) + " hints. You now have " + str(score - numpurchased*5) + " points.")
     elif str(react) == emojis[1]:
-      await ctx.send('<@!' + str(ctx.message.author.id)+">, Enter the hex code of the color you would like to purchase.") 
+      await ctx.send('<@!' + str(ctx.message.author.id)+">, Enter the hex code of the color you would like to purchase.")
 
       def isHex(hexcode):
         return re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', hexcode)
 
-      msg = await self.bot.wait_for('message', check = check_message)
+      msg = await self.bot.wait_for('message', check=check_message)
       if not isHex(msg.content):
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, ' + msg.content + ' is not a valid hex code.')
       elif 20 > score:
@@ -131,8 +136,6 @@ class Economy(commands.Cog):
       else:
         await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), -20)
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, your custom color ' + msg.content + ' has been added to your inventory. You now have ' + str(score-20) + ' points.')
-
-
 
 
 async def addPoints(serverID, userID, amount):
@@ -183,6 +186,41 @@ def getScore(userID):
     return 0
   else:
     return score[0]
+
+
+def addItem(userID, item, quantity):
+  """Adds an item to the user's inventory.
+
+  Args:
+      userID (string): Discord user ID
+      item (string): Name of the item to buy.
+      quantity (int): Number of items to buy.
+  """
+  # Check if the user has an inventory.
+  conn = sqlite3.connect("db/database.db")
+  c = conn.cursor()
+  c.execute("SELECT * FROM inventory WHERE user=?;", (userID,))
+  if(len(c.fetchall()) == 0):
+    # User does not have an inventory.
+    # Create an inventory for the user.
+    inventory = {
+        item: quantity
+    }
+    # Add the inventory to the database.
+    c.execute("INSERT INTO inventory VALUES(?, ?)",
+              (userID, json.dumps(inventory)))
+  else:
+    # User has an inventory.
+    # Add the item to the inventory.
+    c.execute("SELECT inventory FROM inventory WHERE user=?", (userID,))
+    inventory = json.loads(c.fetchone()[0])
+    if(inventory.get(item, 0) <= 0):
+      # Remove the item from the inventory.
+      inventory.remove(item)
+    else:
+      inventory[item] = inventory.get(item, 0) + quantity
+    c.execute("UPDATE inventory SET inventory=? WHERE user=?",
+              (json.dumps(inventory), userID))
 
 
 def setup(bot):
