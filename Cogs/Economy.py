@@ -238,7 +238,7 @@ async def addItem(userID, item, quantity):
     # Add the item to the inventory.
     c.execute("SELECT inventory FROM inventory WHERE user=?", (userID,))
     inventory = json.loads(c.fetchone()[0])
-    if(inventory.get(item, 0) <= 0):
+    if(inventory.get(item, None) != None and inventory.get(item, 0) <= 0):
       # Remove the item from the inventory.
       inventory.pop(item, None)
     else:
