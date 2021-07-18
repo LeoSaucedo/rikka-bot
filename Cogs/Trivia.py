@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import Cogs.Economy as economy
 import sqlite3
+import re
+from random import randint
 
 
 class Trivia(commands.Cog):
@@ -30,8 +32,9 @@ class Trivia(commands.Cog):
       await ctx.send("There is no question being asked.")
       return
     if answer.lower() == self.currentQuestions[ctx.guild.id]["answer"].lower():
-      await ctx.send("Correct! +1 point.")
-      await economy.addPoints(str(ctx.guild.id), str(ctx.author.id), 1)
+      points = randint(1, 5)
+      await ctx.send("Correct! +" + str(points) + " points.")
+      await economy.addPoints(str(ctx.guild.id), str(ctx.author.id), points)
       del self.currentQuestions[ctx.guild.id]
     else:
       await ctx.send("Incorrect!")
@@ -44,6 +47,32 @@ class Trivia(commands.Cog):
       return
     await ctx.send(self.currentQuestions[ctx.guild.id]["answer"])
     del self.currentQuestions[ctx.guild.id]
+
+  @commands.command()
+  async def hint(self, ctx):
+    """Give a hint to the answer to a trivia question. Cost: 1 point"""
+    if ctx.guild.id not in self.currentQuestions:
+      await ctx.send("There is no question being asked.")
+      return
+    else:
+      # There is a current question being asked.
+      if(economy.getScore(str(ctx.author.id)) >= 1):
+        # Subtract 5 points from the user's score.
+        await economy.addPoints(ctx.guild.id, ctx.author.id, -1)
+        # Send the hint.
+        answer = self.currentQuestions[ctx.guild.id]["answer"]
+        hint = ""
+        for i in range(len(answer)):
+          if(str.isalpha(answer[i])):
+            hint += "\_ "
+          else:
+            if(answer[i] == " "):
+              hint += " "
+            hint += answer[i]
+        await ctx.send(hint)
+      else:
+        # Send a message telling the user they don't have enough points.
+        await ctx.send("You don't have enough points to use this command.")
 
 
 def setup(bot):
