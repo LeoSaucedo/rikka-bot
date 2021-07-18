@@ -150,7 +150,7 @@ class Economy(commands.Cog):
         await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), -20)
         await addItem(str(ctx.message.author.id), msg.content.strip(), 1)
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, your custom color ' + msg.content + ' has been added to your inventory. You now have ' + str(score-20) + ' points.')
-  
+
   @commands.command()
   async def inv(self, ctx):
     userID = str(ctx.message.author.id)
@@ -160,6 +160,7 @@ class Economy(commands.Cog):
     data = c.fetchall()
     conn.close()
     print(data)
+
 
 async def addPoints(serverID, userID, amount):
   """Adds the specified number of points to the user.
@@ -244,6 +245,7 @@ async def addItem(userID, item, quantity):
       inventory[item] = inventory.get(item, 0) + quantity
     c.execute("UPDATE inventory SET inventory=? WHERE user=?",
               (json.dumps(inventory), userID))
+    conn.commit()
 
 
 def getQuantity(userID, item):
