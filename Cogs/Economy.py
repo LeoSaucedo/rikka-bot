@@ -240,7 +240,7 @@ async def addItem(userID, item, quantity):
     inventory = json.loads(c.fetchone()[0])
     if(inventory.get(item, 0) <= 0):
       # Remove the item from the inventory.
-      inventory.remove(item)
+      del inventory[item]
     else:
       inventory[item] = inventory.get(item, 0) + quantity
     c.execute("UPDATE inventory SET inventory=? WHERE user=?",
