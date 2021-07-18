@@ -245,7 +245,8 @@ async def addItem(userID, item, quantity):
       inventory[item] = inventory.get(item, 0) + quantity
     c.execute("UPDATE inventory SET inventory=? WHERE user=?",
               (json.dumps(inventory), userID))
-    conn.commit()
+  conn.commit()
+  conn.close()
 
 
 def getQuantity(userID, item):
