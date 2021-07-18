@@ -131,6 +131,7 @@ class Economy(commands.Cog):
         return
       # subtract points from user, add hints to inventory
       await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), numpurchased*-5)
+      await addItem(str(ctx.message.author.id), "hint", numpurchased)
       await ctx.send('<@!' + str(ctx.message.author.id)+">, you have purchased " + str(numpurchased) + " hints. You now have " + str(score - numpurchased*5) + " points.")
     elif str(react) == emojis[1]:  # purchasing a color
       await ctx.send('<@!' + str(ctx.message.author.id)+">, Enter the hex code of the color you would like to purchase.")
@@ -147,8 +148,18 @@ class Economy(commands.Cog):
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, you do not have enough points to purchase a custom color.')
       else:  # subtract points from user, add color to inventory
         await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), -20)
+        await addItem(str(ctx.message.author.id), msg.content.strip(), 1)
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, your custom color ' + msg.content + ' has been added to your inventory. You now have ' + str(score-20) + ' points.')
-
+  
+  @commands.command()
+  async def inv(self, ctx):
+    userID = str(ctx.message.author.id)
+    conn = sqlite3.connect("db/database.db")
+    c = conn.cursor()
+    c.execute("SELECT inventory FROM inventory WHERE user=?;", (userID,))
+    data = c.fetchall()
+    conn.close()
+    print(data)
 
 async def addPoints(serverID, userID, amount):
   """Adds the specified number of points to the user.
@@ -200,7 +211,7 @@ def getScore(userID):
     return score[0]
 
 
-def addItem(userID, item, quantity):
+async def addItem(userID, item, quantity):
   """Adds an item to the user's inventory.
 
   Args:
