@@ -1,6 +1,3 @@
-from sqlite3 import Cursor
-from typing import Tuple
-
 import discord
 from discord.ext import commands
 import random
