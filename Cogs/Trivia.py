@@ -50,15 +50,16 @@ class Trivia(commands.Cog):
 
   @commands.command()
   async def hint(self, ctx):
-    """Give a hint to the answer to a trivia question. Cost: 1 point"""
+    """Give a hint to the answer to a trivia question."""
     if ctx.guild.id not in self.currentQuestions:
       await ctx.send("There is no question being asked.")
       return
     else:
       # There is a current question being asked.
-      if(economy.getScore(str(ctx.author.id)) >= 1):
+      if(economy.getQuantity(str(ctx.author.id), "hint") >= 1):
         # Subtract 5 points from the user's score.
-        await economy.addPoints(ctx.guild.id, ctx.author.id, -1)
+        # await economy.addPoints(ctx.guild.id, ctx.author.id, -1)
+        await economy.addItem(str(ctx.author.id), "hint", -1)
         # Send the hint.
         answer = self.currentQuestions[ctx.guild.id]["answer"]
         hint = ""
@@ -72,7 +73,7 @@ class Trivia(commands.Cog):
         await ctx.send(hint)
       else:
         # Send a message telling the user they don't have enough points.
-        await ctx.send("You don't have enough points to use this command.")
+        await ctx.send("You don't have enough hints to use this command.")
 
 
 def format(attempt):
