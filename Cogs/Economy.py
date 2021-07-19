@@ -196,36 +196,20 @@ class Economy(commands.Cog):
   @commands.command()
   async def inv(self, ctx, *args):
     """displays a users inventory"""
+    #displaying a mentioned users inventory
+    if len(args) == 1 and len(ctx.message.mentions) == 1:
+      userID = ctx.message.mentions[0].id
+      data = getInventory(userID)
+      await display_inventory(self, ctx, userID, data)
+      return
+      
     # getting inventory from db
     userID = str(ctx.message.author.id)
-    user = await self.bot.fetch_user(ctx.message.author.id)
-    conn = sqlite3.connect("db/database.db")
-    c = conn.cursor()
-    c.execute("SELECT inventory FROM inventory WHERE user=?;", (userID,))
-    data = c.fetchone()
-    conn.close()
-    # if inventory is empty
-    if data is None:
-      embed = discord.Embed(title=str(user.display_name) + "'s inventory",
-                            description="Trivia Hints: 0\n", color=0x12f202)
-      await ctx.send(embed=embed)
-      return
-    # load inventory into data
-    data = json.loads(data[0])
+    data = getInventory(userID)
+    
     # displays inventory
     if not args:
-      if "hint" not in data:
-        msg = "Trivia hints: 0\n"
-      else:
-        msg = "Trivia hints: " + str(data.get("hint")) + '\n'
-      for key, value in data.items():
-        if str(key) == "hint":
-          continue
-        else:  # color
-          msg += str(key).upper() + '\n'
-      embed = discord.Embed(title=str(user.display_name) +
-                            "'s inventory", description=msg, color=0x12f202)
-      await ctx.send(embed=embed)
+      await display_inventory(self, ctx, userID, data)
     # change user color
     elif len(args) == 3 and args[0] == 'use' and args[1] == 'color':
       hex = args[2].strip()
@@ -339,6 +323,47 @@ def getQuantity(userID, item):
   inventory = json.loads(c.fetchone()[0])
   return inventory.get(item, 0)
 
+def getInventory(userID):
+  """Returns the users inventory
+
+  Args:
+      userID (string): Discord user ID
+  """
+  conn = sqlite3.connect("db/database.db")
+  c = conn.cursor()
+  c.execute("SELECT inventory FROM inventory WHERE user=?", (userID,))
+  data = c.fetchone()
+  if data is None:
+    return None
+  return json.loads(data[0])
+
+async def display_inventory(self, ctx, userID, inventory):
+  """Displays a users inventory as an embedded message
+
+  Args:
+      userID (string) Discord user ID
+      inventory (dict) dictionary of users inventory
+  """
+  user = await self.bot.fetch_user(userID)
+  if inventory is None:
+    embed = discord.Embed(title=str(user.display_name) + "'s inventory",
+                          description="Trivia Hints: 0\n", color=0x12f202)
+    await ctx.send(embed=embed)
+    return
+  if "hint" not in inventory:
+        msg = "Trivia hints: 0\n"
+  else:
+    msg = "Trivia hints: " + str(inventory.get("hint")) + '\n'
+  for key, value in inventory.items():
+    if str(key) == "hint":
+      continue
+    else:  # color
+      msg += str(key).upper() + '\n'
+  embed = discord.Embed(title=str(user.display_name) +
+                        "'s inventory", description=msg, color=0x12f202)
+  await ctx.send(embed=embed)
+  
+  
 
 def setup(bot):
   bot.add_cog(Economy(bot))
