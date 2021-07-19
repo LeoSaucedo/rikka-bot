@@ -34,13 +34,13 @@ class Colors(commands.Cog):
                 "Invalid option. only enable/disable permitted.")
 
     @commands.command()
-    async def color(self, ctx, color, hex=None):
+    async def color(self, ctx, color):
         """
         Set your color role.
         """
         if(getColorMode(ctx.guild.id)):
             # Colors are enabled
-            colorObj = getColor(color) if hex == None else getColor(color, hex)
+            colorObj = getColor(color)
             if(colorObj == None):
                 raise commands.BadArgument("Invalid color name.")
             else:
@@ -55,7 +55,7 @@ class Colors(commands.Cog):
                     if(role.name == ("Color - " + color)):
                         roleCreated = True
                         # Place the role directly under the bots top role position.
-                        await role.edit(position=(ctx.guild.me.top_role.position-1), color = colorObj)
+                        await role.edit(position=(ctx.guild.me.top_role.position-1))
                         await ctx.author.add_roles(role)
                         break
                 if(not roleCreated):
@@ -66,13 +66,39 @@ class Colors(commands.Cog):
                     # Place role directly under bot's top role pos.
                     await newRole.edit(position=(ctx.me.top_role.position-1))
                     await ctx.author.add_roles(newRole)
-
-            await ctx.send(("{0.author.mention}, changed your color to " +
-                            color + "!").format(ctx.message))
+                await ctx.send(("{0.author.mention}, changed your color to " +
+                                color + "!").format(ctx.message))
         else:
             raise commands.BadArgument(
                 "Color roles are not enabled for this server.")
-
+    
+    #used in inv cmd to change the color role
+    async def inv_color(self, ctx, userName, hex):
+        """Sets color role from users inventory"""
+        colorObj = getColor(userName, hex)
+        roleCreated = False
+        # Removing any previously added roles.
+        for role in ctx.author.roles:
+            if(role.name.startswith("Color - ")):
+                await ctx.author.remove_roles(role)
+        # Searching to see if role is in server.
+        for role in ctx.guild.roles:
+            if(role.name == ("Color - " + userName)):
+                roleCreated = True
+                # Place the role directly under the bots top role position.
+                await role.edit(position=(ctx.guild.me.top_role.position-1), color = colorObj)
+                await ctx.author.add_roles(role)
+                break
+        if(not roleCreated):
+            # If the role has not been created.
+            # Remove the previously existing role if applicable
+            # Create a new role with the specified color.
+            newRole = await ctx.guild.create_role(color=colorObj, name=("Color - "+userName))
+            # Place role directly under bot's top role pos.
+            await newRole.edit(position=(ctx.me.top_role.position-1))
+            await ctx.author.add_roles(newRole)
+        await ctx.send(("{0.author.mention}, changed your color to " +
+                            hex + "!").format(ctx.message))
 
 def setup(bot):
     bot.add_cog(Colors(bot))

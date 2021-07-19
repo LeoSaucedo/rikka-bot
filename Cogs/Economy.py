@@ -186,11 +186,11 @@ class Economy(commands.Cog):
     elif len(args) == 3 and args[0] == 'use' and args[1] == 'color':
       hex = args[2].strip()
       if not hex.upper() in data.keys():
-        await ctx.send('<@!' + str(ctx.message.author.id)+'>, ' + hex + ' is not in your inventory. Exiting shop.\n')
+        await ctx.send('<@!' + str(ctx.message.author.id)+'>, ' + hex + ' is not in your inventory.\n')
         return
       else:
         color_cog = self.bot.get_cog('Colors')
-        await color_cog.color(ctx, str(ctx.message.author.name), hex)
+        await color_cog.inv_color(ctx, str(ctx.message.author.name), hex.upper())
     else:
       await ctx.send("<@!" + str(ctx.message.author.id)+">, invalid arguments for inv.")
       
