@@ -24,7 +24,8 @@ cogs = [
     "Cogs.Colors",
     "Cogs.MAL",
     "Cogs.Economy",
-    "Cogs.Trivia"
+    "Cogs.Trivia",
+    "Cogs.Xkcd"
 ]
 
 
