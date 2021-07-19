@@ -196,17 +196,17 @@ class Economy(commands.Cog):
   @commands.command()
   async def inv(self, ctx, *args):
     """displays a users inventory"""
-    #displaying a mentioned users inventory
+    # displaying a mentioned users inventory
     if len(args) == 1 and len(ctx.message.mentions) == 1:
       userID = ctx.message.mentions[0].id
-      data = getInventory(userID)
+      data = await getInventory(userID)
       await display_inventory(self, ctx, userID, data)
       return
-      
+
     # getting inventory from db
     userID = str(ctx.message.author.id)
-    data = getInventory(userID)
-    
+    data = await getInventory(userID)
+
     # displays inventory
     if not args:
       await display_inventory(self, ctx, userID, data)
@@ -310,7 +310,7 @@ async def addItem(userID, item, quantity):
   conn.close()
 
 
-def getQuantity(userID, item):
+async def getQuantity(userID, item):
   """Returns the number of items in the user's inventory.
 
   Args:
@@ -320,10 +320,14 @@ def getQuantity(userID, item):
   conn = sqlite3.connect("db/database.db")
   c = conn.cursor()
   c.execute("SELECT inventory FROM inventory WHERE user=?", (userID,))
-  inventory = json.loads(c.fetchone()[0])
+  try:
+    inventory = json.loads(c.fetchone()[0])
+  except TypeError:
+    return 0
   return inventory.get(item, 0)
 
-def getInventory(userID):
+
+async def getInventory(userID):
   """Returns the users inventory
 
   Args:
@@ -336,6 +340,7 @@ def getInventory(userID):
   if data is None:
     return None
   return json.loads(data[0])
+
 
 async def display_inventory(self, ctx, userID, inventory):
   """Displays a users inventory as an embedded message
@@ -351,7 +356,7 @@ async def display_inventory(self, ctx, userID, inventory):
     await ctx.send(embed=embed)
     return
   if "hint" not in inventory:
-        msg = "Trivia hints: 0\n"
+    msg = "Trivia hints: 0\n"
   else:
     msg = "Trivia hints: " + str(inventory.get("hint")) + '\n'
   for key, value in inventory.items():
@@ -362,8 +367,7 @@ async def display_inventory(self, ctx, userID, inventory):
   embed = discord.Embed(title=str(user.display_name) +
                         "'s inventory", description=msg, color=0x12f202)
   await ctx.send(embed=embed)
-  
-  
+
 
 def setup(bot):
   bot.add_cog(Economy(bot))

@@ -56,7 +56,8 @@ class Trivia(commands.Cog):
       return
     else:
       # There is a current question being asked.
-      if(economy.getQuantity(str(ctx.author.id), "hint") >= 1):
+      numHints = await economy.getQuantity(str(ctx.author.id), "hint")
+      if(numHints >= 1):
         # Subtract 5 points from the user's score.
         # await economy.addPoints(ctx.guild.id, ctx.author.id, -1)
         await economy.addItem(str(ctx.author.id), "hint", -1)
