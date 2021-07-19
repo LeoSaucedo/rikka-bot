@@ -91,7 +91,7 @@ class Economy(commands.Cog):
           name="Leaderboard", icon_url="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/money-bag_1f4b0.png")
       await ctx.send(embed=embed)
 
-  @commands.command
+  @commands.command()
   async def give(self, ctx: Context, _, amount: str = None, *args):
     """ Give points to another player via mention """
     # Make sure amount is a valid number
