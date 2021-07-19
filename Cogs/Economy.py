@@ -138,7 +138,7 @@ class Economy(commands.Cog):
     # displaying initial shop menu with emoji reactions for user input
     emojis = ['🔍', '🎨']
     msg = "Would you like to shop for:\n" + \
-        emojis[0] + ": Trivia hints - 5 pts\n" + \
+        emojis[0] + ": Trivia hints - 2 pts\n" + \
           emojis[1] + ": Custom colors - 20 pts\n"
     embed = discord.Embed(title="Welcome to the shop!",
                           description=msg, color=0x12f202)
@@ -168,13 +168,13 @@ class Economy(commands.Cog):
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, ' + msg.content + ' is not a valid number of hints.')
         return
       numpurchased = int(msg.content)
-      if numpurchased*5 > score:
+      if numpurchased*2 > score:
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, you do not have enough points to purchase ' + str(numpurchased) + ' hints.')
         return
       # subtract points from user, add hints to inventory
-      await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), numpurchased*-5)
+      await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), numpurchased*-2)
       await addItem(str(ctx.message.author.id), "hint", numpurchased)
-      await ctx.send('<@!' + str(ctx.message.author.id)+">, you have purchased " + str(numpurchased) + " hints. You now have " + str(score - numpurchased*5) + " points.")
+      await ctx.send('<@!' + str(ctx.message.author.id)+">, you have purchased " + str(numpurchased) + " hints. You now have " + str(score - numpurchased*2) + " points.")
     elif str(react) == emojis[1]:  # purchasing a color
       await ctx.send('<@!' + str(ctx.message.author.id)+">, Enter the hex code of the color you would like to purchase.")
       # function to check that user replied with a hex code
