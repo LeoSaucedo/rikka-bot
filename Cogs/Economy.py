@@ -5,10 +5,12 @@ import sqlite3
 import datetime
 import re
 import json
+from discord.ext.commands import Context, Bot
+
 
 class Economy(commands.Cog):
   def __init__(self, bot):
-    self.bot = bot
+    self.bot: Bot = bot
 
   @commands.command()
   async def score(self, ctx):
@@ -89,6 +91,47 @@ class Economy(commands.Cog):
           name="Leaderboard", icon_url="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/money-bag_1f4b0.png")
       await ctx.send(embed=embed)
 
+  @commands.command
+  async def give(self, ctx: Context, _, amount: str = None, *args):
+    """ Give points to another player via mention """
+    # Make sure amount is a valid number
+    try:
+      amount: int = int(amount)
+    except ValueError:
+      return await ctx.send(
+          f'I only accept valid numbers for amount. May I remind you `{ctx.prefix}give <mention> <amount>`'
+      )
+
+    msg: discord.Message = ctx.message
+
+    # Ensure valid input before continuing
+    if amount < 0:
+      await addPoints(ctx.message.guild.id, msg.author.id, -1)
+      return await ctx.send(
+          f'Do you think you\'re funny? Trying to steal points I see. . . Deducting 1 point from your score.'
+      )
+    elif amount == 0:
+      return await ctx.send('Why waste my time trying to send 0 points?')
+    if len(msg.mentions) != 1:
+      return await ctx.send(f'You provided {len(msg.mentions)} mentions, but must provide one.')
+    mention = msg.mentions[0]
+    if msg.author == mention:
+      return await ctx.send(f'You cannot give to yourself. . .')
+
+    # Input should be valid, continue
+    author_score = getScore(msg.author.id)
+
+    # Ensure sender has sufficient points to complete transaction
+    if author_score < amount:
+      return await ctx.send(f'You cannot send {amount} points because you have {author_score} points.')
+
+    # Finish transaction by adding and deducting points
+    await addPoints(ctx.message.guild.id, mention.id, amount)
+    await addPoints(ctx.message.guild.id, msg.author.id, -amount)
+
+    # Final output message
+    await ctx.send(f'Added {amount} points to <@!{mention.id}>\'s score courtesy of <@!{msg.author.id}>.')
+
   @commands.command()
   async def shop(self, ctx):
     """displays shop and allows user to buy items"""
@@ -153,7 +196,7 @@ class Economy(commands.Cog):
   @commands.command()
   async def inv(self, ctx, *args):
     """displays a users inventory"""
-    #getting inventory from db
+    # getting inventory from db
     userID = str(ctx.message.author.id)
     user = await self.bot.fetch_user(ctx.message.author.id)
     conn = sqlite3.connect("db/database.db")
@@ -161,16 +204,16 @@ class Economy(commands.Cog):
     c.execute("SELECT inventory FROM inventory WHERE user=?;", (userID,))
     data = c.fetchone()
     conn.close()
-
-    #if inventory is empty
+    # if inventory is empty
     if data is None:
-      embed = discord.Embed(title = str(user.display_name) + "'s inventory", description = "Trivia Hints: 0\n", color = 0x12f202)
+      embed = discord.Embed(title=str(user.display_name) + "'s inventory",
+                            description="Trivia Hints: 0\n", color=0x12f202)
       await ctx.send(embed=embed)
       return
-    #load inventory into data
+    # load inventory into data
     data = json.loads(data[0])
-    #displays inventory
-    if not args: 
+    # displays inventory
+    if not args:
       if "hint" not in data:
         msg = "Trivia hints: 0\n"
       else:
@@ -178,11 +221,12 @@ class Economy(commands.Cog):
       for key, value in data.items():
         if str(key) == "hint":
           continue
-        else: #color
+        else:  # color
           msg += str(key).upper() + '\n'
-      embed = discord.Embed(title = str(user.display_name) + "'s inventory", description = msg, color = 0x12f202)
+      embed = discord.Embed(title=str(user.display_name) +
+                            "'s inventory", description=msg, color=0x12f202)
       await ctx.send(embed=embed)
-    #change user color
+    # change user color
     elif len(args) == 3 and args[0] == 'use' and args[1] == 'color':
       hex = args[2].strip()
       if not hex.upper() in data.keys():
@@ -193,7 +237,8 @@ class Economy(commands.Cog):
         await color_cog.inv_color(ctx, str(ctx.message.author.name), hex.upper())
     else:
       await ctx.send("<@!" + str(ctx.message.author.id)+">, invalid arguments for inv.")
-      
+
+
 async def addPoints(serverID, userID, amount):
   """Adds the specified number of points to the user.
 
