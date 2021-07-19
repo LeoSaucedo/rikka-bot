@@ -91,12 +91,12 @@ class Economy(commands.Cog):
       await ctx.send(embed=embed)
 
   @commands.command()
-  async def give(self, ctx: Context, _, amount: str = None, *args):
+  async def give(self, ctx: Context, _, amount: str = 0, *args):
     """ Give points to another player via mention """
     # Make sure amount is a valid number
     try:
       amount: int = int(amount)
-    except ValueError:
+    except (ValueError, TypeError):
       return await ctx.send(
         f'I only accept valid numbers for amount. May I remind you `{ctx.prefix}give <mention> <amount>`'
       )
