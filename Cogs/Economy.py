@@ -302,8 +302,8 @@ async def addItem(userID, item, quantity):
     if(inventory.get(item, None) != None and inventory.get(item, 0) <= 0):
       # Remove the item from the inventory.
       inventory.pop(item, None)
-    else:
-      inventory[item] = inventory.get(item, 0) + quantity
+
+    inventory[item] = inventory.get(item, 0) + quantity
     c.execute("UPDATE inventory SET inventory=? WHERE user=?",
               (json.dumps(inventory), userID))
   conn.commit()
