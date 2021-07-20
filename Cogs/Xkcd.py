@@ -1,5 +1,5 @@
 from random import randint
-from typing import Optional, Union, Callable
+from typing import Optional, List, Callable
 
 from discord import Embed
 from discord.ext import commands
@@ -8,7 +8,7 @@ from discord.ext.commands import Context
 
 
 class Xkcd(commands.Cog):
-    required_response_fields: list[str] = ['year', 'month', 'day', 'alt', 'num']
+    required_response_fields: List[str] = ['year', 'month', 'day', 'alt', 'num']
     theme_color: int = 0x7610ba
 
     def __init__(self, bot):
