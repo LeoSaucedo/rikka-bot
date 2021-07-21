@@ -6,6 +6,9 @@ import datetime
 import re
 import json
 from discord.ext.commands import Context, Bot
+from PIL import Image, ImageDraw
+import requests
+import numpy as np
 
 
 class Economy(commands.Cog):
@@ -32,10 +35,16 @@ class Economy(commands.Cog):
           ", you can't fight yourself! Choose a set of opponents."
       await ctx.send(msg)
     else:
+      img = await make_img(self, ctx)
+      img.show()
+      embed = discord.Embed(title = "Fight!", color = 0x12f202)
+      embed.set_image(img)
+      await ctx.send(embed=embed)
       victor = ctx.message.author if vicNum == numPlayers else ctx.message.mentions[vicNum]
       await addPoints(str(ctx.message.guild.id), str(victor.id), rewardAmt)
       msg = '<@!'+str(victor.id)+'>' + " wins! " + str(rewardAmt)
-      msg += " point." if rewardAmt == 1 else " points."
+      msg += " point." if rewardAmt == 1 else " points. "
+      msg += str(victor.avatar_url)
       await ctx.send(msg)
       if numPlayers < 2:
         if not victor == ctx.message.author:
@@ -367,6 +376,39 @@ async def display_inventory(self, ctx, userID, inventory):
   embed = discord.Embed(title=str(user.display_name) +
                         "'s inventory", description=msg, color=0x12f202)
   await ctx.send(embed=embed)
+
+async def make_img(self, ctx):
+  """Makes fight image with author and first mention"""
+  url = 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/691547c7-1a2d-4f3d-b6eb-471cd221ddb7/dcplvjh-74ad8e5b-afb2-4b91-b7f8-f104dd4bf201.jpg/v1/fill/w_1192,h_670,q_70,strp/wii_boxing__matt_vs_matt_by_sulu2021_dcplvjh-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzIwIiwicGF0aCI6IlwvZlwvNjkxNTQ3YzctMWEyZC00ZjNkLWI2ZWItNDcxY2QyMjFkZGI3XC9kY3BsdmpoLTc0YWQ4ZTViLWFmYjItNGI5MS1iN2Y4LWYxMDRkZDRiZjIwMS5qcGciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.kct9rNcOcr60ReZna_Rwq0TRSNV1blolWwEgc_IOPtg'
+  bg_img = Image.open(requests.get(url, stream=True).raw)
+  pfp = Image.open(requests.get(ctx.message.author.avatar_url, stream=True).raw)
+  pfp2 = Image.open(requests.get(ctx.message.mentions[0].avatar_url, stream=True).raw)
+  pfp = await crop_resize_pfp(pfp)
+  pfp2 = await crop_resize_pfp(pfp2)
+
+  
+  bg_img.paste(pfp, (100,65), mask = pfp)
+  bg_img.paste(pfp2, (720,65), mask = pfp2)
+  return bg_img
+
+async def crop_resize_pfp(img):
+  """crops pfp into a circle and resizes it for use in fight image
+  
+  Args: img (image object) - the pfp image
+  """
+  h,w = img.size
+
+  # creating luminous image
+  lum_img = Image.new('L',[h,w] ,0) 
+  draw = ImageDraw.Draw(lum_img)
+  draw.pieslice([(0,0),(h,w)],0,360,fill=255)
+  img_arr = np.array(img)
+  lum_img_arr = np.array(lum_img)
+  final_img_arr = np.dstack((img_arr, lum_img_arr))
+  circular_pfp = Image.fromarray(final_img_arr)
+
+  #resize pfp
+  return circular_pfp.resize((375, 375), Image.BICUBIC)
 
 
 def setup(bot):
