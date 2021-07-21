@@ -31,7 +31,7 @@ class Trivia(commands.Cog):
     if ctx.guild.id not in self.currentQuestions:
       await ctx.send("There is no question being asked.")
       return
-    if(format(answer).lower() == format(self.currentQuestions[ctx.guild.id]["answer"])).lower():
+    if format(answer).lower() == format(self.currentQuestions[ctx.guild.id]["answer"]).lower():
       points = randint(1, 5)
       await ctx.send("Correct! +" + str(points) + " points.")
       await economy.addPoints(str(ctx.guild.id), str(ctx.author.id), points)
