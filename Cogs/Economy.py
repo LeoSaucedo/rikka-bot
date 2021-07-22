@@ -9,6 +9,8 @@ from discord.ext.commands import Context, Bot
 from PIL import Image, ImageDraw
 import requests
 import numpy as np
+from io import BytesIO
+import asyncio
 
 
 class Economy(commands.Cog):
@@ -36,30 +38,45 @@ class Economy(commands.Cog):
       await ctx.send(msg)
     else:
       img = await make_img(self, ctx)
-      img.show()
-      embed = discord.Embed(title = "Fight!", color = 0x12f202)
-      embed.set_image(img)
-      await ctx.send(embed=embed)
-      victor = ctx.message.author if vicNum == numPlayers else ctx.message.mentions[vicNum]
-      await addPoints(str(ctx.message.guild.id), str(victor.id), rewardAmt)
-      msg = '<@!'+str(victor.id)+'>' + " wins! " + str(rewardAmt)
-      msg += " point." if rewardAmt == 1 else " points. "
-      msg += str(victor.avatar_url)
-      await ctx.send(msg)
-      if numPlayers < 2:
-        if not victor == ctx.message.author:
-          await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), rewardAmt * -1)
-          loser = str(ctx.message.author.id)
-        else:
-          await addPoints(str(ctx.message.guild.id), str(ctx.message.mentions[0].id), rewardAmt * -1)
-          loser = str(ctx.message.mentions[0].id)
-        msg = '<@!' + loser + '>' + \
-            ": For your loss, you lose " + str(rewardAmt)
-        if rewardAmt == 1:
-          msg += " point. Better luck next time."
-        else:
-          msg += " points. Better luck next time."
+      #turn img object into file
+      with BytesIO() as image_binary:
+        img.save(image_binary, "PNG")
+        image_binary.seek(0)
+        file=discord.File(fp=image_binary,filename="image.png")
+      embed = discord.Embed(title="Fight!", description = "<@!"+ str(ctx.message.mentions[0].id) + ">, press 👊 when you're ready to fight!")
+      embed.set_image(url="attachment://image.png")
+      emb = await ctx.send(file=file, embed=embed)
+      await emb.add_reaction('👊')
+
+      # reaction check function, checks that reaction is made on the display message, by the mentioned user, and the fist emoji
+      def chk(reaction, user):
+        return str(reaction.emoji) == '👊' and user == ctx.message.mentions[0] and reaction.message == emb
+
+      # wait for reaction from mentioned user
+      try:
+        await self.bot.wait_for('reaction_add', timeout = 60, check=chk)
+      except asyncio.TimeoutError:
+        await ctx.send('<@!'+str(ctx.message.mentions[0].id)+"> isn't there.")
+      else:
+        victor = ctx.message.author if vicNum == numPlayers else ctx.message.mentions[vicNum]
+        await addPoints(str(ctx.message.guild.id), str(victor.id), rewardAmt)
+        msg = '<@!'+str(victor.id)+'>' + " wins! " + str(rewardAmt)
+        msg += " point." if rewardAmt == 1 else " points."
         await ctx.send(msg)
+        if numPlayers < 2:
+          if not victor == ctx.message.author:
+            await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), rewardAmt * -1)
+            loser = str(ctx.message.author.id)
+          else:
+            await addPoints(str(ctx.message.guild.id), str(ctx.message.mentions[0].id), rewardAmt * -1)
+            loser = str(ctx.message.mentions[0].id)
+          msg = '<@!' + loser + '>' + \
+              ": For your loss, you lose " + str(rewardAmt)
+          if rewardAmt == 1:
+            msg += " point. Better luck next time."
+          else:
+            msg += " points. Better luck next time."
+          await ctx.send(msg)
 
   @commands.command()
   async def leaderboard(self, ctx, arg1=None):
