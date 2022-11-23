@@ -314,5 +314,5 @@ class InvalidID(commands.BadArgument):
     super().__init__(message)
 
 
-def setup(bot):
-  bot.add_cog(MyAnimeList(bot))
+async def setup(bot):
+  await bot.add_cog(MyAnimeList(bot))

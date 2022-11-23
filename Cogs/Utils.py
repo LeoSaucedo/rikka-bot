@@ -46,5 +46,5 @@ class Utils(commands.Cog):
     await ctx.send("I rate `"+arg+"` a "+random.randint(0, 10)+"/10!")
 
 
-def setup(bot):
-  bot.add_cog(Utils(bot))
+async def setup(bot):
+  await bot.add_cog(Utils(bot))

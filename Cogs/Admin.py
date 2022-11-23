@@ -121,5 +121,5 @@ class Admin(commands.Cog):
             await ctx.send(ctx.message.channel.send("You must specify a user."))
 
 
-def setup(bot):
-    bot.add_cog(Admin(bot))
+async def setup(bot):
+    await bot.add_cog(Admin(bot))

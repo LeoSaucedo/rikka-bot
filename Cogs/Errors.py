@@ -58,5 +58,5 @@ async def generateErrorEmbed(msg):
     return discord.Embed(color=0xff0000, title="Error", description=msg)
 
 
-def setup(bot):
-    bot.add_cog(Errors(bot))
+async def setup(bot):
+    await bot.add_cog(Errors(bot))

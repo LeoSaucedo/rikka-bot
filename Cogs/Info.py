@@ -62,5 +62,5 @@ class Info(commands.Cog):
         await ctx.send("Latency: " + str(int(ctx.bot.latency * 1000)) + "ms")
 
 
-def setup(bot):
-    bot.add_cog(Info(bot))
+async def setup(bot):
+    await bot.add_cog(Info(bot))

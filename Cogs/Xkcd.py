@@ -89,5 +89,5 @@ class Xkcd(commands.Cog):
             return None
 
 
-def setup(bot):
-    bot.add_cog(Xkcd(bot))
+async def setup(bot):
+    await bot.add_cog(Xkcd(bot))

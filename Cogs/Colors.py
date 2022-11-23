@@ -100,8 +100,8 @@ class Colors(commands.Cog):
         await ctx.send(("{0.author.mention}, changed your color to " +
                             hex + "!").format(ctx.message))
 
-def setup(bot):
-    bot.add_cog(Colors(bot))
+async def setup(bot):
+    await bot.add_cog(Colors(bot))
 
 
 def setColorMode(status, serverID):

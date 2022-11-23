@@ -72,5 +72,5 @@ class WolframError(APIError):
         super().__init__(message)
 
 
-def setup(bot):
-    bot.add_cog(Wolfram(bot))
+async def setup(bot):
+    await bot.add_cog(Wolfram(bot))

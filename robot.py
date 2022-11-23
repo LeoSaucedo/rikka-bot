@@ -9,6 +9,7 @@ import json
 import sqlite3
 import topgg
 import logging
+import asyncio
 
 # The different Cogs supported by Rikka.
 cogs = [
@@ -39,6 +40,7 @@ def get_prefix(bot, message):
   Returns:
       string: The server's prefix, `;` if no set prefix.
   """
+  log_info("Received: " + message.content)
   if not message.guild:
     return ';'
   conn = sqlite3.connect("db/database.db")
@@ -47,8 +49,10 @@ def get_prefix(bot, message):
             (str(message.guild.id),))
   prefix = c.fetchall()
   if(len(prefix) == 0):
+    log_info("No prefix found for server " + str(message.guild.id))
     return ';'
   else:
+    log_info("Prefix for server " + str(message.guild.id) + " is " + prefix[0])
     return prefix[0]
 
 
@@ -57,8 +61,7 @@ def log_info(message):
   print(message)
 
 
-intents = discord.Intents.default()
-intents.members = True
+intents = discord.Intents.all()
 bot = commands.AutoShardedBot(command_prefix=get_prefix, intents=intents)
 botlist = topgg.DBLClient(json.load(open("json/config.json"))["bltoken"]).set_data(bot)
 logging.basicConfig(
@@ -107,11 +110,16 @@ async def on_guild_remove(guild):
   await bot.change_presence(activity=game)
 
 
-if __name__ == "__main__":
-  # Add all cogs.
+async def main():
+  """Loads the cogs and runs the bot.
+  """
   for cog in cogs:
-    bot.load_extension(cog)
+    try:
+      await bot.load_extension(cog)
+      log_info("Loaded " + cog)
+    except Exception as e:
+      log_info("Failed to load " + cog + ": " + str(e))
+  await bot.start(json.load(open("json/config.json"))["token"])
 
-  while True:
-    # Load bot token and run bot.
-    bot.run(json.load(open("json/config.json", "r"))["token"])
+if __name__ == "__main__":
+  asyncio.run(main())

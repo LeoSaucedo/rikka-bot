@@ -369,5 +369,5 @@ async def display_inventory(self, ctx, userID, inventory):
   await ctx.send(embed=embed)
 
 
-def setup(bot):
-  bot.add_cog(Economy(bot))
+async def setup(bot):
+  await bot.add_cog(Economy(bot))
