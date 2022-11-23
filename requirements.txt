@@ -2,7 +2,7 @@ discord.py>=1.2.3
 asyncio
 googletrans
 bs4
-dblpy==0.2
+topggpy==2.0.0a
 pushbullet.py
 lxml
 aiofiles

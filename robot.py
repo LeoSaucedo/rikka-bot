@@ -7,7 +7,7 @@ import discord
 from discord.ext import commands
 import json
 import sqlite3
-import dbl
+import topgg
 import logging
 
 # The different Cogs supported by Rikka.
@@ -57,8 +57,10 @@ def log_info(message):
   print(message)
 
 
-bot = commands.AutoShardedBot(command_prefix=get_prefix)
-botlist = dbl.Client(bot, json.load(open("json/config.json"))["bltoken"])
+intents = discord.Intents.default()
+intents.members = True
+bot = commands.AutoShardedBot(command_prefix=get_prefix, intents=intents)
+botlist = topgg.DBLClient(json.load(open("json/config.json"))["bltoken"]).set_data(bot)
 logging.basicConfig(
     filename="bot.log",
     filemode='w',
@@ -76,12 +78,12 @@ async def on_ready():
   log_info("Connected to: " + str(len(bot.guilds)) + " guilds.")
   log_info("Connected to: " + str(len(bot.users)) + " users.")
 
-  # DBL authentication
+  # topgg authentication
   try:
     await botlist.post_guild_count()
-    log_info("Published server count to dbl.")
+    log_info("Published server count to topgg.")
   except Exception as e:
-    log_info("Failed to post server count to dbl: " + str(e))
+    log_info("Failed to post server count to topgg: " + str(e))
 
   game = discord.Game(name="on " + str(len(bot.guilds))+" guilds!")
   await bot.change_presence(activity=game)
