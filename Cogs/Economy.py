@@ -19,37 +19,35 @@ class Economy(commands.Cog):
       user = ctx.message.author
     else:
       user = ctx.message.mentions[0]
-    await ctx.send("`" + str(user.name) + "`'s score is: " + str(getScore(user.id)))
+    await ctx.send(f"`{str(user.name)}`'s score is: {str(getScore(user.id))}")
 
   @commands.hybrid_command()
-  async def fight(self, ctx):
+  async def fight(self, ctx, *, opponent: discord.Member = None):
     """Fights a user and rewards points to the winner."""
-    numPlayers = len(ctx.message.mentions)
+    # Opponent can only sadly be a single user with slash commands.
+    numPlayers = 1 if (opponent!=None) else len(ctx.message.mentions)
     vicNum = random.randint(0, numPlayers)
     rewardAmt = random.randint(1, 5)
     if(numPlayers < 1) or (ctx.message.author in ctx.message.mentions):
-      msg = '<@!' + str(ctx.message.author.id)+'>' + \
-          ", you can't fight yourself! Choose a set of opponents."
+      msg = f"<@!{str(ctx.message.author.id)}>" + \
+          f", you can't fight yourself! Choose a set of opponents."
       await ctx.send(msg)
     else:
-      victor = ctx.message.author if vicNum == numPlayers else ctx.message.mentions[vicNum]
+      victor = ctx.message.author if vicNum == numPlayers else (ctx.message.mentions[vicNum] if 
+      opponent == None else opponent)
       await addPoints(str(ctx.message.guild.id), str(victor.id), rewardAmt)
       msg = '<@!'+str(victor.id)+'>' + " wins! " + str(rewardAmt)
       msg += " point." if rewardAmt == 1 else " points."
-      await ctx.send(msg)
       if numPlayers < 2:
         if not victor == ctx.message.author:
           await addPoints(str(ctx.message.guild.id), str(ctx.message.author.id), rewardAmt * -1)
           loser = str(ctx.message.author.id)
         else:
-          await addPoints(str(ctx.message.guild.id), str(ctx.message.mentions[0].id), rewardAmt * -1)
-          loser = str(ctx.message.mentions[0].id)
-        msg = '<@!' + loser + '>' + \
-            ": For your loss, you lose " + str(rewardAmt)
-        if rewardAmt == 1:
-          msg += " point. Better luck next time."
-        else:
-          msg += " points. Better luck next time."
+          await addPoints(str(ctx.message.guild.id), str(ctx.message.mentions[0].id
+          if opponent == None else opponent.id), rewardAmt * -1)
+          loser = str(ctx.message.mentions[0].id if opponent == None else opponent.id)
+        msg += f"\n<@!{loser}>: For your loss, you lose {str(rewardAmt)}" + \
+            f" {' point.' if rewardAmt == 1 else ' points.'} Better luck next time!"
         await ctx.send(msg)
 
   @commands.hybrid_command()
