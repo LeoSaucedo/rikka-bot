@@ -46,13 +46,13 @@ def get_prefix(bot, message):
   conn = sqlite3.connect("db/database.db")
   c = conn.cursor()
   c.execute("SELECT prefix FROM prefixes WHERE server=?",
-            (str(message.guild.id),))
-  prefix = c.fetchall()
+            [message.guild.id])
+  prefix = c.fetchone()
   if(len(prefix) == 0):
-    log_info("No prefix found for server " + str(message.guild.id))
+    log_info(f"No prefix found for server {message.guild.id}")
     return ';'
   else:
-    log_info("Prefix for server " + str(message.guild.id) + " is " + prefix[0])
+    log_info(f"Prefix for server {message.guild.id} is {prefix[0]}")
     return prefix[0]
 
 

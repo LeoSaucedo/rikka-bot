@@ -28,7 +28,7 @@ class Admin(commands.Cog):
         if(len(c.fetchall()) == 0):
             # The prefix has not seriously been set
             c.execute("INSERT INTO prefixes VALUES (?,?);",
-                      str(ctx.channel.guild.id), arg)
+                      [str(ctx.channel.guild.id), arg])
             await ctx.send("Set prefix to `"+arg+"`!")
         else:
             c.execute(
