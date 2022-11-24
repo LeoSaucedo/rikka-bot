@@ -17,19 +17,19 @@ class Xkcd(commands.Cog):
         self.latest_request_url = 'http://xkcd.com/info.0.json'
 
     @commands.hybrid_command()
-    async def xkcd(self, ctx: Context, optional: Optional[str], *, args):
+    async def xkcd(self, ctx: Context, args: Optional[str] = None):
         embed: Optional[Embed] = None
 
-        if optional is None or optional == 'random':
+        if args is None or args == 'random':
             embed = Xkcd._make_embed(await self.get_specific(randint(0, 100)))
-        elif optional == 'latest':
+        elif args == 'latest':
             embed = Xkcd._make_embed(await self.get_latest())
-        elif Xkcd._try_convert(optional) is not None:
-            embed = Xkcd._make_embed(await self.get_specific(Xkcd._try_convert(optional)))
+        elif Xkcd._try_convert(args) is not None:
+            embed = Xkcd._make_embed(await self.get_specific(Xkcd._try_convert(args)))
 
-        if embed is not None and embed is not Embed.Empty:
+        if embed is not None and len(embed) > 0:
             return await ctx.send(embed=embed)
-        elif embed is Embed.Empty:
+        elif embed is None:
             # If embed is Embed.Empty that means json response was not value / invalid input
             return await ctx.send('Sorry, I was unable to retrieve that comic for your. It may not exist. . .')
 
