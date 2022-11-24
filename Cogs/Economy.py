@@ -12,7 +12,7 @@ class Economy(commands.Cog):
   def __init__(self, bot):
     self.bot: Bot = bot
 
-  @commands.command()
+  @commands.hybrid_command()
   async def score(self, ctx):
     """Gets the amount of money you have."""
     if(len(ctx.message.mentions) == 0):
@@ -21,7 +21,7 @@ class Economy(commands.Cog):
       user = ctx.message.mentions[0]
     await ctx.send("`" + str(user.name) + "`'s score is: " + str(getScore(user.id)))
 
-  @commands.command()
+  @commands.hybrid_command()
   async def fight(self, ctx):
     """Fights a user and rewards points to the winner."""
     numPlayers = len(ctx.message.mentions)
@@ -52,7 +52,7 @@ class Economy(commands.Cog):
           msg += " points. Better luck next time."
         await ctx.send(msg)
 
-  @commands.command()
+  @commands.hybrid_command()
   async def leaderboard(self, ctx, arg1=None):
     """Gets the leaderboard."""
     if arg1 is None:
@@ -91,8 +91,8 @@ class Economy(commands.Cog):
           name="Leaderboard", icon_url="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/money-bag_1f4b0.png")
       await ctx.send(embed=embed)
 
-  @commands.command()
-  async def give(self, ctx: Context, _, amount: str = 0, *args):
+  @commands.hybrid_command()
+  async def give(self, ctx: Context, amount: int = 0, *, args):
     """ Give points to another player via mention """
     # Make sure amount is a valid number
     try:
@@ -132,7 +132,7 @@ class Economy(commands.Cog):
     # Final output message
     await ctx.send(f'Added {amount} points to <@!{mention.id}>\'s score courtesy of <@!{msg.author.id}>.')
 
-  @commands.command()
+  @commands.hybrid_command()
   async def shop(self, ctx):
     """displays shop and allows user to buy items"""
     # displaying initial shop menu with emoji reactions for user input
@@ -193,8 +193,8 @@ class Economy(commands.Cog):
         await addItem(str(ctx.message.author.id), msg.content.strip().upper(), 1)
         await ctx.send('<@!' + str(ctx.message.author.id)+'>, your custom color ' + msg.content + ' has been added to your inventory. You now have ' + str(score-20) + ' points.')
 
-  @commands.command()
-  async def inv(self, ctx, *args):
+  @commands.hybrid_command()
+  async def inv(self, ctx, *, args):
     """displays a users inventory"""
     # displaying a mentioned users inventory
     if len(args) == 1 and len(ctx.message.mentions) == 1:

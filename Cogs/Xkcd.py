@@ -16,8 +16,8 @@ class Xkcd(commands.Cog):
         self.formattable_request_url = 'http://xkcd.com/{}/info.0.json'
         self.latest_request_url = 'http://xkcd.com/info.0.json'
 
-    @commands.command()
-    async def xkcd(self, ctx: Context, optional: Optional[str], *args):
+    @commands.hybrid_command()
+    async def xkcd(self, ctx: Context, optional: Optional[str], *, args):
         embed: Optional[Embed] = None
 
         if optional is None or optional == 'random':

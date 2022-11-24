@@ -109,7 +109,6 @@ async def on_guild_remove(guild):
   game = discord.Game(name="on " + str(len(bot.guilds))+" guilds!")
   await bot.change_presence(activity=game)
 
-
 async def main():
   """Loads the cogs and runs the bot.
   """
