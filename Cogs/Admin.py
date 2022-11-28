@@ -14,7 +14,7 @@ class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.hybrid_command()
     @commands.has_permissions(administrator=True)
     @commands.bot_has_permissions(administrator=True)
     async def prefix(self, ctx, arg):
@@ -43,7 +43,7 @@ class Admin(commands.Cog):
         conn.commit()
         conn.close()
 
-    @commands.command()
+    @commands.hybrid_command()
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
     async def ban(self, ctx, arg):
@@ -57,7 +57,7 @@ class Admin(commands.Cog):
         except Exception as e:
             raise APIError(str(e))
 
-    @commands.command()
+    @commands.hybrid_command()
     @commands.has_permissions(kick_members=True)
     @commands.bot_has_permissions(kick_members=True)
     async def kick(self, ctx, arg):
@@ -71,7 +71,7 @@ class Admin(commands.Cog):
         except Exception as e:
             raise APIError(str(e))
 
-    @commands.command()
+    @commands.hybrid_command()
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
     async def clear(self, ctx, arg):
@@ -93,7 +93,7 @@ class Admin(commands.Cog):
             await ctx.message.channel.purge(limit=(int(arg)+1), bulk=True)
             await ctx.send("Deleted "+str(arg)+" messages!")
 
-    @commands.command()
+    @commands.hybrid_command()
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
     async def mute(self, ctx, arg):
@@ -107,7 +107,7 @@ class Admin(commands.Cog):
         else:
             await ctx.send("You must specify a user.")
 
-    @commands.command()
+    @commands.hybrid_command()
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
     async def unmute(self, ctx, arg):

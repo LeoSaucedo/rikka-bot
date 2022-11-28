@@ -11,7 +11,7 @@ class Trivia(commands.Cog):
     self.bot = bot
     self.currentQuestions = {}
 
-  @commands.command()
+  @commands.hybrid_command()
   async def ask(self, ctx):
     """Ask a trivia question."""
     conn = sqlite3.connect("db/database.db")
@@ -25,7 +25,7 @@ class Trivia(commands.Cog):
     }
     await ctx.send(question[0])
 
-  @commands.command(pass_context=True, aliases=['a'])
+  @commands.hybrid_command(pass_context=True, aliases=['a'])
   async def answer(self, ctx, *, answer):
     """Answer a trivia question."""
     if ctx.guild.id not in self.currentQuestions:
@@ -39,7 +39,7 @@ class Trivia(commands.Cog):
     else:
       await ctx.send("Incorrect!")
 
-  @commands.command()
+  @commands.hybrid_command()
   async def reveal(self, ctx):
     """Reveal the answer to a trivia question."""
     if ctx.guild.id not in self.currentQuestions:
@@ -48,7 +48,7 @@ class Trivia(commands.Cog):
     await ctx.send(self.currentQuestions[ctx.guild.id]["answer"])
     del self.currentQuestions[ctx.guild.id]
 
-  @commands.command()
+  @commands.hybrid_command()
   async def hint(self, ctx):
     """Give a hint to the answer to a trivia question."""
     if ctx.guild.id not in self.currentQuestions:

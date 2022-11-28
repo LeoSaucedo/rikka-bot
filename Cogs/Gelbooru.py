@@ -38,9 +38,9 @@ class booru(commands.Cog):
         self.session = aiohttp.ClientSession()
         self.validSubCommands = ['id','latest','random','tags']
 
-    @commands.command()
+    @commands.hybrid_command()
     @commands.is_nsfw()
-    async def gelbooru(self, ctx, *args):
+    async def gelbooru(self, ctx, *, args):
         if(len(args) == 0):
             raise InvalidSubcommand('Please enter a subcommand.')
         elif not str(args[0]).lower() in self.validSubCommands:
