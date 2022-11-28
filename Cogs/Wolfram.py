@@ -17,7 +17,7 @@ class Wolfram(commands.Cog):
         self.bot = bot
         self.key = json.load(open("json/config.json", "r"))["wolframapi"]
 
-    @commands.command()
+    @commands.hybrid_command()
     async def wolfimg(self, ctx, *, arg):
         """Sends an image result from Wolfram.
 
@@ -45,7 +45,7 @@ class Wolfram(commands.Cog):
                     embed.set_image(url="attachment://wolfram.jpg")
                     await ctx.send(file=image, embed=embed)
 
-    @commands.command()
+    @commands.hybrid_command()
     async def wolfram(self, ctx, *, arg):
         """Sends a text response from Wolfram.
 
@@ -72,5 +72,5 @@ class WolframError(APIError):
         super().__init__(message)
 
 
-def setup(bot):
-    bot.add_cog(Wolfram(bot))
+async def setup(bot):
+    await bot.add_cog(Wolfram(bot))

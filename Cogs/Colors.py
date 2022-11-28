@@ -12,7 +12,7 @@ class Colors(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.hybrid_command()
     @commands.has_permissions(manage_roles=True)
     @commands.bot_has_permissions(manage_roles=True)
     async def colors(self, ctx, status):
@@ -33,7 +33,7 @@ class Colors(commands.Cog):
             raise commands.BadArgument(
                 "Invalid option. only enable/disable permitted.")
 
-    @commands.command()
+    @commands.hybrid_command()
     async def color(self, ctx, color):
         """
         Set your color role.
@@ -100,8 +100,8 @@ class Colors(commands.Cog):
         await ctx.send(("{0.author.mention}, changed your color to " +
                             hex + "!").format(ctx.message))
 
-def setup(bot):
-    bot.add_cog(Colors(bot))
+async def setup(bot):
+    await bot.add_cog(Colors(bot))
 
 
 def setColorMode(status, serverID):

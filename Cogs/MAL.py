@@ -226,8 +226,8 @@ class MyAnimeList(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
 
-  @commands.command()
-  async def mal(self, ctx, *args):
+  @commands.hybrid_command()
+  async def mal(self, ctx, *, args):
     """Looks up an anime on MAL."""
     if args[0].lower() == 'id':
       data = await fetchItem(session, ''.join(args[1:]).upper())
@@ -314,5 +314,5 @@ class InvalidID(commands.BadArgument):
     super().__init__(message)
 
 
-def setup(bot):
-  bot.add_cog(MyAnimeList(bot))
+async def setup(bot):
+  await bot.add_cog(MyAnimeList(bot))

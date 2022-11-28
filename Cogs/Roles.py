@@ -12,17 +12,17 @@ class Roles(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
 
-  @commands.command()
+  @commands.hybrid_command()
   @commands.has_permissions(manage_roles=True)
   @commands.bot_has_permissions(manage_roles=True)
-  async def assign(self, ctx, status, roleName):
+  async def assign(self, ctx, status, *, args):
     """Enables or disables the given role for assignment."""
-    role = discord.utils.get(ctx.guild.roles, name=(roleName))
+    role = discord.utils.get(ctx.guild.roles, name=str(args))
     if(status == "enable"):
       # Enable assignment
       if(role == None):
         # Role does not exist, create new role
-        role = await ctx.guild.create_role(name=str(roleName))
+        role = await ctx.guild.create_role(name=str(args))
       # Role already exists
       # Set the role as assignable
       setAssign(ctx.guild.id, role.id, True)
@@ -43,7 +43,7 @@ class Roles(commands.Cog):
           "Invalid option. Only enable/disable permitted.")
       return
 
-  @commands.command()
+  @commands.hybrid_command()
   async def iamlist(self, ctx):
     """Lists the assignable roles."""
     assignList = ""
@@ -72,11 +72,11 @@ class Roles(commands.Cog):
       await ctx.send("{0.author.mention}, no assignable roles have been set."
                      .format(ctx.message))
 
-  @commands.command()
-  async def iam(self, ctx, roleName):
+  @commands.hybrid_command()
+  async def iam(self, ctx, *, args):
     """Assigns you to the specified role."""
     # Check to see if role exists.
-    role = discord.utils.get(ctx.guild.roles, name=roleName)
+    role = discord.utils.get(ctx.guild.roles, name=str(args))
     if(role == None):
       # Role does not exist
       await ctx.send("{0.author.mention}, that role does not exist!"
@@ -95,11 +95,11 @@ class Roles(commands.Cog):
           await ctx.send("{0.author.mention}, that role is already assigned to you!".format(
               ctx.message))
 
-  @commands.command()
-  async def iamnot(self, ctx, roleName):
+  @commands.hybrid_command()
+  async def iamnot(self, ctx, *, args):
     """Unassigns you from the specified role."""
     # Check to see if role exists.
-    role = discord.utils.get(ctx.guild.roles, name=roleName)
+    role = discord.utils.get(ctx.guild.roles, name=str(args))
     if(role == None):
       # Role does not exist
       await ctx.send("{0.author.mention}, that role does not exist!"
@@ -175,5 +175,5 @@ def getAssignList(serverId):
   return assignList
 
 
-def setup(bot):
-  bot.add_cog(Roles(bot))
+async def setup(bot):
+  await bot.add_cog(Roles(bot))

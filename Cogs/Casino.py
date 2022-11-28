@@ -13,7 +13,7 @@ class Casino(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
 
-  @commands.command()
+  @commands.hybrid_command()
   async def roll(self, ctx, arg):
     """
     Rolls the specified dice.
@@ -40,7 +40,7 @@ class Casino(commands.Cog):
         name="Dice Roller", icon_url="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/game-die_1f3b2.png")
     await ctx.send(embed=embed)
 
-  @commands.command(name="8ball")
+  @commands.hybrid_command(name="8ball")
   async def eightball(self, ctx):
     """
     Gets a message from the eight-ball.
@@ -84,7 +84,7 @@ class Casino(commands.Cog):
     )
     await ctx.send(embed=embed)
 
-  @commands.command()
+  @commands.hybrid_command()
   async def kekw(self, ctx):
     """
     Posts a healthy bit of cringe.
@@ -112,5 +112,5 @@ class Casino(commands.Cog):
     await ctx.send(embed=embed)
 
 
-def setup(bot):
-  bot.add_cog(Casino(bot))
+async def setup(bot):
+  await bot.add_cog(Casino(bot))

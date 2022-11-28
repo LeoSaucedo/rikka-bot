@@ -7,8 +7,9 @@ import discord
 from discord.ext import commands
 import json
 import sqlite3
-import dbl
+import topgg
 import logging
+import asyncio
 
 # The different Cogs supported by Rikka.
 cogs = [
@@ -39,16 +40,19 @@ def get_prefix(bot, message):
   Returns:
       string: The server's prefix, `;` if no set prefix.
   """
+  log_info("Received: " + message.content)
   if not message.guild:
     return ';'
   conn = sqlite3.connect("db/database.db")
   c = conn.cursor()
   c.execute("SELECT prefix FROM prefixes WHERE server=?",
-            (str(message.guild.id),))
-  prefix = c.fetchall()
+            [message.guild.id])
+  prefix = c.fetchone()
   if(len(prefix) == 0):
+    log_info(f"No prefix found for server {message.guild.id}")
     return ';'
   else:
+    log_info(f"Prefix for server {message.guild.id} is {prefix[0]}")
     return prefix[0]
 
 
@@ -57,8 +61,9 @@ def log_info(message):
   print(message)
 
 
-bot = commands.AutoShardedBot(command_prefix=get_prefix)
-botlist = dbl.Client(bot, json.load(open("json/config.json"))["bltoken"])
+intents = discord.Intents.all()
+bot = commands.AutoShardedBot(command_prefix=get_prefix, intents=intents)
+botlist = topgg.DBLClient(json.load(open("json/config.json"))["bltoken"]).set_data(bot)
 logging.basicConfig(
     filename="bot.log",
     filemode='w',
@@ -76,12 +81,12 @@ async def on_ready():
   log_info("Connected to: " + str(len(bot.guilds)) + " guilds.")
   log_info("Connected to: " + str(len(bot.users)) + " users.")
 
-  # DBL authentication
+  # topgg authentication
   try:
     await botlist.post_guild_count()
-    log_info("Published server count to dbl.")
+    log_info("Published server count to topgg.")
   except Exception as e:
-    log_info("Failed to post server count to dbl: " + str(e))
+    log_info("Failed to post server count to topgg: " + str(e))
 
   game = discord.Game(name="on " + str(len(bot.guilds))+" guilds!")
   await bot.change_presence(activity=game)
@@ -104,12 +109,16 @@ async def on_guild_remove(guild):
   game = discord.Game(name="on " + str(len(bot.guilds))+" guilds!")
   await bot.change_presence(activity=game)
 
+async def main():
+  """Loads the cogs and runs the bot.
+  """
+  for cog in cogs:
+    try:
+      await bot.load_extension(cog)
+      log_info("Loaded " + cog)
+    except Exception as e:
+      log_info("Failed to load " + cog + ": " + str(e))
+  await bot.start(json.load(open("json/config.json"))["token"])
 
 if __name__ == "__main__":
-  # Add all cogs.
-  for cog in cogs:
-    bot.load_extension(cog)
-
-  while True:
-    # Load bot token and run bot.
-    bot.run(json.load(open("json/config.json", "r"))["token"])
+  asyncio.run(main())
